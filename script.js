@@ -215,12 +215,12 @@ input {
   background: #f7f9fb;
 }
 
-.myk--button.severity-info:hover{
+.myk--button.severity-info:hover, .myk--button.severity-info.active {
   color: rgb(14, 165, 233);
   background: rgb(246, 429, 255);
 }
 
-.myk--button.severity-danger:hover{
+.myk--button.severity-danger:hover, .myk--button.severity-danger.active{
   color: rgb(239, 68, 68);
   background: rgb(254,242,242);
 }
@@ -272,6 +272,12 @@ input {
 .myk--reference-info-command-box-container {
   display:flex;
   justify-content: space-between;
+}
+
+.myk--input-line{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 
@@ -367,91 +373,104 @@ input {
             
         </div>
         <div class="myk--tab-container" v-if="activeTab === 'References'" >
-          <div class="myk--container-basics">
-            <span class="myk--section-header">Reference Table</span>
-            <div id="myk--dropdown-reference-table-container" class="myk--container-basics">
-              <div :key="reference.uid" v-for="(reference, index) in selectedProperties" class="myk--dropdown-reference-container">
-                <div class="myk--reference-bar myk--button" :class="{ 'active-reference': expandedPropertyId === reference.uid }" @click="toggleReferenceDetails(reference.uid)">
-                  <div class="myk--within-bar-icon icon-start" style="font-weight: 600;">{{ index + 1 }}</div>
-                  <span>{{ reference.advertisedPrice }}</span>
-                  <div class="myk--within-bar-icon icon-last">{{ expandedPropertyId === reference.uid ? '▲' : '▼' }}</div>
-                </div>
-                <div class="myk--reference-info" v-if="expandedPropertyId === reference.uid">
-                  <div class="myk--reference-info-table">
-                    
-                      <template v-for="(value, key, findex) in reference" :key="key">
-                        <div 
-                          v-if="!['uid','isEdited','link'].includes(key)"
-                          class="myk--reference-info-table-line"
-                          :class="{ 'myk--ruler-bottom': findex < (Object.keys(reference).length - 1) }"
-                        >
-                          <span>{{ capitalize(key) }}:</span>
-                          <span v-if="!reference.isEdited" style="color: rgb(0, 24, 55); max-width: 80%;text-align:right;">{{ value }} {{ returnUnitMetric({key: [key]}) }}</span>
-                          <input v-if="reference.isEdited" type="text" v-model="reference[key]"/> 
-                        </div>
-                      </template>
-                    
-                  </div>
-                  <div class="myk--reference-info-command-box-container">
-                    <div class="myk--reference-info-command-box">
-                      <div class="myk--reference-info-command-button icon-start severity-danger myk--button" @click="removeProperty(reference.uid)">Delete</div>
-                      <div class="myk--reference-info-command-button myk--button" @click="reference.isEdited = true">Edit</div>
-                      <div class="myk--reference-info-command-button icon-last severity-info myk--button" @click="copyObjectToClipboard([reference])">Clipboard</div> 
-                    </div>
-                    <div class="myk--reference-info-command-box">
-                      <div class="myk--reference-info-command-button severity-info myk--button" @click="openLink(reference.link)">Link</div> 
-                    </div>
-                    <div v-if="reference.isEdited" class="myk--reference-info-command-box">
-                      <div class="myk--reference-info-command-button myk--button icon-start severity-danger" @click="getProperties();reference.isEdited = false;">Cancel</div>
-                      <div class="myk--reference-info-command-button myk--button severity-info" @click="reference.isEdited = false;saveProperties(selectedProperties);">Save</div>
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-            <div v-if="selectedProperties != 0" class="myk--reference-info-command-box">
-              <div class="myk--reference-info-command-button myk--button icon-start severity-danger" @click="removeAllProperty()">Delete All</div>
-              <div class="myk--reference-info-command-button myk--button severity-info" @click="copyObjectToClipboard(selectedProperties)">Clipboard</div>
+          <div v-if="settings.additionalTools" class="myk--container-basics">
+            <span class="myk--section-header">Valuation Type</span>
+            <div class="myk--reference-info-command-box">
+              <div class="myk--reference-info-command-button myk--button icon-start severity-info"  :class="{ active: settings.valType === 'Normal' }" @click="settings.valType = 'Normal'">Normal</div>
+              <div class="myk--reference-info-command-button myk--button severity-info"  :class="{ active: settings.valType === 'New Construction' }" @click="settings.valType = 'New Construction'">New Construction</div>
             </div>
           </div>
-          <div class="myk--container-basics">
-            <span class="myk--section-header">Summary Stastics</span>
-            <div class="myk--container-basics_negative">
-              <div class="myk--reference-info-table-line myk--ruler-bottom">
-                <span>PSQM: </span><span style="color: rgb(0, 24, 55)">{{ average(selectedProperties, 'PSQM') }} {{ returnUnitMetric({key: 'PSQM'}) }}</span>
+          <template v-if="settings.valType == 'Normal' || !settings.additionalTools">
+            <div class="myk--container-basics">
+              <span class="myk--section-header">Reference Table</span>
+              <div id="myk--dropdown-reference-table-container" class="myk--container-basics">
+                <div :key="reference.uid" v-for="(reference, index) in selectedProperties" class="myk--dropdown-reference-container">
+                  <div class="myk--reference-bar myk--button" :class="{ 'active-reference': expandedPropertyId === reference.uid }" @click="toggleReferenceDetails(reference.uid)">
+                    <div class="myk--within-bar-icon icon-start" style="font-weight: 600;">{{ index + 1 }}</div>
+                    <span>{{ reference.advertisedPrice }}</span>
+                    <div class="myk--within-bar-icon icon-last">{{ expandedPropertyId === reference.uid ? '▲' : '▼' }}</div>
+                  </div>
+                  <div class="myk--reference-info" v-if="expandedPropertyId === reference.uid">
+                    <div class="myk--reference-info-table">
+                      
+                        <template v-for="(value, key, findex) in reference" :key="key">
+                          <div 
+                            v-if="!['uid','isEdited','link'].includes(key)"
+                            class="myk--reference-info-table-line"
+                            :class="{ 'myk--ruler-bottom': findex < (Object.keys(reference).length - 1) }"
+                          >
+                            <span>{{ capitalize(key) }}:</span>
+                            <span v-if="!reference.isEdited" style="color: rgb(0, 24, 55); max-width: 80%;text-align:right;">{{ value }} {{ returnUnitMetric({key: [key]}) }}</span>
+                            <input v-if="reference.isEdited" type="text" v-model="reference[key]"/> 
+                          </div>
+                        </template>
+                      
+                    </div>
+                    <div class="myk--reference-info-command-box-container">
+                      <div class="myk--reference-info-command-box">
+                        <div class="myk--reference-info-command-button icon-start severity-danger myk--button" @click="removeProperty(reference.uid)">Delete</div>
+                        <div class="myk--reference-info-command-button myk--button" @click="reference.isEdited = true">Edit</div>
+                        <div class="myk--reference-info-command-button icon-last severity-info myk--button" @click="copyObjectToClipboard([reference])">Clipboard</div> 
+                      </div>
+                      <div class="myk--reference-info-command-box">
+                        <div class="myk--reference-info-command-button severity-info myk--button" @click="openLink(reference.link)">Link</div> 
+                      </div>
+                      <div v-if="reference.isEdited" class="myk--reference-info-command-box">
+                        <div class="myk--reference-info-command-button myk--button icon-start severity-danger" @click="getProperties();reference.isEdited = false;">Cancel</div>
+                        <div class="myk--reference-info-command-button myk--button severity-info" @click="reference.isEdited = false;saveProperties(selectedProperties);">Save</div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
               </div>
-              <div class="myk--reference-info-table-line">
-                <span>Price: </span><span style="color: rgb(0, 24, 55)">{{ average(selectedProperties, 'advertisedPrice') }} {{ returnUnitMetric({key: 'advertisedPrice'}) }}</span>
+              <div v-if="selectedProperties != 0" class="myk--reference-info-command-box">
+                <div class="myk--reference-info-command-button myk--button icon-start severity-danger" @click="removeAllProperty()">Delete All</div>
+                <div class="myk--reference-info-command-button myk--button severity-info" @click="copyObjectToClipboard(selectedProperties)">Clipboard</div>
               </div>
             </div>
-            <div class="myk--container-basics_negative">  
-              <div class="myk--reference-info-table-line">
-                <span>Living area: </span><input type="text" v-model="valuationMetrics.dvmLA">
-              </div>  
-              <div class="myk--reference-info-table-line">  
-                <span>PSQM Correction: </span><input type="text" v-model="valuationMetrics.dvmPSQM">
-              </div>  
-              <div class="myk--reference-info-table-line">
-                <span>Valuation: </span><span style="color: rgb(0, 24, 55)">{{ dvmPrice }} {{ returnUnitMetric({key: 'advertisedPrice'}) }}</span>
+            <div class="myk--container-basics">
+              <span class="myk--section-header">Summary Stastics</span>
+              <div class="myk--container-basics_negative">
+                <div class="myk--reference-info-table-line myk--ruler-bottom">
+                  <span>PSQM: </span><span style="color: rgb(0, 24, 55)">{{ average(selectedProperties, 'PSQM') }} {{ returnUnitMetric({key: 'PSQM'}) }}</span>
+                </div>
+                <div class="myk--reference-info-table-line">
+                  <span>Price: </span><span style="color: rgb(0, 24, 55)">{{ average(selectedProperties, 'advertisedPrice') }} {{ returnUnitMetric({key: 'advertisedPrice'}) }}</span>
+                </div>
               </div>
-              <div class="myk--reference-info-table-line">
-                <span>Confidence Interval ARG: </span><span style="color: rgb(0, 24, 55)">[ {{ dvmConfidenceIntervalARG.lower }} ; {{ dvmConfidenceIntervalARG.upper }} ]</span>
+              <div class="myk--container-basics_negative">  
+                <div class="myk--reference-info-table-line">
+                  <span>Living area: </span><input type="text" v-model="valuationMetrics.dvmLA">
+                </div>  
+                <div class="myk--reference-info-table-line">  
+                  <span>PSQM Correction: </span><input type="text" v-model="valuationMetrics.dvmPSQM">
+                </div>  
+                <div class="myk--reference-info-table-line">
+                  <span>Valuation: </span><span style="color: rgb(0, 24, 55)">{{ dvmPrice }} {{ returnUnitMetric({key: 'advertisedPrice'}) }}</span>
+                </div>
+                <div class="myk--reference-info-table-line">
+                  <span>Confidence Interval ARG: </span><span style="color: rgb(0, 24, 55)">[ {{ dvmConfidenceIntervalARG.lower }} ; {{ dvmConfidenceIntervalARG.upper }} ]</span>
+                </div>
+                <div class="myk--reference-info-table-line">
+                  <span>Confidence Interval ING: </span><span style="color: rgb(0, 24, 55)">[ {{ dvmConfidenceIntervalING.lower }} ; {{ dvmConfidenceIntervalING.upper }} ]</span>
+                </div>
               </div>
-              <div class="myk--reference-info-table-line">
-                <span>Confidence Interval ING: </span><span style="color: rgb(0, 24, 55)">[ {{ dvmConfidenceIntervalING.lower }} ; {{ dvmConfidenceIntervalING.upper }} ]</span>
+              <div v-if="average(selectedProperties, 'PSQM') != 0" class="myk--reference-info-command-box">
+                <div class="myk--reference-info-command-button myk--button icon-start severity-info" @click="copySummaryStatistics()">Copy Statistics</div>
+                <div class="myk--reference-info-command-button myk--button severity-info" @click="copySummaryStatistics(sumStats = {'PSQM Average':  average(selectedProperties, 'PSQM') + returnUnitMetric({key: 'PSQM'})},selectedProperties)">Clipboard All</div>
               </div>
             </div>
-            <div v-if="average(selectedProperties, 'PSQM') != 0" class="myk--reference-info-command-box">
-              <div class="myk--reference-info-command-button myk--button icon-start severity-info" @click="copySummaryStatistics()">Copy Statistics</div>
-              <div class="myk--reference-info-command-button myk--button severity-info" @click="copySummaryStatistics(sumStats = {'PSQM Average':  average(selectedProperties, 'PSQM') + returnUnitMetric({key: 'PSQM'})},selectedProperties)">Clipboard All</div>
-            </div>
-          </div>
+          </template>
+          <template v-if="settings.valType == 'New Construction' && settings.additionalTools">
+          Still under construction... 🥁
+          </template>
         </div>
         <div class="myk--tab-container" v-if="activeTab === 'Settings'">
-          <button @click="handleSaveClick()">Trigger Success Toast</button>
-          Settings page
-          {{ currentWindow }}
+          <div class="myk--input-line">
+            <span>Toggle Extra Valuation Tools</span>
+            <input type="checkbox" v-model="settings.additionalTools" />
+          </div>
         </div>
     </div>
 </div>
@@ -460,16 +479,21 @@ input {
       
       data() {
         return {
-          displayApp: false,
+          displayApp: true,
           pageHostname: '',
           currentListing: currentListing,
           activeTab: 'References',
           selectedProperties: [],
           expandedPropertyId: [],
+          settings: {
+            additionalTools: false,
+            valType: 'Normal',
+          },
           valuationMetrics: {
             dvmLA: 150
           },
           STORAGE_KEY: 'selectedProperties',
+          SETTINGS_KEY: 'settingsMyk',
           toast: {
             visible: false,
             message: '',
@@ -478,7 +502,7 @@ input {
           },
           currentWindow: hostname,
           devianceArray: [],
-          basicPropertyInfo: []
+          basicPropertyInfo: [],
         }
       },
       
@@ -519,6 +543,14 @@ input {
         handleSaveClick() {
           // You would call this after successfully saving a property
           this.triggerToast('Property saved successfully!', 'danger');
+        },
+        getSettings() {
+          const settings = localStorage.getItem(this.SETTINGS_KEY);
+          this.settings = settings ? JSON.parse(settings) : this.settings;
+        },
+        saveSettings(){
+          localStorage.setItem(this.SETTINGS_KEY, JSON.stringify(this.settings));
+          this.triggerToast('Settings saved successfully!', 'info');
         },
         getProperties() {
           const properties = localStorage.getItem(this.STORAGE_KEY);
@@ -693,9 +725,16 @@ Note: ${data.note}`;
         }
       },
       
-      
+      watch: {
+        settings: {
+          handler: 'saveSettings',
+          deep: true
+        }
+      },
+
       created() {
-        this.getProperties(); 
+        this.getProperties();
+        this.getSettings();
 
       }
     };
