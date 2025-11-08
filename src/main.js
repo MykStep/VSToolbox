@@ -6,24 +6,22 @@ import './style.css'
 function mountApp() {
     // Create div to mount on
     const appContainer = document.createElement('div');
-    appContainer.id = '__my-vue-injection-app';
-    appContainer.style.position = 'fixed';
-    appContainer.style.top = '20px';
-    appContainer.style.right = '20px';
-    appContainer.style.zIndex = '99999';
-    appContainer.style.background = 'white';
-    appContainer.style.padding = '1rem';
-    appContainer.style.borderRadius = '8px';
-    appContainer.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    appContainer.id = 'myk--vue-app';
+    appContainer.style.position = 'sticky';
+    appContainer.style.top = '0';
+    appContainer.style.zIndex = '10000';
 
-    document.body.appendChild(appContainer);
+    document.body.prepend(appContainer);
 
-    createApp(App).mount('#__my-vue-injection-app');
+    createApp(App).mount('#myk--vue-app');
 }
+
+var hostname = window.location.host;
 
 // Mount when page is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', mountApp);
 } else {
     mountApp();
+    console.log(hostname);
 }

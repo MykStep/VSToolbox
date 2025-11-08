@@ -2,7 +2,7 @@
 	try {
 		if (typeof document != "undefined") {
 			var elementStyle = document.createElement("style");
-			elementStyle.appendChild(document.createTextNode(":root {\n  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;\n  line-height: 1.5;\n  font-weight: 400;\n\n  color-scheme: light dark;\n  color: rgba(255, 255, 255, 0.87);\n  background-color: #d8c79a;\n\n  font-synthesis: none;\n  text-rendering: optimizeLegibility;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\na {\n  font-weight: 500;\n  color: #646cff;\n  text-decoration: inherit;\n}\na:hover {\n  color: #535bf2;\n}\n\nbody {\n  margin: 0;\n  display: flex;\n  place-items: center;\n  min-width: 320px;\n  min-height: 100vh;\n}\n\nh1 {\n  font-size: 3.2em;\n  line-height: 1.1;\n}\n\nbutton {\n  border-radius: 8px;\n  border: 1px solid transparent;\n  padding: 0.6em 1.2em;\n  font-size: 1em;\n  font-weight: 500;\n  font-family: inherit;\n  background-color: #d7c9a1;\n  cursor: pointer;\n  transition: border-color 0.25s;\n}\nbutton:hover {\n  border-color: #646cff;\n}\nbutton:focus,\nbutton:focus-visible {\n  outline: 4px auto -webkit-focus-ring-color;\n}\n\n.card {\n  padding: 2em;\n}\n\n#app {\n  max-width: 1280px;\n  margin: 0 auto;\n  padding: 2rem;\n  text-align: center;\n}\n\n@media (prefers-color-scheme: light) {\n  :root {\n    color: #213547;\n    background-color: #ffffff;\n  }\n  a:hover {\n    color: #747bff;\n  }\n  button {\n    background-color: #f9f9f9;\n  }\n}\n/*$vite$:1*/"));
+			elementStyle.appendChild(document.createTextNode("/* Text Color: #009CFF */\n\n:root {\n  --text-color: #009CFF;\n  --secondary-color:#798DA6;\n  --active-bg: rgb(204, 235.2, 255);\n  --active-hover-bg: rgb(191, 225, 247);\n\n}\n\nbody {\n  height: auto !important;\n}\n\ninput {\n  text-align: right;\n}\n\n.container--main-header{top: 25px !important;}\n\n.classified__header{top: calc(3.75em + 25px) !important;}\n\n#myk--app {\n  top: 0;\n  left: 0;\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Satoshi', sans-serif;\n}\n\n.myk--container-basics{\n  margin: 5px 0;\n}\n\n.myk--container-basics_negative {\n  background: #fff;\n  border-radius: 6px;\n  margin: 5px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 10px;\n}\n\n#myk--app-header {\n    width: 100%;\n    height: 25px;\n    background-color: #fff;\n    border-bottom: 1px solid #d6e2e9;\n    color: var(--text-color);\n}\n\n#myk--app-container {\n    position: absolute;\n    right: 0;\n    width: 450px;\n    height: 700px;\n    background: rgb(247, 249, 251);\n    border-bottom: 1px solid #d6e2e9;\n    box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;\n}\n\n#myk--bg-re-logo{\n  position: absolute;\n  bottom: 30px;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 55px;\n  filter: invert(0.3) grayscale(1);\n  z-index: 1;\n}\n\n#myk--app-selector-menu{\n    display: flex;\n    width: 100%;\n    justify-content: space-between;\n\n}\n\n#myk--app-selector-menu>.myk--selector-buttons{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    width: calc(100% / 3);\n    height: 50px;\n    border-bottom: var(--text-color) 2px solid;\n    cursor: pointer;\n    font-weight: 600;\n}\n\n#myk--app-selector-menu>.myk--selector-buttons.active{\n  background-color: var(--active-bg); /* Light green */\n  color: var(--text-color);\n}\n\n.myk--selector-buttons:hover{\n    background: #f7f9fb;\n}\n\n.myk--tab-container {\n  padding: 15px;\n  display:flex;\n  position: relative;\n  width: 100%;\n  height: calc(100% - 75px);\n  flex-direction: column;\n  overflow-y: scroll;\n  border-radius: 12px;\n  z-index: 5000;\n\n}\n\n.myk--section-header{\n  font-size: 16px;\n  color: rgb(0, 24, 55);\n  margin: 5px 0;\n  font-weight: 600;\n}\n\n.myk--dropdown-reference-container{\n  margin: 10px 0;\n}\n\n.myk--reference-bar{\n  display: flex;\n  width: 100%;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-bar.active-reference{\n  border-bottom-left-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n\n.myk--within-bar-icon{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 30px;\n  height: 30px;\n  font-size: 12px;\n  color: var(--secondary-color);\n}\n\n.myk--within-bar-icon.icon-start{\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.myk--within-bar-icon.icon-last{\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-info{\n  border-bottom-left-radius: 6px;\n  border-bottom-right-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  border-top: 0;\n  padding: 10px;\n  font-size: 14px;\n}\n\n.myk--reference-info-command-box {\n  display: flex;\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  width: max-content;\n  overflow: hidden;\n  width: max-content;\n  overflow: hidden;\n}\n\n.myk--reference-info-command-button{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 30px;\n  padding: 0 10px;\n  font-size: 14px;\n  background: #fff;\n}\n\n.myk--reference-info-command-button.icon-start{\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-info-command-button.icon-last{\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.myk--button{\n  -webkit-user-select: none;\n  cursor:pointer;\n  user-select: none;\n}\n\n.myk--button:hover{\n  background: #f7f9fb;\n}\n\n.myk--button.severity-info:hover, .myk--button.severity-info.active {\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n}\n\n.myk--button.severity-danger:hover, .myk--button.severity-danger.active{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n}\n\n.myk--ruler-bottom{\n  border-bottom: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-info-table-line{\n  margin: 3px 0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.myk--reference-info-table{\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 0 8px;\n}\n\n.toast-notification{\n  position: absolute;\n  bottom: 15px;\n  left: 50%;\n  width: max-content;\n  transform: translateX(-50%);\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border: 1px solid rgb(127.5, 205.5, 255);\n  padding: 5px 12px;\n  border-radius: 50px;\n  z-index: 10000;\n}\n\n.toast-info{\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border-color: rgb(14, 165, 233);\n}\n\n.toast-danger{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n  border-color: rgb(239, 68, 68);\n}\n\n.myk--reference-info-command-box-container {\n  display:flex;\n  justify-content: space-between;\n}\n\n.myk--input-line{\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}/*$vite$:1*/"));
 			document.head.appendChild(elementStyle);
 		}
 	} catch (e) {
@@ -64,11 +64,11 @@
 	});
 	var hyphenateRE = /\B([A-Z])/g;
 	var hyphenate = cacheStringFunction((str) => str.replace(hyphenateRE, "-$1").toLowerCase());
-	var capitalize = cacheStringFunction((str) => {
+	var capitalize$1 = cacheStringFunction((str) => {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	});
 	var toHandlerKey = cacheStringFunction((str) => {
-		return str ? `on${capitalize(str)}` : ``;
+		return str ? `on${capitalize$1(str)}` : ``;
 	});
 	var hasChanged = (value, oldValue) => !Object.is(value, oldValue);
 	var invokeArrayFns = (fns, ...arg) => {
@@ -84,6 +84,10 @@
 	};
 	var looseToNumber = (val) => {
 		const n = parseFloat(val);
+		return isNaN(n) ? val : n;
+	};
+	var toNumber = (val) => {
+		const n = isString(val) ? Number(val) : NaN;
 		return isNaN(n) ? val : n;
 	};
 	var _globalThis;
@@ -132,6 +136,27 @@
 	function includeBooleanAttr(value) {
 		return !!value || value === "";
 	}
+	var isRef$1 = (val) => {
+		return !!(val && val["__v_isRef"] === true);
+	};
+	var toDisplayString = (val) => {
+		return isString(val) ? val : val == null ? "" : isArray(val) || isObject(val) && (val.toString === objectToString || !isFunction(val.toString)) ? isRef$1(val) ? toDisplayString(val.value) : JSON.stringify(val, replacer, 2) : String(val);
+	};
+	var replacer = (_key, val) => {
+		if (isRef$1(val)) return replacer(_key, val.value);
+		else if (isMap(val)) return { [`Map(${val.size})`]: [...val.entries()].reduce((entries, [key, val2], i) => {
+			entries[stringifySymbol(key, i) + " =>"] = val2;
+			return entries;
+		}, {}) };
+		else if (isSet(val)) return { [`Set(${val.size})`]: [...val.values()].map((v) => stringifySymbol(v)) };
+		else if (isSymbol(val)) return stringifySymbol(val);
+		else if (isObject(val) && !isArray(val) && !isPlainObject(val)) return String(val);
+		return val;
+	};
+	var stringifySymbol = (v, i = "") => {
+		var _a;
+		return isSymbol(v) ? `Symbol(${(_a = v.description) != null ? _a : i})` : v;
+	};
 	var activeEffectScope;
 	var EffectScope = class {
 		constructor(detached = false) {
@@ -1053,6 +1078,37 @@
 	function isRef(r) {
 		return r ? r["__v_isRef"] === true : false;
 	}
+	function ref(value) {
+		return createRef(value, false);
+	}
+	function createRef(rawValue, shallow) {
+		if (isRef(rawValue)) return rawValue;
+		return new RefImpl(rawValue, shallow);
+	}
+	var RefImpl = class {
+		constructor(value, isShallow2) {
+			this.dep = new Dep();
+			this["__v_isRef"] = true;
+			this["__v_isShallow"] = false;
+			this._rawValue = isShallow2 ? value : toRaw(value);
+			this._value = isShallow2 ? value : toReactive(value);
+			this["__v_isShallow"] = isShallow2;
+		}
+		get value() {
+			this.dep.track();
+			return this._value;
+		}
+		set value(newValue) {
+			const oldValue = this._rawValue;
+			const useDirectValue = this["__v_isShallow"] || isShallow(newValue) || isReadonly(newValue);
+			newValue = useDirectValue ? newValue : toRaw(newValue);
+			if (hasChanged(newValue, oldValue)) {
+				this._rawValue = newValue;
+				this._value = useDirectValue ? newValue : toReactive(newValue);
+				this.dep.trigger();
+			}
+		}
+	};
 	function unref(ref2) {
 		return isRef(ref2) ? ref2.value : ref2;
 	}
@@ -1129,7 +1185,7 @@
 			if (isShallow(source2) || deep === false || deep === 0) return traverse(source2, 1);
 			return traverse(source2);
 		};
-		let effect;
+		let effect$1;
 		let getter;
 		let cleanup;
 		let boundCleanup;
@@ -1160,7 +1216,7 @@
 				}
 			}
 			const currentEffect = activeWatcher;
-			activeWatcher = effect;
+			activeWatcher = effect$1;
 			try {
 				return call ? call(source, 3, [boundCleanup]) : source(boundCleanup);
 			} finally {
@@ -1175,8 +1231,8 @@
 		}
 		const scope = getCurrentScope();
 		const watchHandle = () => {
-			effect.stop();
-			if (scope && scope.active) remove(scope.effects, effect);
+			effect$1.stop();
+			if (scope && scope.active) remove(scope.effects, effect$1);
 		};
 		if (once && cb) {
 			const _cb = cb;
@@ -1187,13 +1243,13 @@
 		}
 		let oldValue = isMultiSource ? new Array(source.length).fill(INITIAL_WATCHER_VALUE) : INITIAL_WATCHER_VALUE;
 		const job = (immediateFirstRun) => {
-			if (!(effect.flags & 1) || !effect.dirty && !immediateFirstRun) return;
+			if (!(effect$1.flags & 1) || !effect$1.dirty && !immediateFirstRun) return;
 			if (cb) {
-				const newValue = effect.run();
+				const newValue = effect$1.run();
 				if (deep || forceTrigger || (isMultiSource ? newValue.some((v, i) => hasChanged(v, oldValue[i])) : hasChanged(newValue, oldValue))) {
 					if (cleanup) cleanup();
 					const currentWatcher = activeWatcher;
-					activeWatcher = effect;
+					activeWatcher = effect$1;
 					try {
 						const args = [
 							newValue,
@@ -1206,26 +1262,26 @@
 						activeWatcher = currentWatcher;
 					}
 				}
-			} else effect.run();
+			} else effect$1.run();
 		};
 		if (augmentJob) augmentJob(job);
-		effect = new ReactiveEffect(getter);
-		effect.scheduler = scheduler ? () => scheduler(job, false) : job;
-		boundCleanup = (fn) => onWatcherCleanup(fn, false, effect);
-		cleanup = effect.onStop = () => {
-			const cleanups = cleanupMap.get(effect);
+		effect$1 = new ReactiveEffect(getter);
+		effect$1.scheduler = scheduler ? () => scheduler(job, false) : job;
+		boundCleanup = (fn) => onWatcherCleanup(fn, false, effect$1);
+		cleanup = effect$1.onStop = () => {
+			const cleanups = cleanupMap.get(effect$1);
 			if (cleanups) {
 				if (call) call(cleanups, 4);
 				else for (const cleanup2 of cleanups) cleanup2();
-				cleanupMap.delete(effect);
+				cleanupMap.delete(effect$1);
 			}
 		};
 		if (cb) if (immediate) job(true);
-		else oldValue = effect.run();
+		else oldValue = effect$1.run();
 		else if (scheduler) scheduler(job.bind(null, true), true);
-		else effect.run();
-		watchHandle.pause = effect.pause.bind(effect);
-		watchHandle.resume = effect.resume.bind(effect);
+		else effect$1.run();
+		watchHandle.pause = effect$1.pause.bind(effect$1);
+		watchHandle.resume = effect$1.resume.bind(effect$1);
 		watchHandle.stop = watchHandle;
 		return watchHandle;
 	}
@@ -1427,6 +1483,30 @@
 		renderFnWithContext._d = true;
 		return renderFnWithContext;
 	}
+	function withDirectives(vnode, directives) {
+		if (currentRenderingInstance === null) return vnode;
+		const instance = getComponentPublicInstance(currentRenderingInstance);
+		const bindings = vnode.dirs || (vnode.dirs = []);
+		for (let i = 0; i < directives.length; i++) {
+			let [dir, value, arg, modifiers = EMPTY_OBJ] = directives[i];
+			if (dir) {
+				if (isFunction(dir)) dir = {
+					mounted: dir,
+					updated: dir
+				};
+				if (dir.deep) traverse(value);
+				bindings.push({
+					dir,
+					instance,
+					value,
+					oldValue: void 0,
+					arg,
+					modifiers
+				});
+			}
+		}
+		return vnode;
+	}
 	function invokeDirectiveHook(vnode, prevVNode, instance, name) {
 		const bindings = vnode.dirs;
 		const oldBindings = prevVNode && prevVNode.dirs;
@@ -1449,6 +1529,208 @@
 	var TeleportEndKey = Symbol("_vte");
 	var isTeleport = (type) => type.__isTeleport;
 	var leaveCbKey = Symbol("_leaveCb");
+	var enterCbKey$1 = Symbol("_enterCb");
+	function useTransitionState() {
+		const state = {
+			isMounted: false,
+			isLeaving: false,
+			isUnmounting: false,
+			leavingVNodes: /* @__PURE__ */ new Map()
+		};
+		onMounted(() => {
+			state.isMounted = true;
+		});
+		onBeforeUnmount(() => {
+			state.isUnmounting = true;
+		});
+		return state;
+	}
+	var TransitionHookValidator = [Function, Array];
+	var BaseTransitionPropsValidators = {
+		mode: String,
+		appear: Boolean,
+		persisted: Boolean,
+		onBeforeEnter: TransitionHookValidator,
+		onEnter: TransitionHookValidator,
+		onAfterEnter: TransitionHookValidator,
+		onEnterCancelled: TransitionHookValidator,
+		onBeforeLeave: TransitionHookValidator,
+		onLeave: TransitionHookValidator,
+		onAfterLeave: TransitionHookValidator,
+		onLeaveCancelled: TransitionHookValidator,
+		onBeforeAppear: TransitionHookValidator,
+		onAppear: TransitionHookValidator,
+		onAfterAppear: TransitionHookValidator,
+		onAppearCancelled: TransitionHookValidator
+	};
+	var recursiveGetSubtree = (instance) => {
+		const subTree = instance.subTree;
+		return subTree.component ? recursiveGetSubtree(subTree.component) : subTree;
+	};
+	var BaseTransitionImpl = {
+		name: `BaseTransition`,
+		props: BaseTransitionPropsValidators,
+		setup(props, { slots }) {
+			const instance = getCurrentInstance();
+			const state = useTransitionState();
+			return () => {
+				const children = slots.default && getTransitionRawChildren(slots.default(), true);
+				if (!children || !children.length) return;
+				const child = findNonCommentChild(children);
+				const rawProps = toRaw(props);
+				const { mode } = rawProps;
+				if (state.isLeaving) return emptyPlaceholder(child);
+				const innerChild = getInnerChild$1(child);
+				if (!innerChild) return emptyPlaceholder(child);
+				let enterHooks = resolveTransitionHooks(innerChild, rawProps, state, instance, (hooks) => enterHooks = hooks);
+				if (innerChild.type !== Comment) setTransitionHooks(innerChild, enterHooks);
+				let oldInnerChild = instance.subTree && getInnerChild$1(instance.subTree);
+				if (oldInnerChild && oldInnerChild.type !== Comment && !isSameVNodeType(oldInnerChild, innerChild) && recursiveGetSubtree(instance).type !== Comment) {
+					let leavingHooks = resolveTransitionHooks(oldInnerChild, rawProps, state, instance);
+					setTransitionHooks(oldInnerChild, leavingHooks);
+					if (mode === "out-in" && innerChild.type !== Comment) {
+						state.isLeaving = true;
+						leavingHooks.afterLeave = () => {
+							state.isLeaving = false;
+							if (!(instance.job.flags & 8)) instance.update();
+							delete leavingHooks.afterLeave;
+							oldInnerChild = void 0;
+						};
+						return emptyPlaceholder(child);
+					} else if (mode === "in-out" && innerChild.type !== Comment) leavingHooks.delayLeave = (el, earlyRemove, delayedLeave) => {
+						const leavingVNodesCache = getLeavingNodesForType(state, oldInnerChild);
+						leavingVNodesCache[String(oldInnerChild.key)] = oldInnerChild;
+						el[leaveCbKey] = () => {
+							earlyRemove();
+							el[leaveCbKey] = void 0;
+							delete enterHooks.delayedLeave;
+							oldInnerChild = void 0;
+						};
+						enterHooks.delayedLeave = () => {
+							delayedLeave();
+							delete enterHooks.delayedLeave;
+							oldInnerChild = void 0;
+						};
+					};
+					else oldInnerChild = void 0;
+				} else if (oldInnerChild) oldInnerChild = void 0;
+				return child;
+			};
+		}
+	};
+	function findNonCommentChild(children) {
+		let child = children[0];
+		if (children.length > 1) {
+			for (const c of children) if (c.type !== Comment) {
+				child = c;
+				break;
+			}
+		}
+		return child;
+	}
+	var BaseTransition = BaseTransitionImpl;
+	function getLeavingNodesForType(state, vnode) {
+		const { leavingVNodes } = state;
+		let leavingVNodesCache = leavingVNodes.get(vnode.type);
+		if (!leavingVNodesCache) {
+			leavingVNodesCache = /* @__PURE__ */ Object.create(null);
+			leavingVNodes.set(vnode.type, leavingVNodesCache);
+		}
+		return leavingVNodesCache;
+	}
+	function resolveTransitionHooks(vnode, props, state, instance, postClone) {
+		const { appear, mode, persisted = false, onBeforeEnter, onEnter, onAfterEnter, onEnterCancelled, onBeforeLeave, onLeave, onAfterLeave, onLeaveCancelled, onBeforeAppear, onAppear, onAfterAppear, onAppearCancelled } = props;
+		const key = String(vnode.key);
+		const leavingVNodesCache = getLeavingNodesForType(state, vnode);
+		const callHook$2 = (hook, args) => {
+			hook && callWithAsyncErrorHandling(hook, instance, 9, args);
+		};
+		const callAsyncHook = (hook, args) => {
+			const done = args[1];
+			callHook$2(hook, args);
+			if (isArray(hook)) {
+				if (hook.every((hook2) => hook2.length <= 1)) done();
+			} else if (hook.length <= 1) done();
+		};
+		const hooks = {
+			mode,
+			persisted,
+			beforeEnter(el) {
+				let hook = onBeforeEnter;
+				if (!state.isMounted) if (appear) hook = onBeforeAppear || onBeforeEnter;
+				else return;
+				if (el[leaveCbKey]) el[leaveCbKey](true);
+				const leavingVNode = leavingVNodesCache[key];
+				if (leavingVNode && isSameVNodeType(vnode, leavingVNode) && leavingVNode.el[leaveCbKey]) leavingVNode.el[leaveCbKey]();
+				callHook$2(hook, [el]);
+			},
+			enter(el) {
+				let hook = onEnter;
+				let afterHook = onAfterEnter;
+				let cancelHook = onEnterCancelled;
+				if (!state.isMounted) if (appear) {
+					hook = onAppear || onEnter;
+					afterHook = onAfterAppear || onAfterEnter;
+					cancelHook = onAppearCancelled || onEnterCancelled;
+				} else return;
+				let called = false;
+				const done = el[enterCbKey$1] = (cancelled) => {
+					if (called) return;
+					called = true;
+					if (cancelled) callHook$2(cancelHook, [el]);
+					else callHook$2(afterHook, [el]);
+					if (hooks.delayedLeave) hooks.delayedLeave();
+					el[enterCbKey$1] = void 0;
+				};
+				if (hook) callAsyncHook(hook, [el, done]);
+				else done();
+			},
+			leave(el, remove$1) {
+				const key2 = String(vnode.key);
+				if (el[enterCbKey$1]) el[enterCbKey$1](true);
+				if (state.isUnmounting) return remove$1();
+				callHook$2(onBeforeLeave, [el]);
+				let called = false;
+				const done = el[leaveCbKey] = (cancelled) => {
+					if (called) return;
+					called = true;
+					remove$1();
+					if (cancelled) callHook$2(onLeaveCancelled, [el]);
+					else callHook$2(onAfterLeave, [el]);
+					el[leaveCbKey] = void 0;
+					if (leavingVNodesCache[key2] === vnode) delete leavingVNodesCache[key2];
+				};
+				leavingVNodesCache[key2] = vnode;
+				if (onLeave) callAsyncHook(onLeave, [el, done]);
+				else done();
+			},
+			clone(vnode2) {
+				const hooks2 = resolveTransitionHooks(vnode2, props, state, instance, postClone);
+				if (postClone) postClone(hooks2);
+				return hooks2;
+			}
+		};
+		return hooks;
+	}
+	function emptyPlaceholder(vnode) {
+		if (isKeepAlive(vnode)) {
+			vnode = cloneVNode(vnode);
+			vnode.children = null;
+			return vnode;
+		}
+	}
+	function getInnerChild$1(vnode) {
+		if (!isKeepAlive(vnode)) {
+			if (isTeleport(vnode.type) && vnode.children) return findNonCommentChild(vnode.children);
+			return vnode;
+		}
+		if (vnode.component) return vnode.component.subTree;
+		const { shapeFlag, children } = vnode;
+		if (children) {
+			if (shapeFlag & 16) return children[0];
+			if (shapeFlag & 32 && isFunction(children.default)) return children.default();
+		}
+	}
 	function setTransitionHooks(vnode, hooks) {
 		if (vnode.shapeFlag & 6 && vnode.component) {
 			vnode.transition = hooks;
@@ -1457,6 +1739,20 @@
 			vnode.ssContent.transition = hooks.clone(vnode.ssContent);
 			vnode.ssFallback.transition = hooks.clone(vnode.ssFallback);
 		} else vnode.transition = hooks;
+	}
+	function getTransitionRawChildren(children, keepComment = false, parentKey) {
+		let ret = [];
+		let keyedFragmentCount = 0;
+		for (let i = 0; i < children.length; i++) {
+			let child = children[i];
+			const key = parentKey == null ? child.key : String(parentKey) + String(child.key != null ? child.key : i);
+			if (child.type === Fragment) {
+				if (child.patchFlag & 128) keyedFragmentCount++;
+				ret = ret.concat(getTransitionRawChildren(child.children, keepComment, key));
+			} else if (keepComment || child.type !== Comment) ret.push(key != null ? cloneVNode(child, { key }) : child);
+		}
+		if (keyedFragmentCount > 1) for (let i = 0; i < ret.length; i++) ret[i].patchFlag = -2;
+		return ret;
 	}
 	function markAsyncBoundary(instance) {
 		instance.ids = [
@@ -1613,6 +1909,37 @@
 		injectHook("ec", hook, target);
 	}
 	var NULL_DYNAMIC_COMPONENT = Symbol.for("v-ndc");
+	function renderList(source, renderItem, cache, index) {
+		let ret;
+		const cached = cache && cache[index];
+		const sourceIsArray = isArray(source);
+		if (sourceIsArray || isString(source)) {
+			const sourceIsReactiveArray = sourceIsArray && isReactive(source);
+			let needsWrap = false;
+			let isReadonlySource = false;
+			if (sourceIsReactiveArray) {
+				needsWrap = !isShallow(source);
+				isReadonlySource = isReadonly(source);
+				source = shallowReadArray(source);
+			}
+			ret = new Array(source.length);
+			for (let i = 0, l = source.length; i < l; i++) ret[i] = renderItem(needsWrap ? isReadonlySource ? toReadonly(toReactive(source[i])) : toReactive(source[i]) : source[i], i, void 0, cached && cached[i]);
+		} else if (typeof source === "number") {
+			ret = new Array(source);
+			for (let i = 0; i < source; i++) ret[i] = renderItem(i + 1, i, void 0, cached && cached[i]);
+		} else if (isObject(source)) if (source[Symbol.iterator]) ret = Array.from(source, (item, i) => renderItem(item, i, void 0, cached && cached[i]));
+		else {
+			const keys = Object.keys(source);
+			ret = new Array(keys.length);
+			for (let i = 0, l = keys.length; i < l; i++) {
+				const key = keys[i];
+				ret[i] = renderItem(source[key], key, i, cached && cached[i]);
+			}
+		}
+		else ret = [];
+		if (cache) cache[index] = ret;
+		return ret;
+	}
 	var getPublicInstance = (i) => {
 		if (!i) return null;
 		if (isStatefulComponent(i)) return getComponentPublicInstance(i);
@@ -1708,7 +2035,7 @@
 		const publicThis = instance.proxy;
 		const ctx = instance.ctx;
 		shouldCacheAccess = false;
-		if (options.beforeCreate) callHook(options.beforeCreate, instance, "bc");
+		if (options.beforeCreate) callHook$1(options.beforeCreate, instance, "bc");
 		const { data: dataOptions, computed: computedOptions, methods, watch: watchOptions, provide: provideOptions, inject: injectOptions, created, beforeMount, mounted, beforeUpdate, updated, activated, deactivated, beforeDestroy, beforeUnmount, destroyed, unmounted, render, renderTracked, renderTriggered, errorCaptured, serverPrefetch, expose, inheritAttrs, components, directives, filters } = options;
 		const checkDuplicateProperties = null;
 		if (injectOptions) resolveInjections(injectOptions, ctx, checkDuplicateProperties);
@@ -1743,7 +2070,7 @@
 				provide(key, provides[key]);
 			});
 		}
-		if (created) callHook(created, instance, "c");
+		if (created) callHook$1(created, instance, "c");
 		function registerLifecycleHook(register, hook) {
 			if (isArray(hook)) hook.forEach((_hook) => register(_hook.bind(publicThis)));
 			else if (hook) register(hook.bind(publicThis));
@@ -1795,7 +2122,7 @@
 			else ctx[key] = injected;
 		}
 	}
-	function callHook(hook, instance, type) {
+	function callHook$1(hook, instance, type) {
 		callWithAsyncErrorHandling(isArray(hook) ? hook.map((h$1) => h$1.bind(instance.proxy)) : hook.bind(instance.proxy), instance, type);
 	}
 	function createWatcher(raw, ctx, publicThis, key) {
@@ -2555,13 +2882,13 @@
 				}
 			};
 			instance.scope.on();
-			const effect = instance.effect = new ReactiveEffect(componentUpdateFn);
+			const effect$1 = instance.effect = new ReactiveEffect(componentUpdateFn);
 			instance.scope.off();
-			const update = instance.update = effect.run.bind(effect);
-			const job = instance.job = effect.runIfDirty.bind(effect);
+			const update = instance.update = effect$1.run.bind(effect$1);
+			const job = instance.job = effect$1.runIfDirty.bind(effect$1);
 			job.i = instance;
 			job.id = instance.uid;
-			effect.scheduler = () => queueJob(job);
+			effect$1.scheduler = () => queueJob(job);
 			toggleRecurse(instance, true);
 			update();
 		};
@@ -2868,12 +3195,12 @@
 	function resolveChildrenNamespace({ type, props }, currentNamespace) {
 		return currentNamespace === "svg" && type === "foreignObject" || currentNamespace === "mathml" && type === "annotation-xml" && props && props.encoding && props.encoding.includes("html") ? void 0 : currentNamespace;
 	}
-	function toggleRecurse({ effect, job }, allowed) {
+	function toggleRecurse({ effect: effect$1, job }, allowed) {
 		if (allowed) {
-			effect.flags |= 32;
+			effect$1.flags |= 32;
 			job.flags |= 4;
 		} else {
-			effect.flags &= -33;
+			effect$1.flags &= -33;
 			job.flags &= -5;
 		}
 	}
@@ -3214,6 +3541,9 @@
 	function createElementBlock(type, props, children, patchFlag, dynamicProps, shapeFlag) {
 		return setupBlock(createBaseVNode(type, props, children, patchFlag, dynamicProps, shapeFlag, true));
 	}
+	function createBlock(type, props, children, patchFlag, dynamicProps) {
+		return setupBlock(createVNode(type, props, children, patchFlag, dynamicProps, true));
+	}
 	function isVNode(value) {
 		return value ? value.__v_isVNode === true : false;
 	}
@@ -3334,6 +3664,9 @@
 	}
 	function createTextVNode(text = " ", flag = 0) {
 		return createVNode(Text, null, text, flag);
+	}
+	function createCommentVNode(text = "", asBlock = false) {
+		return asBlock ? (openBlock(), createBlock(Comment, null, text)) : createVNode(Comment, null, text);
 	}
 	function normalizeVNode(child) {
 		if (child == null || typeof child === "boolean") return createVNode(Comment);
@@ -3616,6 +3949,23 @@
 	var computed$1 = (getterOrOptions, debugOptions) => {
 		return computed(getterOrOptions, debugOptions, isInSSRComponentSetup);
 	};
+	function h(type, propsOrChildren, children) {
+		try {
+			setBlockTracking(-1);
+			const l = arguments.length;
+			if (l === 2) if (isObject(propsOrChildren) && !isArray(propsOrChildren)) {
+				if (isVNode(propsOrChildren)) return createVNode(type, null, [propsOrChildren]);
+				return createVNode(type, propsOrChildren);
+			} else return createVNode(type, null, propsOrChildren);
+			else {
+				if (l > 3) children = Array.prototype.slice.call(arguments, 2);
+				else if (l === 3 && isVNode(children)) children = [children];
+				return createVNode(type, propsOrChildren, children);
+			}
+		} finally {
+			setBlockTracking(1);
+		}
+	}
 	var version = "3.5.24";
 	var policy = void 0;
 	var tt = typeof window !== "undefined" && window.trustedTypes;
@@ -3673,7 +4023,224 @@
 			return [before ? before.nextSibling : parent.firstChild, anchor ? anchor.previousSibling : parent.lastChild];
 		}
 	};
+	var TRANSITION = "transition";
+	var ANIMATION = "animation";
 	var vtcKey = Symbol("_vtc");
+	var DOMTransitionPropsValidators = {
+		name: String,
+		type: String,
+		css: {
+			type: Boolean,
+			default: true
+		},
+		duration: [
+			String,
+			Number,
+			Object
+		],
+		enterFromClass: String,
+		enterActiveClass: String,
+		enterToClass: String,
+		appearFromClass: String,
+		appearActiveClass: String,
+		appearToClass: String,
+		leaveFromClass: String,
+		leaveActiveClass: String,
+		leaveToClass: String
+	};
+	var TransitionPropsValidators = /* @__PURE__ */ extend({}, BaseTransitionPropsValidators, DOMTransitionPropsValidators);
+	var decorate$1 = (t) => {
+		t.displayName = "Transition";
+		t.props = TransitionPropsValidators;
+		return t;
+	};
+	var Transition = /* @__PURE__ */ decorate$1((props, { slots }) => h(BaseTransition, resolveTransitionProps(props), slots));
+	var callHook = (hook, args = []) => {
+		if (isArray(hook)) hook.forEach((h2) => h2(...args));
+		else if (hook) hook(...args);
+	};
+	var hasExplicitCallback = (hook) => {
+		return hook ? isArray(hook) ? hook.some((h2) => h2.length > 1) : hook.length > 1 : false;
+	};
+	function resolveTransitionProps(rawProps) {
+		const baseProps = {};
+		for (const key in rawProps) if (!(key in DOMTransitionPropsValidators)) baseProps[key] = rawProps[key];
+		if (rawProps.css === false) return baseProps;
+		const { name = "v", type, duration, enterFromClass = `${name}-enter-from`, enterActiveClass = `${name}-enter-active`, enterToClass = `${name}-enter-to`, appearFromClass = enterFromClass, appearActiveClass = enterActiveClass, appearToClass = enterToClass, leaveFromClass = `${name}-leave-from`, leaveActiveClass = `${name}-leave-active`, leaveToClass = `${name}-leave-to` } = rawProps;
+		const durations = normalizeDuration(duration);
+		const enterDuration = durations && durations[0];
+		const leaveDuration = durations && durations[1];
+		const { onBeforeEnter, onEnter, onEnterCancelled, onLeave, onLeaveCancelled, onBeforeAppear = onBeforeEnter, onAppear = onEnter, onAppearCancelled = onEnterCancelled } = baseProps;
+		const finishEnter = (el, isAppear, done, isCancelled) => {
+			el._enterCancelled = isCancelled;
+			removeTransitionClass(el, isAppear ? appearToClass : enterToClass);
+			removeTransitionClass(el, isAppear ? appearActiveClass : enterActiveClass);
+			done && done();
+		};
+		const finishLeave = (el, done) => {
+			el._isLeaving = false;
+			removeTransitionClass(el, leaveFromClass);
+			removeTransitionClass(el, leaveToClass);
+			removeTransitionClass(el, leaveActiveClass);
+			done && done();
+		};
+		const makeEnterHook = (isAppear) => {
+			return (el, done) => {
+				const hook = isAppear ? onAppear : onEnter;
+				const resolve = () => finishEnter(el, isAppear, done);
+				callHook(hook, [el, resolve]);
+				nextFrame(() => {
+					removeTransitionClass(el, isAppear ? appearFromClass : enterFromClass);
+					addTransitionClass(el, isAppear ? appearToClass : enterToClass);
+					if (!hasExplicitCallback(hook)) whenTransitionEnds(el, type, enterDuration, resolve);
+				});
+			};
+		};
+		return extend(baseProps, {
+			onBeforeEnter(el) {
+				callHook(onBeforeEnter, [el]);
+				addTransitionClass(el, enterFromClass);
+				addTransitionClass(el, enterActiveClass);
+			},
+			onBeforeAppear(el) {
+				callHook(onBeforeAppear, [el]);
+				addTransitionClass(el, appearFromClass);
+				addTransitionClass(el, appearActiveClass);
+			},
+			onEnter: makeEnterHook(false),
+			onAppear: makeEnterHook(true),
+			onLeave(el, done) {
+				el._isLeaving = true;
+				const resolve = () => finishLeave(el, done);
+				addTransitionClass(el, leaveFromClass);
+				if (!el._enterCancelled) {
+					forceReflow(el);
+					addTransitionClass(el, leaveActiveClass);
+				} else {
+					addTransitionClass(el, leaveActiveClass);
+					forceReflow(el);
+				}
+				nextFrame(() => {
+					if (!el._isLeaving) return;
+					removeTransitionClass(el, leaveFromClass);
+					addTransitionClass(el, leaveToClass);
+					if (!hasExplicitCallback(onLeave)) whenTransitionEnds(el, type, leaveDuration, resolve);
+				});
+				callHook(onLeave, [el, resolve]);
+			},
+			onEnterCancelled(el) {
+				finishEnter(el, false, void 0, true);
+				callHook(onEnterCancelled, [el]);
+			},
+			onAppearCancelled(el) {
+				finishEnter(el, true, void 0, true);
+				callHook(onAppearCancelled, [el]);
+			},
+			onLeaveCancelled(el) {
+				finishLeave(el);
+				callHook(onLeaveCancelled, [el]);
+			}
+		});
+	}
+	function normalizeDuration(duration) {
+		if (duration == null) return null;
+		else if (isObject(duration)) return [NumberOf(duration.enter), NumberOf(duration.leave)];
+		else {
+			const n = NumberOf(duration);
+			return [n, n];
+		}
+	}
+	function NumberOf(val) {
+		return toNumber(val);
+	}
+	function addTransitionClass(el, cls) {
+		cls.split(/\s+/).forEach((c) => c && el.classList.add(c));
+		(el[vtcKey] || (el[vtcKey] = /* @__PURE__ */ new Set())).add(cls);
+	}
+	function removeTransitionClass(el, cls) {
+		cls.split(/\s+/).forEach((c) => c && el.classList.remove(c));
+		const _vtc = el[vtcKey];
+		if (_vtc) {
+			_vtc.delete(cls);
+			if (!_vtc.size) el[vtcKey] = void 0;
+		}
+	}
+	function nextFrame(cb) {
+		requestAnimationFrame(() => {
+			requestAnimationFrame(cb);
+		});
+	}
+	var endId = 0;
+	function whenTransitionEnds(el, expectedType, explicitTimeout, resolve) {
+		const id = el._endId = ++endId;
+		const resolveIfNotStale = () => {
+			if (id === el._endId) resolve();
+		};
+		if (explicitTimeout != null) return setTimeout(resolveIfNotStale, explicitTimeout);
+		const { type, timeout, propCount } = getTransitionInfo(el, expectedType);
+		if (!type) return resolve();
+		const endEvent = type + "end";
+		let ended = 0;
+		const end = () => {
+			el.removeEventListener(endEvent, onEnd);
+			resolveIfNotStale();
+		};
+		const onEnd = (e) => {
+			if (e.target === el && ++ended >= propCount) end();
+		};
+		setTimeout(() => {
+			if (ended < propCount) end();
+		}, timeout + 1);
+		el.addEventListener(endEvent, onEnd);
+	}
+	function getTransitionInfo(el, expectedType) {
+		const styles = window.getComputedStyle(el);
+		const getStyleProperties = (key) => (styles[key] || "").split(", ");
+		const transitionDelays = getStyleProperties(`${TRANSITION}Delay`);
+		const transitionDurations = getStyleProperties(`${TRANSITION}Duration`);
+		const transitionTimeout = getTimeout(transitionDelays, transitionDurations);
+		const animationDelays = getStyleProperties(`${ANIMATION}Delay`);
+		const animationDurations = getStyleProperties(`${ANIMATION}Duration`);
+		const animationTimeout = getTimeout(animationDelays, animationDurations);
+		let type = null;
+		let timeout = 0;
+		let propCount = 0;
+		if (expectedType === TRANSITION) {
+			if (transitionTimeout > 0) {
+				type = TRANSITION;
+				timeout = transitionTimeout;
+				propCount = transitionDurations.length;
+			}
+		} else if (expectedType === ANIMATION) {
+			if (animationTimeout > 0) {
+				type = ANIMATION;
+				timeout = animationTimeout;
+				propCount = animationDurations.length;
+			}
+		} else {
+			timeout = Math.max(transitionTimeout, animationTimeout);
+			type = timeout > 0 ? transitionTimeout > animationTimeout ? TRANSITION : ANIMATION : null;
+			propCount = type ? type === TRANSITION ? transitionDurations.length : animationDurations.length : 0;
+		}
+		const hasTransform = type === TRANSITION && /\b(?:transform|all)(?:,|$)/.test(getStyleProperties(`${TRANSITION}Property`).toString());
+		return {
+			type,
+			timeout,
+			propCount,
+			hasTransform
+		};
+	}
+	function getTimeout(delays, durations) {
+		while (delays.length < durations.length) delays = delays.concat(delays);
+		return Math.max(...durations.map((d, i) => toMs(d) + toMs(delays[i])));
+	}
+	function toMs(s) {
+		if (s === "auto") return 0;
+		return Number(s.slice(0, -1).replace(",", ".")) * 1e3;
+	}
+	function forceReflow(el) {
+		return (el ? el.ownerDocument : document).body.offsetHeight;
+	}
 	function patchClass(el, value, isSVG) {
 		const transitionClasses = el[vtcKey];
 		if (transitionClasses) value = (value ? [value, ...transitionClasses] : [...transitionClasses]).join(" ");
@@ -3737,7 +4304,7 @@
 		if (cached) return cached;
 		let name = camelize(rawName);
 		if (name !== "filter" && name in style) return prefixCache[rawName] = name;
-		name = capitalize(name);
+		name = capitalize$1(name);
 		for (let i = 0; i < prefixes.length; i++) {
 			const prefixed = prefixes[i] + name;
 			if (prefixed in style) return prefixCache[rawName] = prefixed;
@@ -3875,6 +4442,59 @@
 		if (isNativeOn(key) && isString(value)) return false;
 		return key in el;
 	}
+	var getModelAssigner = (vnode) => {
+		const fn = vnode.props["onUpdate:modelValue"] || false;
+		return isArray(fn) ? (value) => invokeArrayFns(fn, value) : fn;
+	};
+	function onCompositionStart(e) {
+		e.target.composing = true;
+	}
+	function onCompositionEnd(e) {
+		const target = e.target;
+		if (target.composing) {
+			target.composing = false;
+			target.dispatchEvent(new Event("input"));
+		}
+	}
+	var assignKey = Symbol("_assign");
+	function castValue(value, trim, number) {
+		if (trim) value = value.trim();
+		if (number) value = looseToNumber(value);
+		return value;
+	}
+	var vModelText = {
+		created(el, { modifiers: { lazy, trim, number } }, vnode) {
+			el[assignKey] = getModelAssigner(vnode);
+			const castToNumber = number || vnode.props && vnode.props.type === "number";
+			addEventListener(el, lazy ? "change" : "input", (e) => {
+				if (e.target.composing) return;
+				el[assignKey](castValue(el.value, trim, castToNumber));
+			});
+			if (trim || castToNumber) addEventListener(el, "change", () => {
+				el.value = castValue(el.value, trim, castToNumber);
+			});
+			if (!lazy) {
+				addEventListener(el, "compositionstart", onCompositionStart);
+				addEventListener(el, "compositionend", onCompositionEnd);
+				addEventListener(el, "change", onCompositionEnd);
+			}
+		},
+		mounted(el, { value }) {
+			el.value = value == null ? "" : value;
+		},
+		beforeUpdate(el, { value, oldValue, modifiers: { lazy, trim, number } }, vnode) {
+			el[assignKey] = getModelAssigner(vnode);
+			if (el.composing) return;
+			const elValue = (number || el.type === "number") && !/^0\d/.test(el.value) ? looseToNumber(el.value) : el.value;
+			const newValue = value == null ? "" : value;
+			if (elValue === newValue) return;
+			if (document.activeElement === el && el.type !== "range") {
+				if (lazy && value === oldValue) return;
+				if (trim && el.value.trim() === newValue) return;
+			}
+			el.value = newValue;
+		}
+	};
 	var rendererOptions = /* @__PURE__ */ extend({ patchProp }, nodeOps);
 	var renderer;
 	function ensureRenderer() {
@@ -3906,28 +4526,282 @@
 		if (isString(container)) return document.querySelector(container);
 		return container;
 	}
+	var currentListing = ref(null);
+	var currentWindow = ref(window.location.hostname);
+	var tableInformation = ref([]);
+	function informationGathering() {
+		var price = document.getElementsByClassName("classified__price")[0].getElementsByClassName("sr-only")[0].innerText.split("€")[0];
+		classifyTableInformation();
+		currentListing.value = {
+			uid: window.location.pathname.split("/").at(-1),
+			link: window.location.href,
+			advertisedPrice: price,
+			PSQM: Math.round(price / parseFloat(callInfoByHeader("Living area"))),
+			LA: callInfoByHeader("Living area"),
+			EPC: callInfoByHeader("Primary energy consumption"),
+			EPCLabel: callInfoByHeader("Energy class"),
+			CY: callInfoByHeader("Construction year"),
+			note: ""
+		};
+	}
+	function classifyTableInformation() {
+		var rows = document.getElementsByClassName("classified-table__row");
+		if (rows.length > 0) Array.from(rows).forEach((row) => {
+			var tableInfoHeader = row.getElementsByClassName("classified-table__header")[0];
+			var tableInfoValue = row.getElementsByClassName("classified-table__data")[0];
+			if (tableInfoHeader != void 0 && tableInfoValue != void 0) tableInformation.value.push({
+				header: tableInfoHeader.innerText,
+				value: tableInfoValue.innerText
+			});
+		});
+		else console.log("Couldn't spot rows.");
+	}
+	function callInfoByHeader(header) {
+		return tableInformation.value.find((item) => item.header === header)?.value.split(" ")[0];
+	}
+	informationGathering();
+	function scrapImmowebData() {
+		function reloadCurrentListingData() {
+			informationGathering();
+			console.log(currentListing.value);
+		}
+		return {
+			currentListing: readonly(currentListing),
+			currentWindow: readonly(currentWindow),
+			reloadCurrentListingData
+		};
+	}
+	function capitalize(str) {
+		if (!str) return "";
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+	function returnUnitMetric(informationItem) {
+		return {
+			advertisedPrice: "€",
+			EPC: "kWh/m²",
+			LA: "sqm",
+			PSQM: "€/sqm"
+		}[informationItem.key] || void 0;
+	}
+	function useLocalStorage(key, defaultValue) {
+		const data = ref(defaultValue);
+		const storedValue = localStorage.getItem(key);
+		if (storedValue) data.value = JSON.parse(storedValue);
+		watch(data, (newValue) => {
+			localStorage.setItem(key, JSON.stringify(newValue));
+		}, { deep: true });
+		return data;
+	}
+	var toast = reactive({
+		visible: false,
+		message: "",
+		type: "success",
+		timeoutId: null
+	});
+	function useToast() {
+		const showToast$1 = (message, type = "success", duration = 3e3) => {
+			if (toast.timeoutId) clearTimeout(toast.timeoutId);
+			toast.message = message;
+			toast.type = type;
+			toast.visible = true;
+			toast.timeoutId = setTimeout(() => {
+				toast.visible = false;
+			}, duration);
+		};
+		return {
+			toast: reactive(toast),
+			showToast: showToast$1
+		};
+	}
+	var { showToast } = useToast();
+	var selectedProperties = useLocalStorage("selectedProperties", []);
+	function useProperties() {
+		function addProperty(property) {
+			if (!selectedProperties.value.map((x) => x.uid).includes(property.uid)) {
+				selectedProperties.value.push(property);
+				showToast("Property saved successfully!", "info");
+			}
+		}
+		function removeProperty(propertyId) {
+			selectedProperties.value = selectedProperties.value.filter((p$1) => p$1.uid !== propertyId);
+			console.log(`Property with id ${propertyId} removed.`);
+			showToast(`Property with id ${propertyId} removed.`, "danger");
+		}
+		function removeAllProperty() {
+			selectedProperties.value = [];
+			showToast(`Properties removed.`, "danger");
+		}
+		return {
+			selectedProperties,
+			addProperty,
+			removeProperty,
+			removeAllProperty
+		};
+	}
+	function formatObjectForClipboard(data, index = null) {
+		const formattedPrice = (Number(data.advertisedPrice) / 1e3).toFixed(1).replace(".", ",") + "k";
+		return `${index !== null ? `Reference ${index}: ${data.link}` : `Link: ${data.link}`}
+EPC: ${data.EPC}, ${data.EPCLabel}
+LA: ${data.LA}
+CY: ${data.CY}
+P: ${formattedPrice}
+PSQM: ${data.PSQM}
+Note: ${data.note}`;
+	}
+	function useClipboard() {
+		const { showToast: showToast$1 } = useToast();
+		async function copyToClipboard(text) {
+			try {
+				await navigator.clipboard.writeText(text);
+				console.log("Text copied to clipboard successfully!");
+				showToast$1("Copied to clipboard", "info");
+			} catch (err) {
+				console.error("Failed to copy text: ", err);
+				showToast$1("Failed to copy", "error");
+			}
+		}
+		function copyObjectToClipboard(data) {
+			let textToCopy = "";
+			data.forEach((reference, index) => {
+				const displayIndex = data.length > 1 ? index + 1 : null;
+				let referenceText = formatObjectForClipboard(reference, displayIndex);
+				textToCopy += `\n\n` + referenceText;
+			});
+			copyToClipboard(textToCopy.trim());
+		}
+		function copySummaryStatistics(sumStats, data = null) {
+			let textToCopy = "";
+			if (data !== null) data.forEach((reference, index) => {
+				const displayIndex = data.length > 1 ? index + 1 : null;
+				let referenceText = formatObjectForClipboard(reference, displayIndex);
+				textToCopy += `\n\n` + referenceText;
+			});
+			for (const [key, value] of Object.entries(sumStats)) {
+				let sumStatsItemText = `${key}: ${value}`;
+				textToCopy += `\n\n` + sumStatsItemText;
+			}
+			copyToClipboard(textToCopy.trim());
+		}
+		return {
+			copyObjectToClipboard,
+			copySummaryStatistics
+		};
+	}
+	var _hoisted_1 = { id: "myk--app" };
+	var _hoisted_2 = { id: "myk--app-header" };
+	var _hoisted_3 = { id: "myk--header-controls" };
+	var _hoisted_4 = {
+		key: 0,
+		id: "myk--app-container"
+	};
+	var _hoisted_5 = { id: "myk--app-selector-menu" };
+	var _hoisted_6 = {
+		key: 0,
+		class: "myk--tab-container"
+	};
+	var _hoisted_7 = {
+		class: "myk--container-basics",
+		style: {
+			display: "flex",
+			justifyContent: "space-between",
+			alignItems: "end"
+		}
+	};
+	var _hoisted_8 = {
+		key: 0,
+		class: "myk--section-header"
+	};
+	var _hoisted_9 = { class: "myk--reference-info-command-box" };
+	var _hoisted_10 = { class: "myk--reference-info-table" };
+	var _hoisted_11 = {
+		key: 0,
+		style: { "color": "rgb(0, 24, 55)" }
+	};
+	var _hoisted_12 = { class: "myk--reference-info-command-box" };
 	var App_default = {
 		__name: "App",
 		setup(__props) {
+			const { currentListing: currentListing$1, currentWindow: currentWindow$1, reloadCurrentListingData } = scrapImmowebData();
+			const { addProperty } = useProperties();
+			const { toast: toast$1, showToast: showToast$1 } = useToast();
+			const { copyObjectToClipboard, copySummaryStatistics } = useClipboard();
+			const displayApp = ref(true);
+			const activeTab = ref("Main");
 			return (_ctx, _cache) => {
-				return openBlock(), createElementBlock("h3", null, "Production App (GH Test Branch)");
+				return openBlock(), createElementBlock("div", _hoisted_1, [createBaseVNode("div", _hoisted_2, [createBaseVNode("div", _hoisted_3, [createBaseVNode("div", {
+					onClick: _cache[0] || (_cache[0] = ($event) => displayApp.value = !displayApp.value),
+					togglediv: "myk--app-container"
+				}, "O/I")])]), displayApp.value ? (openBlock(), createElementBlock("div", _hoisted_4, [
+					createVNode(Transition, { name: "toast-fade" }, {
+						default: withCtx(() => [unref(toast$1).visible ? (openBlock(), createElementBlock("div", {
+							key: 0,
+							class: normalizeClass(["toast-notification", "toast-" + unref(toast$1).type])
+						}, toDisplayString(unref(toast$1).message), 3)) : createCommentVNode("", true)]),
+						_: 1
+					}),
+					_cache[8] || (_cache[8] = createBaseVNode("img", {
+						id: "myk--bg-re-logo",
+						src: "https://cdn.prod.website-files.com/60781e1041c84501a6e9c2d8/60781e1041c8458cd8e9c348_rockestate-icon-white.svg"
+					}, null, -1)),
+					createBaseVNode("div", _hoisted_5, [
+						createBaseVNode("span", {
+							class: normalizeClass(["myk--selector-buttons", { active: activeTab.value === "Main" }]),
+							onClick: _cache[1] || (_cache[1] = ($event) => activeTab.value = "Main")
+						}, "Main", 2),
+						createBaseVNode("span", {
+							class: normalizeClass(["myk--selector-buttons", { active: activeTab.value === "References" }]),
+							onClick: _cache[2] || (_cache[2] = ($event) => activeTab.value = "References")
+						}, "References", 2),
+						createBaseVNode("span", {
+							class: normalizeClass(["myk--selector-buttons", { active: activeTab.value === "Settings" }]),
+							onClick: _cache[3] || (_cache[3] = ($event) => activeTab.value = "Settings")
+						}, "Settings", 2)
+					]),
+					activeTab.value === "Main" ? (openBlock(), createElementBlock("div", _hoisted_6, [unref(currentWindow$1) != "vs.rock.estate" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+						createBaseVNode("div", _hoisted_7, [unref(currentWindow$1).includes("immoweb") ? (openBlock(), createElementBlock("span", _hoisted_8, "Listing Information:")) : createCommentVNode("", true), createBaseVNode("div", _hoisted_9, [createBaseVNode("div", {
+							class: "myk--reference-info-command-button severity-info myk--button",
+							onClick: _cache[4] || (_cache[4] = ($event) => unref(reloadCurrentListingData)())
+						}, "Reload")])]),
+						createBaseVNode("div", _hoisted_10, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(currentListing$1), (value, key, findex) => {
+							return openBlock(), createElementBlock(Fragment, { key }, [!["uid", "link"].includes(key) ? (openBlock(), createElementBlock("div", {
+								key: 0,
+								class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(unref(currentListing$1)).length - 1 }])
+							}, [
+								createBaseVNode("span", null, toDisplayString(unref(capitalize)(key)) + ":", 1),
+								!["note"].includes(key) ? (openBlock(), createElementBlock("span", _hoisted_11, toDisplayString(value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [key] })), 1)) : createCommentVNode("", true),
+								["note"].includes(key) ? withDirectives((openBlock(), createElementBlock("input", {
+									key: 1,
+									type: "text",
+									placeholder: "Additonal Notes",
+									"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(currentListing$1).note = $event)
+								}, null, 512)), [[vModelText, unref(currentListing$1).note]]) : createCommentVNode("", true)
+							], 2)) : createCommentVNode("", true)], 64);
+						}), 128))]),
+						createBaseVNode("div", _hoisted_12, [createBaseVNode("div", {
+							class: "myk--reference-info-command-button myk--button icon-start severity-info",
+							onClick: _cache[6] || (_cache[6] = ($event) => unref(copyObjectToClipboard)([unref(currentListing$1)]))
+						}, "Clipboard"), createBaseVNode("div", {
+							class: "myk--reference-info-command-button myk--button severity-info",
+							onClick: _cache[7] || (_cache[7] = ($event) => unref(addProperty)(unref(currentListing$1)))
+						}, "Add")])
+					], 64)) : createCommentVNode("", true)])) : createCommentVNode("", true)
+				])) : createCommentVNode("", true)]);
 			};
 		}
 	};
 	function mountApp() {
 		const appContainer = document.createElement("div");
-		appContainer.id = "__my-vue-injection-app";
-		appContainer.style.position = "fixed";
-		appContainer.style.top = "20px";
-		appContainer.style.right = "20px";
-		appContainer.style.zIndex = "99999";
-		appContainer.style.background = "white";
-		appContainer.style.padding = "1rem";
-		appContainer.style.borderRadius = "8px";
-		appContainer.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
-		document.body.appendChild(appContainer);
-		createApp(App_default).mount("#__my-vue-injection-app");
+		appContainer.id = "myk--vue-app";
+		appContainer.style.position = "sticky";
+		appContainer.style.top = "0";
+		appContainer.style.zIndex = "10000";
+		document.body.prepend(appContainer);
+		createApp(App_default).mount("#myk--vue-app");
 	}
+	var hostname = window.location.host;
 	if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mountApp);
-	else mountApp();
+	else {
+		mountApp();
+		console.log(hostname);
+	}
 })();
