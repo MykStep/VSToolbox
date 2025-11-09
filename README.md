@@ -1,6 +1,3 @@
-# VSToolbox
-A tool to enhance the efficiency of Real Estate Valuation Specialists
-
 Features:
   1. Scrap immoweb listings' information.
   2. Collect references.
@@ -10,3 +7,8 @@ Features:
 Release v0.1:
   1. Created settings foundation
   2. Added <additionalTools> settings
+  
+Release v0.2:
+  1. Switched to Composition API, with possibility to use compononents
+  2. Using Vite / Rolldown for bundling
+  3. Added CSS to JS plugin for vite configuration
