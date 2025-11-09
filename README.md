@@ -1,5 +1,14 @@
-# Vue 3 + Vite
+Features:
+  1. Scrap immoweb listings' information.
+  2. Collect references.
+  3. Calculates summary statistics.
+  4. Create a copy/pastable summary of a valuation.
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+Release v0.1:
+  1. Created settings foundation
+  2. Added <additionalTools> settings
+  
+Release v0.2:
+  1. Switched to Composition API, with possibility to use compononents
+  2. Using Vite / Rolldown for bundling
+  3. Added CSS to JS plugin for vite configuration
