@@ -48,7 +48,7 @@
           <div class="myk--reference-info-table">
             <template v-for="(value, key, findex) in currentListing" :key="key">
               <div 
-                v-if="!['uid','link'].includes(key)"
+                v-if="!['uid','link','isEdited'].includes(key)"
                 class="myk--reference-info-table-line"
                 :class="{ 'myk--ruler-bottom': findex < (Object.keys(currentListing).length - 1) }"
               >
@@ -63,6 +63,9 @@
             <div class="myk--reference-info-command-button myk--button icon-start severity-info" @click="copyObjectToClipboard([currentListing])">Clipboard</div>
             <div class="myk--reference-info-command-button myk--button severity-info" @click="addProperty(currentListing)">Add</div>
           </div>
+
+          {{ currentListing }}
+
 
         </template>
 
@@ -88,6 +91,7 @@
                   <div class="myk--within-bar-icon icon-last">{{ expandedPropertyId === reference.uid ? '▲' : '▼' }}</div>
                 </div>
                 <div class="myk--reference-info" v-if="expandedPropertyId === reference.uid">
+                  {{ reference.isEdited }}
                   <div class="myk--reference-info-table">
                     
                       <template v-for="(value, key, findex) in reference" :key="key">
@@ -106,7 +110,7 @@
                   <div class="myk--reference-info-command-box-container">
                     <div class="myk--reference-info-command-box">
                       <div class="myk--reference-info-command-button icon-start severity-danger myk--button" @click="removeProperty(reference.uid)">Delete</div>
-                      <div class="myk--reference-info-command-button myk--button" @click="reference.isEdited = !reference.isEdited">Edit</div>
+                      <div class="myk--reference-info-command-button myk--button" @click="handleEditMode(reference.uid)">Edit</div>
                       <div class="myk--reference-info-command-button icon-last severity-info myk--button" @click="copyObjectToClipboard([reference])">Clipboard</div> 
                     </div>
                     <div class="myk--reference-info-command-box">
@@ -243,6 +247,10 @@ function toggleReferenceDetails(referenceUID) {
     // Otherwise, open the clicked item.
     expandedPropertyId.value = referenceUID;
   }
+}
+
+function handleEditMode(referenceUID) {
+  selectedProperties.value.find(i => i.uid == referenceUID).isEdited = !selectedProperties.value.find(i => i.uid == referenceUID).isEdited;
 }
 
 </script>

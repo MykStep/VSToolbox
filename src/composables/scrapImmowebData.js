@@ -18,6 +18,7 @@ function informationGathering() {
         EPC: callInfoByHeader("Primary energy consumption"),
         EPCLabel: callInfoByHeader("Energy class"),
         CY: callInfoByHeader("Construction year"),
+        isEdited: false,
         note: ""
     };
 }
@@ -52,7 +53,7 @@ export function scrapImmowebData() {
     }
   return {
     // State
-    currentListing: readonly(currentListing),
+    currentListing: currentListing,
     currentWindow: readonly(currentWindow),
 
     // Methods

@@ -3,9 +3,10 @@ import { useToast } from './useToast';
 
 // Get the state/methods from other composables
 const { showToast } = useToast();
-const selectedProperties = useLocalStorage('selectedProperties', []);
 
 export function useProperties() {
+
+  const selectedProperties = useLocalStorage('selectedProperties', []);
 
   function addProperty(property) {
     const totalUIDs = selectedProperties.value.map(x => x.uid);
