@@ -4681,10 +4681,44 @@
 	function useLocalStorage(key, defaultValue) {
 		const data = ref(defaultValue);
 		const storedValue = localStorage.getItem(key);
-		if (storedValue) data.value = JSON.parse(storedValue);
+		if (storedValue !== null) try {
+			data.value = JSON.parse(storedValue);
+		} catch (e) {
+			console.error(`[useLocalStorage] Error parsing stored value for key "${key}":`, e);
+			localStorage.setItem(key, JSON.stringify(defaultValue));
+		}
+		else localStorage.setItem(key, JSON.stringify(defaultValue));
 		watch(data, (newValue) => {
 			localStorage.setItem(key, JSON.stringify(newValue));
 		}, { deep: true });
+		const updateFromStorage = (event) => {
+			console.log("event key: " + event.key);
+			console.log("eventlistener from: " + key);
+			console.log(event.key === key);
+			console.log("--------");
+			if (event.key === key) {
+				console.log("first step with: " + key);
+				if (event.newValue === null) {
+					data.value = defaultValue;
+					console.log("operation consisted of a removal in: " + key);
+				} else try {
+					console.log(data.value);
+					data.value = JSON.parse(event.newValue);
+					console.log(data.value);
+					console.log(JSON.parse(event.newValue));
+				} catch (e) {
+					console.error(`[useLocalStorage] Error parsing broadcasted value for key "${key}":`, e);
+				}
+			}
+		};
+		onMounted(() => {
+			window.addEventListener("storage", updateFromStorage);
+			console.log("mounted: " + key);
+		});
+		onUnmounted(() => {
+			window.removeEventListener("storage", updateFromStorage);
+			console.log("unmounted: " + key);
+		});
 		return data;
 	}
 	var toast = reactive({
@@ -4709,8 +4743,8 @@
 		};
 	}
 	var { showToast } = useToast();
-	var selectedProperties = useLocalStorage("selectedProperties", []);
 	function useProperties() {
+		const selectedProperties = useLocalStorage("selectedProperties", []);
 		function addProperty(property) {
 			if (!selectedProperties.value.map((x) => x.uid).includes(property.uid)) {
 				selectedProperties.value.push(property);
@@ -4921,7 +4955,7 @@ Note: ${data.note}`;
 		__name: "App",
 		setup(__props) {
 			const { currentListing: currentListing$1, currentWindow: currentWindow$1, reloadCurrentListingData } = scrapImmowebData();
-			const { selectedProperties: selectedProperties$1, addProperty, removeProperty, removeAllProperty } = useProperties();
+			const { selectedProperties, addProperty, removeProperty, removeAllProperty } = useProperties();
 			const { toast: toast$1, showToast: showToast$1 } = useToast();
 			const { copyObjectToClipboard, copySummaryStatistics } = useClipboard();
 			const { valuationMetrics: valuationMetrics$1, dvmPrice: dvmPrice$1, dvmConfidenceIntervalARG: dvmConfidenceIntervalARG$1, dvmConfidenceIntervalING: dvmConfidenceIntervalING$1 } = useValuation();
@@ -4937,7 +4971,7 @@ Note: ${data.note}`;
 				else expandedPropertyId.value = referenceUID;
 			}
 			function handleEditMode(referenceUID) {
-				selectedProperties$1.value.find((i) => i.uid == referenceUID).isEdited = !selectedProperties$1.value.find((i) => i.uid == referenceUID).isEdited;
+				selectedProperties.value.find((i) => i.uid == referenceUID).isEdited = !selectedProperties.value.find((i) => i.uid == referenceUID).isEdited;
 			}
 			return (_ctx, _cache) => {
 				return openBlock(), createElementBlock("div", _hoisted_1, [createBaseVNode("div", _hoisted_2, [createBaseVNode("div", _hoisted_3, [createBaseVNode("div", {
@@ -4995,7 +5029,8 @@ Note: ${data.note}`;
 						}, "Clipboard"), createBaseVNode("div", {
 							class: "myk--reference-info-command-button myk--button severity-info",
 							onClick: _cache[7] || (_cache[7] = ($event) => unref(addProperty)(unref(currentListing$1)))
-						}, "Add")])
+						}, "Add")]),
+						createTextVNode(" test - " + toDisplayString(unref(selectedProperties)), 1)
 					], 64)) : createCommentVNode("", true)])) : createCommentVNode("", true),
 					activeTab.value === "References" ? (openBlock(), createElementBlock("div", _hoisted_13, [
 						unref(settings).additionalTools ? (openBlock(), createElementBlock("div", _hoisted_14, [_cache[17] || (_cache[17] = createBaseVNode("span", { class: "myk--section-header" }, "Valuation Type", -1)), createBaseVNode("div", _hoisted_15, [createBaseVNode("div", {
@@ -5007,7 +5042,7 @@ Note: ${data.note}`;
 						}, "New Construction", 2)])])) : createCommentVNode("", true),
 						unref(settings).valType == "Normal" || !unref(settings).additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("div", _hoisted_16, [
 							_cache[18] || (_cache[18] = createBaseVNode("span", { class: "myk--section-header" }, "Reference Table", -1)),
-							createBaseVNode("div", _hoisted_17, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(selectedProperties$1), (reference, index) => {
+							createBaseVNode("div", _hoisted_17, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(selectedProperties), (reference, index) => {
 								return openBlock(), createElementBlock("div", {
 									key: reference.uid,
 									class: "myk--dropdown-reference-container"
@@ -5057,16 +5092,16 @@ Note: ${data.note}`;
 									}, "Link", 8, _hoisted_31)])])
 								])) : createCommentVNode("", true)]);
 							}), 128))]),
-							unref(selectedProperties$1) != 0 ? (openBlock(), createElementBlock("div", _hoisted_32, [createBaseVNode("div", {
+							unref(selectedProperties) != 0 ? (openBlock(), createElementBlock("div", _hoisted_32, [createBaseVNode("div", {
 								class: "myk--reference-info-command-button myk--button icon-start severity-danger",
 								onClick: _cache[10] || (_cache[10] = ($event) => unref(removeAllProperty)())
 							}, "Delete All"), createBaseVNode("div", {
 								class: "myk--reference-info-command-button myk--button severity-info",
-								onClick: _cache[11] || (_cache[11] = ($event) => unref(copyObjectToClipboard)(unref(selectedProperties$1)))
+								onClick: _cache[11] || (_cache[11] = ($event) => unref(copyObjectToClipboard)(unref(selectedProperties)))
 							}, "Clipboard")])) : createCommentVNode("", true)
 						]), createBaseVNode("div", _hoisted_33, [
 							_cache[26] || (_cache[26] = createBaseVNode("span", { class: "myk--section-header" }, "Summary Stastics", -1)),
-							createBaseVNode("div", _hoisted_34, [createBaseVNode("div", _hoisted_35, [_cache[19] || (_cache[19] = createBaseVNode("span", null, "PSQM: ", -1)), createBaseVNode("span", _hoisted_36, toDisplayString(unref(average)(unref(selectedProperties$1), "PSQM")) + " " + toDisplayString(unref(returnUnitMetric)({ key: "PSQM" })), 1)]), createBaseVNode("div", _hoisted_37, [_cache[20] || (_cache[20] = createBaseVNode("span", null, "Price: ", -1)), createBaseVNode("span", _hoisted_38, toDisplayString(unref(average)(unref(selectedProperties$1), "advertisedPrice")) + " " + toDisplayString(unref(returnUnitMetric)({ key: "advertisedPrice" })), 1)])]),
+							createBaseVNode("div", _hoisted_34, [createBaseVNode("div", _hoisted_35, [_cache[19] || (_cache[19] = createBaseVNode("span", null, "PSQM: ", -1)), createBaseVNode("span", _hoisted_36, toDisplayString(unref(average)(unref(selectedProperties), "PSQM")) + " " + toDisplayString(unref(returnUnitMetric)({ key: "PSQM" })), 1)]), createBaseVNode("div", _hoisted_37, [_cache[20] || (_cache[20] = createBaseVNode("span", null, "Price: ", -1)), createBaseVNode("span", _hoisted_38, toDisplayString(unref(average)(unref(selectedProperties), "advertisedPrice")) + " " + toDisplayString(unref(returnUnitMetric)({ key: "advertisedPrice" })), 1)])]),
 							createBaseVNode("div", _hoisted_39, [
 								createBaseVNode("div", _hoisted_40, [_cache[21] || (_cache[21] = createBaseVNode("span", null, "Living area: ", -1)), withDirectives(createBaseVNode("input", {
 									type: "text",
@@ -5080,12 +5115,12 @@ Note: ${data.note}`;
 								createBaseVNode("div", _hoisted_44, [_cache[24] || (_cache[24] = createBaseVNode("span", null, "Confidence Interval ARG: ", -1)), createBaseVNode("span", _hoisted_45, "[ " + toDisplayString(unref(dvmConfidenceIntervalARG$1).lower) + " ; " + toDisplayString(unref(dvmConfidenceIntervalARG$1).upper) + " ]", 1)]),
 								createBaseVNode("div", _hoisted_46, [_cache[25] || (_cache[25] = createBaseVNode("span", null, "Confidence Interval ING: ", -1)), createBaseVNode("span", _hoisted_47, "[ " + toDisplayString(unref(dvmConfidenceIntervalING$1).lower) + " ; " + toDisplayString(unref(dvmConfidenceIntervalING$1).upper) + " ]", 1)])
 							]),
-							unref(average)(unref(selectedProperties$1), "PSQM") != 0 ? (openBlock(), createElementBlock("div", _hoisted_48, [createBaseVNode("div", {
+							unref(average)(unref(selectedProperties), "PSQM") != 0 ? (openBlock(), createElementBlock("div", _hoisted_48, [createBaseVNode("div", {
 								class: "myk--reference-info-command-button myk--button icon-start severity-info",
 								onClick: _cache[14] || (_cache[14] = ($event) => unref(copySummaryStatistics)())
 							}, "Copy Statistics"), createBaseVNode("div", {
 								class: "myk--reference-info-command-button myk--button severity-info",
-								onClick: _cache[15] || (_cache[15] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(average)(unref(selectedProperties$1), "PSQM") + unref(returnUnitMetric)({ key: "PSQM" }) }, unref(selectedProperties$1)))
+								onClick: _cache[15] || (_cache[15] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(average)(unref(selectedProperties), "PSQM") + unref(returnUnitMetric)({ key: "PSQM" }) }, unref(selectedProperties)))
 							}, "Clipboard All")])) : createCommentVNode("", true)
 						])], 64)) : createCommentVNode("", true),
 						unref(settings).valType == "New Construction" && unref(settings).additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createTextVNode(" Still under construction... 🥁 ")], 64)) : createCommentVNode("", true)

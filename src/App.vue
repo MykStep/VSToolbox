@@ -64,6 +64,7 @@
             <div class="myk--reference-info-command-button myk--button severity-info" @click="addProperty(currentListing)">Add</div>
           </div>
 
+          test - {{ selectedProperties }}
         </template>
 
       </div>
