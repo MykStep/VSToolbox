@@ -4627,6 +4627,7 @@
 			EPC: callInfoByHeader("Primary energy consumption"),
 			EPCLabel: callInfoByHeader("Energy class"),
 			CY: callInfoByHeader("Construction year"),
+			isEdited: false,
 			note: ""
 		};
 	}
@@ -4935,6 +4936,9 @@ Note: ${data.note}`;
 				if (expandedPropertyId.value === referenceUID) expandedPropertyId.value = null;
 				else expandedPropertyId.value = referenceUID;
 			}
+			function handleEditMode(referenceUID) {
+				selectedProperties$1.value.find((i) => i.uid == referenceUID).isEdited = !selectedProperties$1.value.find((i) => i.uid == referenceUID).isEdited;
+			}
 			return (_ctx, _cache) => {
 				return openBlock(), createElementBlock("div", _hoisted_1, [createBaseVNode("div", _hoisted_2, [createBaseVNode("div", _hoisted_3, [createBaseVNode("div", {
 					onClick: _cache[0] || (_cache[0] = ($event) => displayApp.value = !displayApp.value),
@@ -5014,40 +5018,44 @@ Note: ${data.note}`;
 									createBaseVNode("div", _hoisted_19, toDisplayString(index + 1), 1),
 									createBaseVNode("span", null, toDisplayString(reference.advertisedPrice), 1),
 									createBaseVNode("div", _hoisted_20, toDisplayString(expandedPropertyId.value === reference.uid ? "▲" : "▼"), 1)
-								], 10, _hoisted_18), expandedPropertyId.value === reference.uid ? (openBlock(), createElementBlock("div", _hoisted_21, [createBaseVNode("div", _hoisted_22, [(openBlock(true), createElementBlock(Fragment, null, renderList(reference, (value, key, findex) => {
-									return openBlock(), createElementBlock(Fragment, { key }, [![
-										"uid",
-										"isEdited",
-										"link"
-									].includes(key) ? (openBlock(), createElementBlock("div", {
-										key: 0,
-										class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(reference).length - 1 }])
-									}, [
-										createBaseVNode("span", null, toDisplayString(unref(capitalize)(key)) + ":", 1),
-										!reference.isEdited ? (openBlock(), createElementBlock("span", _hoisted_23, toDisplayString(value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [key] })), 1)) : createCommentVNode("", true),
-										reference.isEdited ? withDirectives((openBlock(), createElementBlock("input", {
-											key: 1,
-											type: "text",
-											"onUpdate:modelValue": ($event) => reference[key] = $event
-										}, null, 8, _hoisted_24)), [[vModelText, reference[key]]]) : createCommentVNode("", true)
-									], 2)) : createCommentVNode("", true)], 64);
-								}), 128))]), createBaseVNode("div", _hoisted_25, [createBaseVNode("div", _hoisted_26, [
-									createBaseVNode("div", {
-										class: "myk--reference-info-command-button icon-start severity-danger myk--button",
-										onClick: ($event) => unref(removeProperty)(reference.uid)
-									}, "Delete", 8, _hoisted_27),
-									createBaseVNode("div", {
-										class: "myk--reference-info-command-button myk--button",
-										onClick: ($event) => reference.isEdited = !reference.isEdited
-									}, "Edit", 8, _hoisted_28),
-									createBaseVNode("div", {
-										class: "myk--reference-info-command-button icon-last severity-info myk--button",
-										onClick: ($event) => unref(copyObjectToClipboard)([reference])
-									}, "Clipboard", 8, _hoisted_29)
-								]), createBaseVNode("div", _hoisted_30, [createBaseVNode("div", {
-									class: "myk--reference-info-command-button severity-info myk--button",
-									onClick: ($event) => unref(openLink)(reference.link)
-								}, "Link", 8, _hoisted_31)])])])) : createCommentVNode("", true)]);
+								], 10, _hoisted_18), expandedPropertyId.value === reference.uid ? (openBlock(), createElementBlock("div", _hoisted_21, [
+									createTextVNode(toDisplayString(reference.isEdited) + " ", 1),
+									createBaseVNode("div", _hoisted_22, [(openBlock(true), createElementBlock(Fragment, null, renderList(reference, (value, key, findex) => {
+										return openBlock(), createElementBlock(Fragment, { key }, [![
+											"uid",
+											"isEdited",
+											"link"
+										].includes(key) ? (openBlock(), createElementBlock("div", {
+											key: 0,
+											class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(reference).length - 1 }])
+										}, [
+											createBaseVNode("span", null, toDisplayString(unref(capitalize)(key)) + ":", 1),
+											!reference.isEdited ? (openBlock(), createElementBlock("span", _hoisted_23, toDisplayString(value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [key] })), 1)) : createCommentVNode("", true),
+											reference.isEdited ? withDirectives((openBlock(), createElementBlock("input", {
+												key: 1,
+												type: "text",
+												"onUpdate:modelValue": ($event) => reference[key] = $event
+											}, null, 8, _hoisted_24)), [[vModelText, reference[key]]]) : createCommentVNode("", true)
+										], 2)) : createCommentVNode("", true)], 64);
+									}), 128))]),
+									createBaseVNode("div", _hoisted_25, [createBaseVNode("div", _hoisted_26, [
+										createBaseVNode("div", {
+											class: "myk--reference-info-command-button icon-start severity-danger myk--button",
+											onClick: ($event) => unref(removeProperty)(reference.uid)
+										}, "Delete", 8, _hoisted_27),
+										createBaseVNode("div", {
+											class: "myk--reference-info-command-button myk--button",
+											onClick: ($event) => handleEditMode(reference.uid)
+										}, "Edit", 8, _hoisted_28),
+										createBaseVNode("div", {
+											class: "myk--reference-info-command-button icon-last severity-info myk--button",
+											onClick: ($event) => unref(copyObjectToClipboard)([reference])
+										}, "Clipboard", 8, _hoisted_29)
+									]), createBaseVNode("div", _hoisted_30, [createBaseVNode("div", {
+										class: "myk--reference-info-command-button severity-info myk--button",
+										onClick: ($event) => unref(openLink)(reference.link)
+									}, "Link", 8, _hoisted_31)])])
+								])) : createCommentVNode("", true)]);
 							}), 128))]),
 							unref(selectedProperties$1) != 0 ? (openBlock(), createElementBlock("div", _hoisted_32, [createBaseVNode("div", {
 								class: "myk--reference-info-command-button myk--button icon-start severity-danger",

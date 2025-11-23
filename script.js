@@ -479,7 +479,7 @@ input {
       
       data() {
         return {
-          displayApp: true,
+          displayApp: false,
           pageHostname: '',
           currentListing: currentListing,
           activeTab: 'References',

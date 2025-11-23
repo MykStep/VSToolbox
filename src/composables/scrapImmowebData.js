@@ -18,6 +18,7 @@ function informationGathering() {
         EPC: callInfoByHeader("Primary energy consumption"),
         EPCLabel: callInfoByHeader("Energy class"),
         CY: callInfoByHeader("Construction year"),
+        isEdited: false,
         note: ""
     };
 }
