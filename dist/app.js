@@ -4653,7 +4653,7 @@
 			console.log(currentListing.value);
 		}
 		return {
-			currentListing: readonly(currentListing),
+			currentListing,
 			currentWindow: readonly(currentWindow),
 			reloadCurrentListingData
 		};
@@ -5009,7 +5009,11 @@ Note: ${data.note}`;
 							onClick: _cache[4] || (_cache[4] = ($event) => unref(reloadCurrentListingData)())
 						}, "Reload")])]),
 						createBaseVNode("div", _hoisted_10, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(currentListing$1), (value, key, findex) => {
-							return openBlock(), createElementBlock(Fragment, { key }, [!["uid", "link"].includes(key) ? (openBlock(), createElementBlock("div", {
+							return openBlock(), createElementBlock(Fragment, { key }, [![
+								"uid",
+								"link",
+								"isEdited"
+							].includes(key) ? (openBlock(), createElementBlock("div", {
 								key: 0,
 								class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(unref(currentListing$1)).length - 1 }])
 							}, [
@@ -5030,7 +5034,7 @@ Note: ${data.note}`;
 							class: "myk--reference-info-command-button myk--button severity-info",
 							onClick: _cache[7] || (_cache[7] = ($event) => unref(addProperty)(unref(currentListing$1)))
 						}, "Add")]),
-						createTextVNode(" test - " + toDisplayString(unref(selectedProperties)), 1)
+						createTextVNode(" " + toDisplayString(unref(currentListing$1)), 1)
 					], 64)) : createCommentVNode("", true)])) : createCommentVNode("", true),
 					activeTab.value === "References" ? (openBlock(), createElementBlock("div", _hoisted_13, [
 						unref(settings).additionalTools ? (openBlock(), createElementBlock("div", _hoisted_14, [_cache[17] || (_cache[17] = createBaseVNode("span", { class: "myk--section-header" }, "Valuation Type", -1)), createBaseVNode("div", _hoisted_15, [createBaseVNode("div", {

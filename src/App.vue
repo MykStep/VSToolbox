@@ -48,7 +48,7 @@
           <div class="myk--reference-info-table">
             <template v-for="(value, key, findex) in currentListing" :key="key">
               <div 
-                v-if="!['uid','link'].includes(key)"
+                v-if="!['uid','link','isEdited'].includes(key)"
                 class="myk--reference-info-table-line"
                 :class="{ 'myk--ruler-bottom': findex < (Object.keys(currentListing).length - 1) }"
               >
@@ -64,7 +64,9 @@
             <div class="myk--reference-info-command-button myk--button severity-info" @click="addProperty(currentListing)">Add</div>
           </div>
 
-          test - {{ selectedProperties }}
+          {{ currentListing }}
+
+
         </template>
 
       </div>

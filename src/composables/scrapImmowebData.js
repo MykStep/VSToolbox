@@ -53,7 +53,7 @@ export function scrapImmowebData() {
     }
   return {
     // State
-    currentListing: readonly(currentListing),
+    currentListing: currentListing,
     currentWindow: readonly(currentWindow),
 
     // Methods
