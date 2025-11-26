@@ -1,19 +1,29 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import './style.css'
+import styleText from './assets/shadowStyle.css?inline'
 
 // Wrapping mount logic in a function:
 function mountApp() {
-    // Create div to mount on
-    const appContainer = document.createElement('div');
-    appContainer.id = 'myk--vue-app';
-    appContainer.style.position = 'sticky';
-    appContainer.style.top = '0';
-    appContainer.style.zIndex = '10000';
+    // 1. Creating the host
+    const host = document.createElement('div');
+    host.id = 'vstoolbox-host';
+    document.body.prepend(host);
 
-    document.body.prepend(appContainer);
+    // 2. Attach Shadow DOM
+    const shadow = host.attachShadow({mode: 'open'});
 
-    createApp(App).mount('#myk--vue-app');
+    // 3. Inject Styles into the shadow root
+    const styleTag = document.createElement('style');
+    styleTag.textContent = styleText;
+    shadow.appendChild(styleTag);
+
+    // 4. Create the Mount Point 
+    const appRoot = document.createElement('div');
+    appRoot.id = 'myk--vue-app';
+    shadow.appendChild(appRoot);
+
+    createApp(App).mount(appRoot);
 }
 
 var hostname = window.location.host;
