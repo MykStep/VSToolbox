@@ -64,7 +64,7 @@
             <div class="myk--reference-info-command-button myk--button severity-info" @click="addProperty(currentListing)">Add</div>
           </div>
 
-          {{ currentListing }}
+          
 
 
         </template>
@@ -91,7 +91,7 @@
                   <div class="myk--within-bar-icon icon-last">{{ expandedPropertyId === reference.uid ? '▲' : '▼' }}</div>
                 </div>
                 <div class="myk--reference-info" v-if="expandedPropertyId === reference.uid">
-                  {{ reference.isEdited }}
+                  
                   <div class="myk--reference-info-table">
                     
                       <template v-for="(value, key, findex) in reference" :key="key">
