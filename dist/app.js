@@ -4622,10 +4622,10 @@
 			uid: window.location.pathname.split("/").at(-1),
 			link: window.location.href,
 			advertisedPrice: price,
-			PSQM: Math.round(price / parseFloat(callInfoByHeader("Living area"))),
-			LA: callInfoByHeader("Living area"),
+			PSQM: Math.round(price / parseFloat(callInfoByHeader("Usable floor area"))),
+			LA: callInfoByHeader("Usable floor area"),
 			EPC: callInfoByHeader("Primary energy consumption"),
-			EPCLabel: callInfoByHeader("Energy class"),
+			EPCLabel: callInfoByHeader("EPC/EPC label"),
 			CY: callInfoByHeader("Construction year"),
 			isEdited: false,
 			note: ""

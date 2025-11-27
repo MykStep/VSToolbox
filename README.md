@@ -14,7 +14,7 @@ Release v0.2:
   3. Added CSS to JS plugin for vite configuration
 
 Refactor Plan:
-  1. Shadow DOM
+  1. Shadow DOM [ V ]
   2. Pinia (State Management)
   3. Service Layer
   4. Better Component Structure
