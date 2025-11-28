@@ -180,9 +180,11 @@
 <script setup>
 // --- Imports ---
 import { ref, watch } from 'vue';
+
 // composables
-import { scrapImmowebData } from './composables/scrapImmowebData';
 import { capitalize, returnUnitMetric, average, openLink } from './composables/utils';
+
+import { scrapImmowebData } from './composables/scrapImmowebData';
 import { useToast } from './composables/useToast';
 import { useClipboard } from './composables/useClipboard';
 import { useValuation } from './composables/useValuation';
@@ -208,7 +210,6 @@ const {
   currentWindow, 
   reloadCurrentListingData 
 } = scrapImmowebData();
-
 
 // toast
 const { 

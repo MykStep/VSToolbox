@@ -5074,6 +5074,26 @@
 		}
 		return refs;
 	}
+	function capitalize(str) {
+		if (!str) return "";
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+	function returnUnitMetric(informationItem) {
+		return {
+			advertisedPrice: "€",
+			EPC: "kWh/m²",
+			LA: "sqm",
+			PSQM: "€/sqm"
+		}[informationItem.key] || void 0;
+	}
+	function average(properties, key = "") {
+		const priceList = properties.map((x) => parseFloat(x[key])).filter((price) => !Number.isNaN(price));
+		if (priceList.length === 0) return "0.00";
+		return (priceList.reduce((total, currentPrice) => total + currentPrice, 0) / priceList.length).toFixed(2);
+	}
+	function openLink(link) {
+		window.open(link, "_blank", "noopener,noreferrer");
+	}
 	var currentListing = ref(null);
 	var currentWindow = ref(window.location.hostname);
 	var tableInformation = ref([]);
@@ -5119,26 +5139,6 @@
 			currentWindow: readonly(currentWindow),
 			reloadCurrentListingData
 		};
-	}
-	function capitalize(str) {
-		if (!str) return "";
-		return str.charAt(0).toUpperCase() + str.slice(1);
-	}
-	function returnUnitMetric(informationItem) {
-		return {
-			advertisedPrice: "€",
-			EPC: "kWh/m²",
-			LA: "sqm",
-			PSQM: "€/sqm"
-		}[informationItem.key] || void 0;
-	}
-	function average(properties, key = "") {
-		const priceList = properties.map((x) => parseFloat(x[key])).filter((price) => !Number.isNaN(price));
-		if (priceList.length === 0) return "0.00";
-		return (priceList.reduce((total, currentPrice) => total + currentPrice, 0) / priceList.length).toFixed(2);
-	}
-	function openLink(link) {
-		window.open(link, "_blank", "noopener,noreferrer");
 	}
 	var toast = reactive({
 		visible: false,
