@@ -61,30 +61,28 @@
 
           <div class="myk--reference-info-command-box">
             <div class="myk--reference-info-command-button myk--button icon-start severity-info" @click="copyObjectToClipboard([currentListing])">Clipboard</div>
-            <div class="myk--reference-info-command-button myk--button severity-info" @click="addProperty(currentListing)">Add</div>
+            <div class="myk--reference-info-command-button myk--button severity-info" @click="propertyStore.addProperty(currentListing)">Add</div>
           </div>
-
           
-
 
         </template>
 
       </div>
 
       <div class="myk--tab-container" v-if="activeTab === 'References'" >
-        <div v-if="settings.additionalTools" class="myk--container-basics">
+        <div v-if="settingsStore.settings.additionalTools" class="myk--container-basics">
           <span class="myk--section-header">Valuation Type</span>
           <div class="myk--reference-info-command-box">
-            <div class="myk--reference-info-command-button myk--button icon-start severity-info"  :class="{ active: settings.valType === 'Normal' }" @click="settings.valType = 'Normal'">Normal</div>
-            <div class="myk--reference-info-command-button myk--button severity-info"  :class="{ active: settings.valType === 'New Construction' }" @click="settings.valType = 'New Construction'">New Construction</div>
+            <div class="myk--reference-info-command-button myk--button icon-start severity-info"  :class="{ active: settingsStore.settings.valType === 'Normal' }" @click="settingsStore.settings.valType = 'Normal'">Normal</div>
+            <div class="myk--reference-info-command-button myk--button severity-info"  :class="{ active: settingsStore.settings.valType === 'New Construction' }" @click="settingsStore.settings.valType = 'New Construction'">New Construction</div>
           </div>
         </div>
         
-        <template v-if="settings.valType == 'Normal' || !settings.additionalTools">
+        <template v-if="settingsStore.settings.valType == 'Normal' || !settingsStore.settings.additionalTools">
           <div class="myk--container-basics">
             <span class="myk--section-header">Reference Table</span>
             <div id="myk--dropdown-reference-table-container" class="myk--container-basics">
-              <div :key="reference.uid" v-for="(reference, index) in selectedProperties" class="myk--dropdown-reference-container">
+              <div :key="reference.uid" v-for="(reference, index) in propertyStore.savedProperties" class="myk--dropdown-reference-container">
                 <div class="myk--reference-bar myk--button" :class="{ 'active-reference': expandedPropertyId === reference.uid }" @click="toggleReferenceDetails(reference.uid)">
                   <div class="myk--within-bar-icon icon-start" style="font-weight: 600;">{{ index + 1 }}</div>
                   <span>{{ reference.advertisedPrice }}</span>
@@ -109,7 +107,7 @@
                   </div>
                   <div class="myk--reference-info-command-box-container">
                     <div class="myk--reference-info-command-box">
-                      <div class="myk--reference-info-command-button icon-start severity-danger myk--button" @click="removeProperty(reference.uid)">Delete</div>
+                      <div class="myk--reference-info-command-button icon-start severity-danger myk--button" @click="propertyStore.removeProperty(reference.uid)">Delete</div>
                       <div class="myk--reference-info-command-button myk--button" @click="handleEditMode(reference.uid)">Edit</div>
                       <div class="myk--reference-info-command-button icon-last severity-info myk--button" @click="copyObjectToClipboard([reference])">Clipboard</div> 
                     </div>
@@ -121,9 +119,9 @@
                 </div>
               </div>
             </div>
-            <div v-if="selectedProperties != 0" class="myk--reference-info-command-box">
-              <div class="myk--reference-info-command-button myk--button icon-start severity-danger" @click="removeAllProperty()">Delete All</div>
-              <div class="myk--reference-info-command-button myk--button severity-info" @click="copyObjectToClipboard(selectedProperties)">Clipboard</div>
+            <div v-if="propertyStore.savedProperties != 0" class="myk--reference-info-command-box">
+              <div class="myk--reference-info-command-button myk--button icon-start severity-danger" @click="propertyStore.removeAllProperty()">Delete All</div>
+              <div class="myk--reference-info-command-button myk--button severity-info" @click="copyObjectToClipboard(propertyStore.savedProperties)">Clipboard</div>
             </div>
           </div>
 
@@ -131,10 +129,10 @@
             <span class="myk--section-header">Summary Stastics</span>
             <div class="myk--container-basics_negative">
               <div class="myk--reference-info-table-line myk--ruler-bottom">
-                <span>PSQM: </span><span style="color: rgb(0, 24, 55)">{{ average(selectedProperties, 'PSQM') }} {{ returnUnitMetric({key: 'PSQM'}) }}</span>
+                <span>PSQM: </span><span style="color: rgb(0, 24, 55)">{{ propertyStore.averagePSQM.formatted }}</span>
               </div>
               <div class="myk--reference-info-table-line">
-                <span>Price: </span><span style="color: rgb(0, 24, 55)">{{ average(selectedProperties, 'advertisedPrice') }} {{ returnUnitMetric({key: 'advertisedPrice'}) }}</span>
+                <span>Price: </span><span style="color: rgb(0, 24, 55)">{{ propertyStore.averagePrice.formatted }}</span>
               </div>
             </div>
             <div class="myk--container-basics_negative">  
@@ -154,14 +152,14 @@
                 <span>Confidence Interval ING: </span><span style="color: rgb(0, 24, 55)">[ {{ dvmConfidenceIntervalING.lower }} ; {{ dvmConfidenceIntervalING.upper }} ]</span>
               </div>
             </div>
-            <div v-if="average(selectedProperties, 'PSQM') != 0" class="myk--reference-info-command-box">
+            <div v-if="propertyStore.averagePSQM.unformatted != 0" class="myk--reference-info-command-box">
               <div class="myk--reference-info-command-button myk--button icon-start severity-info" @click="copySummaryStatistics()">Copy Statistics</div>
-              <div class="myk--reference-info-command-button myk--button severity-info" @click="copySummaryStatistics(sumStats = {'PSQM Average':  average(selectedProperties, 'PSQM') + returnUnitMetric({key: 'PSQM'})},selectedProperties)">Clipboard All</div>
+              <div class="myk--reference-info-command-button myk--button severity-info" @click="copySummaryStatistics(sumStats = {'PSQM Average':  propertyStore.averagePSQM.formatted},propertyStore.savedProperties)">Clipboard All</div>
             </div>
           </div>
         </template>
         
-        <template v-if="settings.valType == 'New Construction' && settings.additionalTools">
+        <template v-if="settingsStore.settings.valType == 'New Construction' && settingsStore.settings.additionalTools">
         Still under construction... 🥁
         </template>
       
@@ -170,8 +168,9 @@
       <div class="myk--tab-container" v-if="activeTab === 'Settings'">
         <div class="myk--input-line">
           <span>Toggle Extra Valuation Tools</span>
-          <input type="checkbox" v-model="settings.additionalTools" />
+          <input type="checkbox" v-model="settingsStore.settings.additionalTools" />
         </div>
+        {{ settingsStore.settings }}
       </div>
 
     </div>
@@ -180,15 +179,26 @@
 
 <script setup>
 // --- Imports ---
-import { ref, reactive } from 'vue';
+import { ref, watch } from 'vue';
 // composables
 import { scrapImmowebData } from './composables/scrapImmowebData';
 import { capitalize, returnUnitMetric, average, openLink } from './composables/utils';
-import { useProperties } from './composables/useProperties';
 import { useToast } from './composables/useToast';
 import { useClipboard } from './composables/useClipboard';
 import { useValuation } from './composables/useValuation';
-import { useLocalStorage } from './composables/useLocalStorage';
+
+import { storeToRefs } from 'pinia'
+import { usePropertyStore } from './stores/properties';
+import { useSettingsStore } from './stores/settings';
+
+// Stores
+const propertyStore = usePropertyStore();
+const settingsStore = useSettingsStore();
+const { settings } = storeToRefs(settingsStore);
+
+watch( settings, (newSettings) => {
+  settingsStore.save();
+}, {deep: true} );
 
 
 // --- State and Methods Usage ---
@@ -199,13 +209,6 @@ const {
   reloadCurrentListingData 
 } = scrapImmowebData();
 
-// property CRUD
-const {
-  selectedProperties,
-  addProperty,
-  removeProperty,
-  removeAllProperty
-} = useProperties();
 
 // toast
 const { 
@@ -227,11 +230,7 @@ const {
   dvmConfidenceIntervalING 
 } = useValuation();
 
-// settings
-const settings = useLocalStorage('settingsMyk', {
-  additionalTools: false,
-  valType: 'Normal',
-});
+
 
 // --- UI State ---
 const displayApp = ref(true);
@@ -250,11 +249,8 @@ function toggleReferenceDetails(referenceUID) {
 }
 
 function handleEditMode(referenceUID) {
-  selectedProperties.value.find(i => i.uid == referenceUID).isEdited = !selectedProperties.value.find(i => i.uid == referenceUID).isEdited;
+  propertyStore.savedProperties.find(i => i.uid == referenceUID).isEdited = !propertyStore.savedProperties.find(i => i.uid == referenceUID).isEdited;
+  propertyStore.save();
 }
 
 </script>
-
-<style scoped>
-
-</style>
