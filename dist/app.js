@@ -50,7 +50,7 @@
 	var toRawType = (value) => {
 		return toTypeString(value).slice(8, -1);
 	};
-	var isPlainObject = (val) => toTypeString(val) === "[object Object]";
+	var isPlainObject$1 = (val) => toTypeString(val) === "[object Object]";
 	var isIntegerKey = (key) => isString(key) && key !== "NaN" && key[0] !== "-" && "" + parseInt(key, 10) === key;
 	var isReservedProp = /* @__PURE__ */ makeMap(",key,ref,ref_for,ref_key,onVnodeBeforeMount,onVnodeMounted,onVnodeBeforeUpdate,onVnodeUpdated,onVnodeBeforeUnmount,onVnodeUnmounted");
 	var cacheStringFunction = (fn) => {
@@ -186,7 +186,7 @@
 		}, {}) };
 		else if (isSet(val)) return { [`Set(${val.size})`]: [...val.values()].map((v) => stringifySymbol(v)) };
 		else if (isSymbol(val)) return stringifySymbol(val);
-		else if (isObject(val) && !isArray(val) && !isPlainObject(val)) return String(val);
+		else if (isObject(val) && !isArray(val) && !isPlainObject$1(val)) return String(val);
 		return val;
 	};
 	var stringifySymbol = (v, i = "") => {
@@ -272,8 +272,14 @@
 			}
 		}
 	};
+	function effectScope(detached) {
+		return new EffectScope(detached);
+	}
 	function getCurrentScope() {
 		return activeEffectScope;
+	}
+	function onScopeDispose(fn, failSilently = false) {
+		if (activeEffectScope) activeEffectScope.cleanups.push(fn);
 	}
 	var activeSub;
 	var pausedQueueEffects = /* @__PURE__ */ new WeakSet();
@@ -346,9 +352,9 @@
 	var batchDepth = 0;
 	var batchedSub;
 	var batchedComputed;
-	function batch(sub, isComputed = false) {
+	function batch(sub, isComputed$1 = false) {
 		sub.flags |= 8;
-		if (isComputed) {
+		if (isComputed$1) {
 			sub.next = batchedComputed;
 			batchedComputed = sub;
 			return;
@@ -638,6 +644,10 @@
 			}
 		}
 		endBatch();
+	}
+	function getDepFromReactive(object, key) {
+		const depMap = targetMap.get(object);
+		return depMap && depMap.get(key);
 	}
 	function reactiveReadArray(array) {
 		const raw = toRaw(array);
@@ -1161,6 +1171,51 @@
 	function proxyRefs(objectWithRefs) {
 		return isReactive(objectWithRefs) ? objectWithRefs : new Proxy(objectWithRefs, shallowUnwrapHandlers);
 	}
+	function toRefs(object) {
+		const ret = isArray(object) ? new Array(object.length) : {};
+		for (const key in object) ret[key] = propertyToRef(object, key);
+		return ret;
+	}
+	var ObjectRefImpl = class {
+		constructor(_object, _key, _defaultValue) {
+			this._object = _object;
+			this._key = _key;
+			this._defaultValue = _defaultValue;
+			this["__v_isRef"] = true;
+			this._value = void 0;
+		}
+		get value() {
+			const val = this._object[this._key];
+			return this._value = val === void 0 ? this._defaultValue : val;
+		}
+		set value(newVal) {
+			this._object[this._key] = newVal;
+		}
+		get dep() {
+			return getDepFromReactive(toRaw(this._object), this._key);
+		}
+	};
+	var GetterRefImpl = class {
+		constructor(_getter) {
+			this._getter = _getter;
+			this["__v_isRef"] = true;
+			this["__v_isReadonly"] = true;
+			this._value = void 0;
+		}
+		get value() {
+			return this._value = this._getter();
+		}
+	};
+	function toRef(source, key, defaultValue) {
+		if (isRef(source)) return source;
+		else if (isFunction(source)) return new GetterRefImpl(source);
+		else if (isObject(source) && arguments.length > 1) return propertyToRef(source, key, defaultValue);
+		else return ref(source);
+	}
+	function propertyToRef(source, key, defaultValue) {
+		const val = source[key];
+		return isRef(val) ? val : new ObjectRefImpl(source, key, defaultValue);
+	}
 	var ComputedRefImpl = class {
 		constructor(fn, setter, isSSR) {
 			this.fn = fn;
@@ -1332,7 +1387,7 @@
 		else if (isSet(value) || isMap(value)) value.forEach((v) => {
 			traverse(v, depth, seen);
 		});
-		else if (isPlainObject(value)) {
+		else if (isPlainObject$1(value)) {
 			for (const key in value) traverse(value[key], depth, seen);
 			for (const key of Object.getOwnPropertySymbols(value)) if (Object.prototype.propertyIsEnumerable.call(value, key)) traverse(value[key], depth, seen);
 		}
@@ -2385,6 +2440,9 @@
 			if (provides && key in provides) return provides[key];
 			else if (arguments.length > 1) return treatDefaultAsFactory && isFunction(defaultValue) ? defaultValue.call(instance && instance.proxy) : defaultValue;
 		}
+	}
+	function hasInjectionContext() {
+		return !!(getCurrentInstance() || currentApp);
 	}
 	var internalObjectProto = {};
 	var createInternalObject = () => Object.create(internalObjectProto);
@@ -4539,22 +4597,22 @@
 				const modelValue = el._modelValue;
 				const elementValue = getValue(el);
 				const checked = el.checked;
-				const assign = el[assignKey];
+				const assign$2 = el[assignKey];
 				if (isArray(modelValue)) {
 					const index = looseIndexOf(modelValue, elementValue);
 					const found = index !== -1;
-					if (checked && !found) assign(modelValue.concat(elementValue));
+					if (checked && !found) assign$2(modelValue.concat(elementValue));
 					else if (!checked && found) {
 						const filtered = [...modelValue];
 						filtered.splice(index, 1);
-						assign(filtered);
+						assign$2(filtered);
 					}
 				} else if (isSet(modelValue)) {
 					const cloned = new Set(modelValue);
 					if (checked) cloned.add(elementValue);
 					else cloned.delete(elementValue);
-					assign(cloned);
-				} else assign(getCheckboxValue(el, checked));
+					assign$2(cloned);
+				} else assign$2(getCheckboxValue(el, checked));
 			});
 		},
 		mounted: setChecked,
@@ -4612,6 +4670,430 @@
 		if (isString(container)) return document.querySelector(container);
 		return container;
 	}
+	var IS_CLIENT = typeof window !== "undefined";
+	var activePinia;
+	var setActivePinia = (pinia) => activePinia = pinia;
+	var piniaSymbol = Symbol();
+	function isPlainObject(o) {
+		return o && typeof o === "object" && Object.prototype.toString.call(o) === "[object Object]" && typeof o.toJSON !== "function";
+	}
+	var MutationType;
+	(function(MutationType$1) {
+		MutationType$1["direct"] = "direct";
+		MutationType$1["patchObject"] = "patch object";
+		MutationType$1["patchFunction"] = "patch function";
+	})(MutationType || (MutationType = {}));
+	var _global = /* @__PURE__ */ (() => typeof window === "object" && window.window === window ? window : typeof self === "object" && self.self === self ? self : typeof global === "object" && global.global === global ? global : typeof globalThis === "object" ? globalThis : { HTMLElement: null })();
+	function bom(blob, { autoBom = false } = {}) {
+		if (autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) return new Blob([String.fromCharCode(65279), blob], { type: blob.type });
+		return blob;
+	}
+	function download(url, name, opts) {
+		const xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		xhr.responseType = "blob";
+		xhr.onload = function() {
+			saveAs(xhr.response, name, opts);
+		};
+		xhr.onerror = function() {
+			console.error("could not download file");
+		};
+		xhr.send();
+	}
+	function corsEnabled(url) {
+		const xhr = new XMLHttpRequest();
+		xhr.open("HEAD", url, false);
+		try {
+			xhr.send();
+		} catch (e) {}
+		return xhr.status >= 200 && xhr.status <= 299;
+	}
+	function click(node) {
+		try {
+			node.dispatchEvent(new MouseEvent("click"));
+		} catch (e) {
+			const evt = new MouseEvent("click", {
+				bubbles: true,
+				cancelable: true,
+				view: window,
+				detail: 0,
+				screenX: 80,
+				screenY: 20,
+				clientX: 80,
+				clientY: 20,
+				ctrlKey: false,
+				altKey: false,
+				shiftKey: false,
+				metaKey: false,
+				button: 0,
+				relatedTarget: null
+			});
+			node.dispatchEvent(evt);
+		}
+	}
+	var _navigator = typeof navigator === "object" ? navigator : { userAgent: "" };
+	var isMacOSWebView = /* @__PURE__ */ (() => /Macintosh/.test(_navigator.userAgent) && /AppleWebKit/.test(_navigator.userAgent) && !/Safari/.test(_navigator.userAgent))();
+	var saveAs = !IS_CLIENT ? () => {} : typeof HTMLAnchorElement !== "undefined" && "download" in HTMLAnchorElement.prototype && !isMacOSWebView ? downloadSaveAs : "msSaveOrOpenBlob" in _navigator ? msSaveAs : fileSaverSaveAs;
+	function downloadSaveAs(blob, name = "download", opts) {
+		const a = document.createElement("a");
+		a.download = name;
+		a.rel = "noopener";
+		if (typeof blob === "string") {
+			a.href = blob;
+			if (a.origin !== location.origin) if (corsEnabled(a.href)) download(blob, name, opts);
+			else {
+				a.target = "_blank";
+				click(a);
+			}
+			else click(a);
+		} else {
+			a.href = URL.createObjectURL(blob);
+			setTimeout(function() {
+				URL.revokeObjectURL(a.href);
+			}, 4e4);
+			setTimeout(function() {
+				click(a);
+			}, 0);
+		}
+	}
+	function msSaveAs(blob, name = "download", opts) {
+		if (typeof blob === "string") if (corsEnabled(blob)) download(blob, name, opts);
+		else {
+			const a = document.createElement("a");
+			a.href = blob;
+			a.target = "_blank";
+			setTimeout(function() {
+				click(a);
+			});
+		}
+		else navigator.msSaveOrOpenBlob(bom(blob, opts), name);
+	}
+	function fileSaverSaveAs(blob, name, opts, popup) {
+		popup = popup || open("", "_blank");
+		if (popup) popup.document.title = popup.document.body.innerText = "downloading...";
+		if (typeof blob === "string") return download(blob, name, opts);
+		const force = blob.type === "application/octet-stream";
+		const isSafari = /constructor/i.test(String(_global.HTMLElement)) || "safari" in _global;
+		const isChromeIOS = /CriOS\/[\d]+/.test(navigator.userAgent);
+		if ((isChromeIOS || force && isSafari || isMacOSWebView) && typeof FileReader !== "undefined") {
+			const reader = new FileReader();
+			reader.onloadend = function() {
+				let url = reader.result;
+				if (typeof url !== "string") {
+					popup = null;
+					throw new Error("Wrong reader.result type");
+				}
+				url = isChromeIOS ? url : url.replace(/^data:[^;]*;/, "data:attachment/file;");
+				if (popup) popup.location.href = url;
+				else location.assign(url);
+				popup = null;
+			};
+			reader.readAsDataURL(blob);
+		} else {
+			const url = URL.createObjectURL(blob);
+			if (popup) popup.location.assign(url);
+			else location.href = url;
+			popup = null;
+			setTimeout(function() {
+				URL.revokeObjectURL(url);
+			}, 4e4);
+		}
+	}
+	var { assign: assign$1 } = Object;
+	function createPinia() {
+		const scope = effectScope(true);
+		const state = scope.run(() => ref({}));
+		let _p = [];
+		let toBeInstalled = [];
+		const pinia = markRaw({
+			install(app) {
+				setActivePinia(pinia);
+				pinia._a = app;
+				app.provide(piniaSymbol, pinia);
+				app.config.globalProperties.$pinia = pinia;
+				toBeInstalled.forEach((plugin) => _p.push(plugin));
+				toBeInstalled = [];
+			},
+			use(plugin) {
+				if (!this._a) toBeInstalled.push(plugin);
+				else _p.push(plugin);
+				return this;
+			},
+			_p,
+			_a: null,
+			_e: scope,
+			_s: /* @__PURE__ */ new Map(),
+			state
+		});
+		return pinia;
+	}
+	var noop = () => {};
+	function addSubscription(subscriptions, callback, detached, onCleanup = noop) {
+		subscriptions.add(callback);
+		const removeSubscription = () => {
+			subscriptions.delete(callback) && onCleanup();
+		};
+		if (!detached && getCurrentScope()) onScopeDispose(removeSubscription);
+		return removeSubscription;
+	}
+	function triggerSubscriptions(subscriptions, ...args) {
+		subscriptions.forEach((callback) => {
+			callback(...args);
+		});
+	}
+	var fallbackRunWithContext = (fn) => fn();
+	var ACTION_MARKER = Symbol();
+	var ACTION_NAME = Symbol();
+	function mergeReactiveObjects(target, patchToApply) {
+		if (target instanceof Map && patchToApply instanceof Map) patchToApply.forEach((value, key) => target.set(key, value));
+		else if (target instanceof Set && patchToApply instanceof Set) patchToApply.forEach(target.add, target);
+		for (const key in patchToApply) {
+			if (!patchToApply.hasOwnProperty(key)) continue;
+			const subPatch = patchToApply[key];
+			const targetValue = target[key];
+			if (isPlainObject(targetValue) && isPlainObject(subPatch) && target.hasOwnProperty(key) && !isRef(subPatch) && !isReactive(subPatch)) target[key] = mergeReactiveObjects(targetValue, subPatch);
+			else target[key] = subPatch;
+		}
+		return target;
+	}
+	var skipHydrateSymbol = Symbol();
+	function shouldHydrate(obj) {
+		return !isPlainObject(obj) || !Object.prototype.hasOwnProperty.call(obj, skipHydrateSymbol);
+	}
+	var { assign } = Object;
+	function isComputed(o) {
+		return !!(isRef(o) && o.effect);
+	}
+	function createOptionsStore(id, options, pinia, hot) {
+		const { state, actions, getters } = options;
+		const initialState = pinia.state.value[id];
+		let store;
+		function setup() {
+			if (!initialState && true)
+ /* istanbul ignore if */
+			pinia.state.value[id] = state ? state() : {};
+			const localState = toRefs(pinia.state.value[id]);
+			return assign(localState, actions, Object.keys(getters || {}).reduce((computedGetters, name) => {
+				computedGetters[name] = markRaw(computed(() => {
+					setActivePinia(pinia);
+					const store$1 = pinia._s.get(id);
+					return getters[name].call(store$1, store$1);
+				}));
+				return computedGetters;
+			}, {}));
+		}
+		store = createSetupStore(id, setup, options, pinia, hot, true);
+		return store;
+	}
+	function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) {
+		let scope;
+		const optionsForPlugin = assign({ actions: {} }, options);
+		const $subscribeOptions = { deep: true };
+		let isListening;
+		let isSyncListening;
+		let subscriptions = /* @__PURE__ */ new Set();
+		let actionSubscriptions = /* @__PURE__ */ new Set();
+		let debuggerEvents;
+		const initialState = pinia.state.value[$id];
+		if (!isOptionsStore && !initialState && true)
+ /* istanbul ignore if */
+		pinia.state.value[$id] = {};
+		ref({});
+		let activeListener;
+		function $patch(partialStateOrMutator) {
+			let subscriptionMutation;
+			isListening = isSyncListening = false;
+			if (typeof partialStateOrMutator === "function") {
+				partialStateOrMutator(pinia.state.value[$id]);
+				subscriptionMutation = {
+					type: MutationType.patchFunction,
+					storeId: $id,
+					events: debuggerEvents
+				};
+			} else {
+				mergeReactiveObjects(pinia.state.value[$id], partialStateOrMutator);
+				subscriptionMutation = {
+					type: MutationType.patchObject,
+					payload: partialStateOrMutator,
+					storeId: $id,
+					events: debuggerEvents
+				};
+			}
+			const myListenerId = activeListener = Symbol();
+			nextTick().then(() => {
+				if (activeListener === myListenerId) isListening = true;
+			});
+			isSyncListening = true;
+			triggerSubscriptions(subscriptions, subscriptionMutation, pinia.state.value[$id]);
+		}
+		const $reset = isOptionsStore ? function $reset$1() {
+			const { state } = options;
+			const newState = state ? state() : {};
+			this.$patch(($state) => {
+				assign($state, newState);
+			});
+		} : noop;
+		function $dispose() {
+			scope.stop();
+			subscriptions.clear();
+			actionSubscriptions.clear();
+			pinia._s.delete($id);
+		}
+		const action = (fn, name = "") => {
+			if (ACTION_MARKER in fn) {
+				fn[ACTION_NAME] = name;
+				return fn;
+			}
+			const wrappedAction = function() {
+				setActivePinia(pinia);
+				const args = Array.from(arguments);
+				const afterCallbackSet = /* @__PURE__ */ new Set();
+				const onErrorCallbackSet = /* @__PURE__ */ new Set();
+				function after(callback) {
+					afterCallbackSet.add(callback);
+				}
+				function onError(callback) {
+					onErrorCallbackSet.add(callback);
+				}
+				triggerSubscriptions(actionSubscriptions, {
+					args,
+					name: wrappedAction[ACTION_NAME],
+					store,
+					after,
+					onError
+				});
+				let ret;
+				try {
+					ret = fn.apply(this && this.$id === $id ? this : store, args);
+				} catch (error) {
+					triggerSubscriptions(onErrorCallbackSet, error);
+					throw error;
+				}
+				if (ret instanceof Promise) return ret.then((value) => {
+					triggerSubscriptions(afterCallbackSet, value);
+					return value;
+				}).catch((error) => {
+					triggerSubscriptions(onErrorCallbackSet, error);
+					return Promise.reject(error);
+				});
+				triggerSubscriptions(afterCallbackSet, ret);
+				return ret;
+			};
+			wrappedAction[ACTION_MARKER] = true;
+			wrappedAction[ACTION_NAME] = name;
+			return wrappedAction;
+		};
+		const partialStore = {
+			_p: pinia,
+			$id,
+			$onAction: addSubscription.bind(null, actionSubscriptions),
+			$patch,
+			$reset,
+			$subscribe(callback, options$1 = {}) {
+				const removeSubscription = addSubscription(subscriptions, callback, options$1.detached, () => stopWatcher());
+				const stopWatcher = scope.run(() => watch(() => pinia.state.value[$id], (state) => {
+					if (options$1.flush === "sync" ? isSyncListening : isListening) callback({
+						storeId: $id,
+						type: MutationType.direct,
+						events: debuggerEvents
+					}, state);
+				}, assign({}, $subscribeOptions, options$1)));
+				return removeSubscription;
+			},
+			$dispose
+		};
+		const store = reactive(partialStore);
+		pinia._s.set($id, store);
+		const setupStore = (pinia._a && pinia._a.runWithContext || fallbackRunWithContext)(() => pinia._e.run(() => (scope = effectScope()).run(() => setup({ action }))));
+		for (const key in setupStore) {
+			const prop = setupStore[key];
+			if (isRef(prop) && !isComputed(prop) || isReactive(prop)) {
+				if (!isOptionsStore) {
+					if (initialState && shouldHydrate(prop)) if (isRef(prop)) prop.value = initialState[key];
+					else mergeReactiveObjects(prop, initialState[key]);
+					pinia.state.value[$id][key] = prop;
+				}
+			} else if (typeof prop === "function") {
+				setupStore[key] = action(prop, key);
+				optionsForPlugin.actions[key] = prop;
+			}
+		}
+		/* istanbul ignore if */
+		assign(store, setupStore);
+		assign(toRaw(store), setupStore);
+		Object.defineProperty(store, "$state", {
+			get: () => pinia.state.value[$id],
+			set: (state) => {
+				$patch(($state) => {
+					assign($state, state);
+				});
+			}
+		});
+		pinia._p.forEach((extender) => {
+			assign(store, scope.run(() => extender({
+				store,
+				app: pinia._a,
+				pinia,
+				options: optionsForPlugin
+			})));
+		});
+		if (initialState && isOptionsStore && options.hydrate) options.hydrate(store.$state, initialState);
+		isListening = true;
+		isSyncListening = true;
+		return store;
+	}
+	/*! #__NO_SIDE_EFFECTS__ */
+	function defineStore(id, setup, setupOptions) {
+		let options;
+		const isSetupStore = typeof setup === "function";
+		options = isSetupStore ? setupOptions : setup;
+		function useStore(pinia, hot) {
+			const hasContext = hasInjectionContext();
+			pinia = pinia || (hasContext ? inject(piniaSymbol, null) : null);
+			if (pinia) setActivePinia(pinia);
+			pinia = activePinia;
+			if (!pinia._s.has(id)) if (isSetupStore) createSetupStore(id, setup, options, pinia);
+			else createOptionsStore(id, options, pinia);
+			return pinia._s.get(id);
+		}
+		useStore.$id = id;
+		return useStore;
+	}
+	function storeToRefs(store) {
+		const rawStore = toRaw(store);
+		const refs = {};
+		for (const key in rawStore) {
+			const value = rawStore[key];
+			if (value.effect) refs[key] = computed({
+				get: () => store[key],
+				set(value$1) {
+					store[key] = value$1;
+				}
+			});
+			else if (isRef(value) || isReactive(value)) refs[key] = toRef(store, key);
+		}
+		return refs;
+	}
+	function capitalize(str) {
+		if (!str) return "";
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+	function returnUnitMetric(informationItem) {
+		return {
+			advertisedPrice: "€",
+			EPC: "kWh/m²",
+			LA: "sqm",
+			PSQM: "€/sqm"
+		}[informationItem.key] || void 0;
+	}
+	function average(properties, key = "") {
+		const priceList = properties.map((x) => parseFloat(x[key])).filter((price) => !Number.isNaN(price));
+		if (priceList.length === 0) return "0.00";
+		return (priceList.reduce((total, currentPrice) => total + currentPrice, 0) / priceList.length).toFixed(2);
+	}
+	function openLink(link) {
+		window.open(link, "_blank", "noopener,noreferrer");
+	}
 	var currentListing = ref(null);
 	var currentWindow = ref(window.location.hostname);
 	var tableInformation = ref([]);
@@ -4658,69 +5140,6 @@
 			reloadCurrentListingData
 		};
 	}
-	function capitalize(str) {
-		if (!str) return "";
-		return str.charAt(0).toUpperCase() + str.slice(1);
-	}
-	function returnUnitMetric(informationItem) {
-		return {
-			advertisedPrice: "€",
-			EPC: "kWh/m²",
-			LA: "sqm",
-			PSQM: "€/sqm"
-		}[informationItem.key] || void 0;
-	}
-	function average(properties, key = "") {
-		const priceList = properties.map((x) => parseFloat(x[key])).filter((price) => !Number.isNaN(price));
-		if (priceList.length === 0) return "0.00";
-		return (priceList.reduce((total, currentPrice) => total + currentPrice, 0) / priceList.length).toFixed(2);
-	}
-	function openLink(link) {
-		window.open(link, "_blank", "noopener,noreferrer");
-	}
-	function useLocalStorage(key, defaultValue) {
-		const data = ref(defaultValue);
-		const storedValue = localStorage.getItem(key);
-		if (storedValue !== null) try {
-			data.value = JSON.parse(storedValue);
-		} catch (e) {
-			console.error(`[useLocalStorage] Error parsing stored value for key "${key}":`, e);
-			localStorage.setItem(key, JSON.stringify(defaultValue));
-		}
-		else localStorage.setItem(key, JSON.stringify(defaultValue));
-		watch(data, (newValue) => {
-			localStorage.setItem(key, JSON.stringify(newValue));
-		}, { deep: true });
-		const updateFromStorage = (event) => {
-			console.log("event key: " + event.key);
-			console.log("eventlistener from: " + key);
-			console.log(event.key === key);
-			console.log("--------");
-			if (event.key === key) {
-				console.log("first step with: " + key);
-				if (event.newValue === null) {
-					data.value = defaultValue;
-					console.log("operation consisted of a removal in: " + key);
-				} else try {
-					console.log(data.value);
-					data.value = JSON.parse(event.newValue);
-					console.log(data.value);
-					console.log(JSON.parse(event.newValue));
-				} catch (e) {
-					console.error(`[useLocalStorage] Error parsing broadcasted value for key "${key}":`, e);
-				}
-			}
-		};
-		onMounted(() => {
-			window.addEventListener("storage", updateFromStorage);
-			console.log("mounted: " + key);
-		});
-		onUnmounted(() => {
-			window.removeEventListener("storage", updateFromStorage);
-			console.log("unmounted: " + key);
-		});
-		return data;
-	}
 	var toast = reactive({
 		visible: false,
 		message: "",
@@ -4728,7 +5147,7 @@
 		timeoutId: null
 	});
 	function useToast() {
-		const showToast$1 = (message, type = "success", duration = 3e3) => {
+		const showToast$2 = (message, type = "success", duration = 3e3) => {
 			if (toast.timeoutId) clearTimeout(toast.timeoutId);
 			toast.message = message;
 			toast.type = type;
@@ -4739,32 +5158,7 @@
 		};
 		return {
 			toast: reactive(toast),
-			showToast: showToast$1
-		};
-	}
-	var { showToast } = useToast();
-	function useProperties() {
-		const selectedProperties = useLocalStorage("selectedProperties", []);
-		function addProperty(property) {
-			if (!selectedProperties.value.map((x) => x.uid).includes(property.uid)) {
-				selectedProperties.value.push(property);
-				showToast("Property saved successfully!", "info");
-			}
-		}
-		function removeProperty(propertyId) {
-			selectedProperties.value = selectedProperties.value.filter((p$1) => p$1.uid !== propertyId);
-			console.log(`Property with id ${propertyId} removed.`);
-			showToast(`Property with id ${propertyId} removed.`, "danger");
-		}
-		function removeAllProperty() {
-			selectedProperties.value = [];
-			showToast(`Properties removed.`, "danger");
-		}
-		return {
-			selectedProperties,
-			addProperty,
-			removeProperty,
-			removeAllProperty
+			showToast: showToast$2
 		};
 	}
 	function formatObjectForClipboard(data, index = null) {
@@ -4778,15 +5172,15 @@ PSQM: ${data.PSQM}
 Note: ${data.note}`;
 	}
 	function useClipboard() {
-		const { showToast: showToast$1 } = useToast();
+		const { showToast: showToast$2 } = useToast();
 		async function copyToClipboard(text) {
 			try {
 				await navigator.clipboard.writeText(text);
 				console.log("Text copied to clipboard successfully!");
-				showToast$1("Copied to clipboard", "info");
+				showToast$2("Copied to clipboard", "info");
 			} catch (err) {
 				console.error("Failed to copy text: ", err);
-				showToast$1("Failed to copy", "error");
+				showToast$2("Failed to copy", "error");
 			}
 		}
 		function copyObjectToClipboard(data) {
@@ -4851,6 +5245,99 @@ Note: ${data.note}`;
 			dvmConfidenceIntervalING
 		};
 	}
+	var { showToast: showToast$1 } = useToast();
+	function init$1(key) {
+		const data = localStorage.getItem(key);
+		return data ? JSON.parse(data) : [];
+	}
+	function syncToLocalStorage$1(state, key) {
+		window.addEventListener("storage", (event) => {
+			if (event.key === key) if (event.newValue === null) {
+				state.value = [];
+				showToast$1(`${key} in localStorage was cleared.`, "danger");
+			} else try {
+				state.value = JSON.parse(event.newValue);
+				showToast$1(`Intercepted localStorage udpdate.`, "info");
+			} catch (e) {
+				showToast$1("Failed to parse intercepted JSON.", "danger");
+			}
+		});
+	}
+	const usePropertyStore = defineStore("properties", () => {
+		const STORAGE_KEY = "selectedProperties";
+		const savedProperties = ref(init$1(STORAGE_KEY));
+		syncToLocalStorage$1(savedProperties, STORAGE_KEY);
+		function addProperty(listing) {
+			if (!savedProperties.value.find((p$1) => p$1.uid === listing.uid)) {
+				savedProperties.value.push(listing);
+				save();
+				showToast$1("Property saved successfully!", "info");
+			}
+		}
+		function removeProperty(uid$2) {
+			savedProperties.value = savedProperties.value.filter((p$1) => p$1.uid !== uid$2);
+			save();
+			showToast$1(`Property with id ${uid$2} removed.`, "danger");
+		}
+		function removeAllProperty() {
+			savedProperties.value = [];
+			save();
+			showToast$1(`Properties removed.`, "danger");
+		}
+		function save() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProperties.value));
+		}
+		const averagePSQM = computed(() => {
+			return {
+				formatted: average(savedProperties.value, "PSQM") + " " + returnUnitMetric({ key: "PSQM" }),
+				unformatted: average(savedProperties.value, "PSQM")
+			};
+		});
+		const averagePrice = computed(() => {
+			return {
+				formatted: average(savedProperties.value, "advertisedPrice") + " " + returnUnitMetric({ key: "advertisedPrice" }),
+				unformatted: average(savedProperties.value, "advertisedPrice")
+			};
+		});
+		return {
+			savedProperties,
+			addProperty,
+			removeProperty,
+			removeAllProperty,
+			save,
+			averagePSQM,
+			averagePrice
+		};
+	});
+	function init(key) {
+		const data = localStorage.getItem(key);
+		return data ? JSON.parse(data) : [];
+	}
+	function syncToLocalStorage(state, key) {
+		window.addEventListener("storage", (event) => {
+			if (event.key === key) if (event.newValue === null) {
+				state.value = [];
+				showToast(`${key} in localStorage was cleared.`, "danger");
+			} else try {
+				state.value = JSON.parse(event.newValue);
+				showToast(`Intercepted localStorage udpdate.`, "info");
+			} catch (e) {
+				showToast("Failed to parse intercepted JSON.", "danger");
+			}
+		});
+	}
+	const useSettingsStore = defineStore("settings", () => {
+		const STORAGE_KEY = "settingsMyk";
+		const settings = ref(init(STORAGE_KEY));
+		syncToLocalStorage(settings, STORAGE_KEY);
+		function save() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(settings.value));
+		}
+		return {
+			settings,
+			save
+		};
+	});
 	var _hoisted_1 = { id: "myk--app" };
 	var _hoisted_2 = { id: "myk--app-header" };
 	var _hoisted_3 = { id: "myk--header-controls" };
@@ -4954,15 +5441,16 @@ Note: ${data.note}`;
 	var App_default = {
 		__name: "App",
 		setup(__props) {
+			const propertyStore = usePropertyStore();
+			const settingsStore = useSettingsStore();
+			const { settings } = storeToRefs(settingsStore);
+			watch(settings, (newSettings) => {
+				settingsStore.save();
+			}, { deep: true });
 			const { currentListing: currentListing$1, currentWindow: currentWindow$1, reloadCurrentListingData } = scrapImmowebData();
-			const { selectedProperties, addProperty, removeProperty, removeAllProperty } = useProperties();
-			const { toast: toast$1, showToast: showToast$1 } = useToast();
+			const { toast: toast$1, showToast: showToast$2 } = useToast();
 			const { copyObjectToClipboard, copySummaryStatistics } = useClipboard();
 			const { valuationMetrics: valuationMetrics$1, dvmPrice: dvmPrice$1, dvmConfidenceIntervalARG: dvmConfidenceIntervalARG$1, dvmConfidenceIntervalING: dvmConfidenceIntervalING$1 } = useValuation();
-			const settings = useLocalStorage("settingsMyk", {
-				additionalTools: false,
-				valType: "Normal"
-			});
 			const displayApp = ref(true);
 			const activeTab = ref("Main");
 			const expandedPropertyId = ref(null);
@@ -4971,7 +5459,8 @@ Note: ${data.note}`;
 				else expandedPropertyId.value = referenceUID;
 			}
 			function handleEditMode(referenceUID) {
-				selectedProperties.value.find((i) => i.uid == referenceUID).isEdited = !selectedProperties.value.find((i) => i.uid == referenceUID).isEdited;
+				propertyStore.savedProperties.find((i) => i.uid == referenceUID).isEdited = !propertyStore.savedProperties.find((i) => i.uid == referenceUID).isEdited;
+				propertyStore.save();
 			}
 			return (_ctx, _cache) => {
 				return openBlock(), createElementBlock("div", _hoisted_1, [createBaseVNode("div", _hoisted_2, [createBaseVNode("div", _hoisted_3, [createBaseVNode("div", {
@@ -5032,20 +5521,20 @@ Note: ${data.note}`;
 							onClick: _cache[6] || (_cache[6] = ($event) => unref(copyObjectToClipboard)([unref(currentListing$1)]))
 						}, "Clipboard"), createBaseVNode("div", {
 							class: "myk--reference-info-command-button myk--button severity-info",
-							onClick: _cache[7] || (_cache[7] = ($event) => unref(addProperty)(unref(currentListing$1)))
+							onClick: _cache[7] || (_cache[7] = ($event) => unref(propertyStore).addProperty(unref(currentListing$1)))
 						}, "Add")])
 					], 64)) : createCommentVNode("", true)])) : createCommentVNode("", true),
 					activeTab.value === "References" ? (openBlock(), createElementBlock("div", _hoisted_13, [
-						unref(settings).additionalTools ? (openBlock(), createElementBlock("div", _hoisted_14, [_cache[17] || (_cache[17] = createBaseVNode("span", { class: "myk--section-header" }, "Valuation Type", -1)), createBaseVNode("div", _hoisted_15, [createBaseVNode("div", {
-							class: normalizeClass(["myk--reference-info-command-button myk--button icon-start severity-info", { active: unref(settings).valType === "Normal" }]),
-							onClick: _cache[8] || (_cache[8] = ($event) => unref(settings).valType = "Normal")
+						unref(settingsStore).settings.additionalTools ? (openBlock(), createElementBlock("div", _hoisted_14, [_cache[17] || (_cache[17] = createBaseVNode("span", { class: "myk--section-header" }, "Valuation Type", -1)), createBaseVNode("div", _hoisted_15, [createBaseVNode("div", {
+							class: normalizeClass(["myk--reference-info-command-button myk--button icon-start severity-info", { active: unref(settingsStore).settings.valType === "Normal" }]),
+							onClick: _cache[8] || (_cache[8] = ($event) => unref(settingsStore).settings.valType = "Normal")
 						}, "Normal", 2), createBaseVNode("div", {
-							class: normalizeClass(["myk--reference-info-command-button myk--button severity-info", { active: unref(settings).valType === "New Construction" }]),
-							onClick: _cache[9] || (_cache[9] = ($event) => unref(settings).valType = "New Construction")
+							class: normalizeClass(["myk--reference-info-command-button myk--button severity-info", { active: unref(settingsStore).settings.valType === "New Construction" }]),
+							onClick: _cache[9] || (_cache[9] = ($event) => unref(settingsStore).settings.valType = "New Construction")
 						}, "New Construction", 2)])])) : createCommentVNode("", true),
-						unref(settings).valType == "Normal" || !unref(settings).additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("div", _hoisted_16, [
+						unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("div", _hoisted_16, [
 							_cache[18] || (_cache[18] = createBaseVNode("span", { class: "myk--section-header" }, "Reference Table", -1)),
-							createBaseVNode("div", _hoisted_17, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(selectedProperties), (reference, index) => {
+							createBaseVNode("div", _hoisted_17, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(propertyStore).savedProperties, (reference, index) => {
 								return openBlock(), createElementBlock("div", {
 									key: reference.uid,
 									class: "myk--dropdown-reference-container"
@@ -5076,7 +5565,7 @@ Note: ${data.note}`;
 								}), 128))]), createBaseVNode("div", _hoisted_25, [createBaseVNode("div", _hoisted_26, [
 									createBaseVNode("div", {
 										class: "myk--reference-info-command-button icon-start severity-danger myk--button",
-										onClick: ($event) => unref(removeProperty)(reference.uid)
+										onClick: ($event) => unref(propertyStore).removeProperty(reference.uid)
 									}, "Delete", 8, _hoisted_27),
 									createBaseVNode("div", {
 										class: "myk--reference-info-command-button myk--button",
@@ -5091,16 +5580,16 @@ Note: ${data.note}`;
 									onClick: ($event) => unref(openLink)(reference.link)
 								}, "Link", 8, _hoisted_31)])])])) : createCommentVNode("", true)]);
 							}), 128))]),
-							unref(selectedProperties) != 0 ? (openBlock(), createElementBlock("div", _hoisted_32, [createBaseVNode("div", {
+							unref(propertyStore).savedProperties != 0 ? (openBlock(), createElementBlock("div", _hoisted_32, [createBaseVNode("div", {
 								class: "myk--reference-info-command-button myk--button icon-start severity-danger",
-								onClick: _cache[10] || (_cache[10] = ($event) => unref(removeAllProperty)())
+								onClick: _cache[10] || (_cache[10] = ($event) => unref(propertyStore).removeAllProperty())
 							}, "Delete All"), createBaseVNode("div", {
 								class: "myk--reference-info-command-button myk--button severity-info",
-								onClick: _cache[11] || (_cache[11] = ($event) => unref(copyObjectToClipboard)(unref(selectedProperties)))
+								onClick: _cache[11] || (_cache[11] = ($event) => unref(copyObjectToClipboard)(unref(propertyStore).savedProperties))
 							}, "Clipboard")])) : createCommentVNode("", true)
 						]), createBaseVNode("div", _hoisted_33, [
 							_cache[26] || (_cache[26] = createBaseVNode("span", { class: "myk--section-header" }, "Summary Stastics", -1)),
-							createBaseVNode("div", _hoisted_34, [createBaseVNode("div", _hoisted_35, [_cache[19] || (_cache[19] = createBaseVNode("span", null, "PSQM: ", -1)), createBaseVNode("span", _hoisted_36, toDisplayString(unref(average)(unref(selectedProperties), "PSQM")) + " " + toDisplayString(unref(returnUnitMetric)({ key: "PSQM" })), 1)]), createBaseVNode("div", _hoisted_37, [_cache[20] || (_cache[20] = createBaseVNode("span", null, "Price: ", -1)), createBaseVNode("span", _hoisted_38, toDisplayString(unref(average)(unref(selectedProperties), "advertisedPrice")) + " " + toDisplayString(unref(returnUnitMetric)({ key: "advertisedPrice" })), 1)])]),
+							createBaseVNode("div", _hoisted_34, [createBaseVNode("div", _hoisted_35, [_cache[19] || (_cache[19] = createBaseVNode("span", null, "PSQM: ", -1)), createBaseVNode("span", _hoisted_36, toDisplayString(unref(propertyStore).averagePSQM.formatted), 1)]), createBaseVNode("div", _hoisted_37, [_cache[20] || (_cache[20] = createBaseVNode("span", null, "Price: ", -1)), createBaseVNode("span", _hoisted_38, toDisplayString(unref(propertyStore).averagePrice.formatted), 1)])]),
 							createBaseVNode("div", _hoisted_39, [
 								createBaseVNode("div", _hoisted_40, [_cache[21] || (_cache[21] = createBaseVNode("span", null, "Living area: ", -1)), withDirectives(createBaseVNode("input", {
 									type: "text",
@@ -5114,20 +5603,20 @@ Note: ${data.note}`;
 								createBaseVNode("div", _hoisted_44, [_cache[24] || (_cache[24] = createBaseVNode("span", null, "Confidence Interval ARG: ", -1)), createBaseVNode("span", _hoisted_45, "[ " + toDisplayString(unref(dvmConfidenceIntervalARG$1).lower) + " ; " + toDisplayString(unref(dvmConfidenceIntervalARG$1).upper) + " ]", 1)]),
 								createBaseVNode("div", _hoisted_46, [_cache[25] || (_cache[25] = createBaseVNode("span", null, "Confidence Interval ING: ", -1)), createBaseVNode("span", _hoisted_47, "[ " + toDisplayString(unref(dvmConfidenceIntervalING$1).lower) + " ; " + toDisplayString(unref(dvmConfidenceIntervalING$1).upper) + " ]", 1)])
 							]),
-							unref(average)(unref(selectedProperties), "PSQM") != 0 ? (openBlock(), createElementBlock("div", _hoisted_48, [createBaseVNode("div", {
+							unref(propertyStore).averagePSQM.unformatted != 0 ? (openBlock(), createElementBlock("div", _hoisted_48, [createBaseVNode("div", {
 								class: "myk--reference-info-command-button myk--button icon-start severity-info",
 								onClick: _cache[14] || (_cache[14] = ($event) => unref(copySummaryStatistics)())
 							}, "Copy Statistics"), createBaseVNode("div", {
 								class: "myk--reference-info-command-button myk--button severity-info",
-								onClick: _cache[15] || (_cache[15] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(average)(unref(selectedProperties), "PSQM") + unref(returnUnitMetric)({ key: "PSQM" }) }, unref(selectedProperties)))
+								onClick: _cache[15] || (_cache[15] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(propertyStore).averagePSQM.formatted }, unref(propertyStore).savedProperties))
 							}, "Clipboard All")])) : createCommentVNode("", true)
 						])], 64)) : createCommentVNode("", true),
-						unref(settings).valType == "New Construction" && unref(settings).additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createTextVNode(" Still under construction... 🥁 ")], 64)) : createCommentVNode("", true)
+						unref(settingsStore).settings.valType == "New Construction" && unref(settingsStore).settings.additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createTextVNode(" Still under construction... 🥁 ")], 64)) : createCommentVNode("", true)
 					])) : createCommentVNode("", true),
 					activeTab.value === "Settings" ? (openBlock(), createElementBlock("div", _hoisted_49, [createBaseVNode("div", _hoisted_50, [_cache[27] || (_cache[27] = createBaseVNode("span", null, "Toggle Extra Valuation Tools", -1)), withDirectives(createBaseVNode("input", {
 						type: "checkbox",
-						"onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => unref(settings).additionalTools = $event)
-					}, null, 512), [[vModelCheckbox, unref(settings).additionalTools]])])])) : createCommentVNode("", true)
+						"onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => unref(settingsStore).settings.additionalTools = $event)
+					}, null, 512), [[vModelCheckbox, unref(settingsStore).settings.additionalTools]])]), createTextVNode(" " + toDisplayString(unref(settingsStore).settings), 1)])) : createCommentVNode("", true)
 				])) : createCommentVNode("", true)]);
 			};
 		}
@@ -5144,7 +5633,10 @@ Note: ${data.note}`;
 		const appRoot = document.createElement("div");
 		appRoot.id = "myk--vue-app";
 		shadow.appendChild(appRoot);
-		createApp(App_default).mount(appRoot);
+		const app = createApp(App_default);
+		const pinia = createPinia();
+		app.use(pinia);
+		app.mount(appRoot);
 	}
 	var hostname = window.location.host;
 	if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mountApp);

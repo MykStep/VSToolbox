@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import './style.css'
 import styleText from './assets/shadowStyle.css?inline'
@@ -23,7 +24,11 @@ function mountApp() {
     appRoot.id = 'myk--vue-app';
     shadow.appendChild(appRoot);
 
-    createApp(App).mount(appRoot);
+    const app = createApp(App);
+    const pinia = createPinia();
+    
+    app.use(pinia);
+    app.mount(appRoot);
 }
 
 var hostname = window.location.host;
