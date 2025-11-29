@@ -179,12 +179,11 @@
 
 <script setup>
 // --- Imports ---
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
 // composables
 import { capitalize, returnUnitMetric, average, openLink } from './composables/utils';
 
-import { scrapImmowebData } from './composables/scrapImmowebData';
 import { useToast } from './composables/useToast';
 import { useClipboard } from './composables/useClipboard';
 import { useValuation } from './composables/useValuation';
@@ -192,6 +191,8 @@ import { useValuation } from './composables/useValuation';
 import { storeToRefs } from 'pinia'
 import { usePropertyStore } from './stores/properties';
 import { useSettingsStore } from './stores/settings';
+
+import { ImmowebScraper } from './services/scraper/immoweb.js';
 
 // Stores
 const propertyStore = usePropertyStore();
@@ -202,14 +203,25 @@ watch( settings, (newSettings) => {
   settingsStore.save();
 }, {deep: true} );
 
+// Services
+// TODO: create a wrapper function that routes towards the correct scraper
+function reloadCurrentListingData() {
+    const scraper = new ImmowebScraper(document);
+    const result = scraper.scrape();
+    
+    if (result.success) {
+        currentListing.value = result.data;
+        showToast('Scraping successful', 'info');
+    } else {
+        showToast('Scraping unsuccessful', 'danger');
+    }
+}
+
+onMounted(() => {
+  reloadCurrentListingData();
+})
 
 // --- State and Methods Usage ---
-// scraping immoweb
-const { 
-  currentListing, 
-  currentWindow, 
-  reloadCurrentListingData 
-} = scrapImmowebData();
 
 // toast
 const { 
@@ -235,8 +247,10 @@ const {
 
 // --- UI State ---
 const displayApp = ref(true);
+const currentListing = ref({});
 const activeTab = ref('Main');
 const expandedPropertyId = ref(null);
+const currentWindow = ref(window.location.hostname);
 
 // -- App Logic ---
 function toggleReferenceDetails(referenceUID) {

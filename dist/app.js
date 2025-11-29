@@ -5094,52 +5094,6 @@
 	function openLink(link) {
 		window.open(link, "_blank", "noopener,noreferrer");
 	}
-	var currentListing = ref(null);
-	var currentWindow = ref(window.location.hostname);
-	var tableInformation = ref([]);
-	function informationGathering() {
-		var price = document.getElementsByClassName("classified__price")[0].getElementsByClassName("sr-only")[0].innerText.split("€")[0];
-		classifyTableInformation();
-		currentListing.value = {
-			uid: window.location.pathname.split("/").at(-1),
-			link: window.location.href,
-			advertisedPrice: price,
-			PSQM: Math.round(price / parseFloat(callInfoByHeader("Usable floor area"))),
-			LA: callInfoByHeader("Usable floor area"),
-			EPC: callInfoByHeader("Primary energy consumption"),
-			EPCLabel: callInfoByHeader("EPC/EPC label"),
-			CY: callInfoByHeader("Construction year"),
-			isEdited: false,
-			note: ""
-		};
-	}
-	function classifyTableInformation() {
-		var rows = document.getElementsByClassName("classified-table__row");
-		if (rows.length > 0) Array.from(rows).forEach((row) => {
-			var tableInfoHeader = row.getElementsByClassName("classified-table__header")[0];
-			var tableInfoValue = row.getElementsByClassName("classified-table__data")[0];
-			if (tableInfoHeader != void 0 && tableInfoValue != void 0) tableInformation.value.push({
-				header: tableInfoHeader.innerText,
-				value: tableInfoValue.innerText
-			});
-		});
-		else console.log("Couldn't spot rows.");
-	}
-	function callInfoByHeader(header) {
-		return tableInformation.value.find((item) => item.header === header)?.value.split(" ")[0];
-	}
-	informationGathering();
-	function scrapImmowebData() {
-		function reloadCurrentListingData() {
-			informationGathering();
-			console.log(currentListing.value);
-		}
-		return {
-			currentListing,
-			currentWindow: readonly(currentWindow),
-			reloadCurrentListingData
-		};
-	}
 	var toast = reactive({
 		visible: false,
 		message: "",
@@ -5147,7 +5101,7 @@
 		timeoutId: null
 	});
 	function useToast() {
-		const showToast$2 = (message, type = "success", duration = 3e3) => {
+		const showToast$4 = (message, type = "success", duration = 3e3) => {
 			if (toast.timeoutId) clearTimeout(toast.timeoutId);
 			toast.message = message;
 			toast.type = type;
@@ -5158,7 +5112,7 @@
 		};
 		return {
 			toast: reactive(toast),
-			showToast: showToast$2
+			showToast: showToast$4
 		};
 	}
 	function formatObjectForClipboard(data, index = null) {
@@ -5172,15 +5126,15 @@ PSQM: ${data.PSQM}
 Note: ${data.note}`;
 	}
 	function useClipboard() {
-		const { showToast: showToast$2 } = useToast();
+		const { showToast: showToast$4 } = useToast();
 		async function copyToClipboard(text) {
 			try {
 				await navigator.clipboard.writeText(text);
 				console.log("Text copied to clipboard successfully!");
-				showToast$2("Copied to clipboard", "info");
+				showToast$4("Copied to clipboard", "info");
 			} catch (err) {
 				console.error("Failed to copy text: ", err);
-				showToast$2("Failed to copy", "error");
+				showToast$4("Failed to copy", "error");
 			}
 		}
 		function copyObjectToClipboard(data) {
@@ -5245,7 +5199,7 @@ Note: ${data.note}`;
 			dvmConfidenceIntervalING
 		};
 	}
-	var { showToast: showToast$1 } = useToast();
+	var { showToast: showToast$3 } = useToast();
 	function init$1(key) {
 		const data = localStorage.getItem(key);
 		return data ? JSON.parse(data) : [];
@@ -5254,12 +5208,12 @@ Note: ${data.note}`;
 		window.addEventListener("storage", (event) => {
 			if (event.key === key) if (event.newValue === null) {
 				state.value = [];
-				showToast$1(`${key} in localStorage was cleared.`, "danger");
+				showToast$3(`${key} in localStorage was cleared.`, "danger");
 			} else try {
 				state.value = JSON.parse(event.newValue);
-				showToast$1(`Intercepted localStorage udpdate.`, "info");
+				showToast$3(`Intercepted localStorage udpdate.`, "info");
 			} catch (e) {
-				showToast$1("Failed to parse intercepted JSON.", "danger");
+				showToast$3("Failed to parse intercepted JSON.", "danger");
 			}
 		});
 	}
@@ -5271,18 +5225,18 @@ Note: ${data.note}`;
 			if (!savedProperties.value.find((p$1) => p$1.uid === listing.uid)) {
 				savedProperties.value.push(listing);
 				save();
-				showToast$1("Property saved successfully!", "info");
+				showToast$3("Property saved successfully!", "info");
 			}
 		}
 		function removeProperty(uid$2) {
 			savedProperties.value = savedProperties.value.filter((p$1) => p$1.uid !== uid$2);
 			save();
-			showToast$1(`Property with id ${uid$2} removed.`, "danger");
+			showToast$3(`Property with id ${uid$2} removed.`, "danger");
 		}
 		function removeAllProperty() {
 			savedProperties.value = [];
 			save();
-			showToast$1(`Properties removed.`, "danger");
+			showToast$3(`Properties removed.`, "danger");
 		}
 		function save() {
 			localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProperties.value));
@@ -5338,6 +5292,95 @@ Note: ${data.note}`;
 			save
 		};
 	});
+	var { showToast: showToast$2 } = useToast();
+	var BaseScraper = class {
+		constructor(document$1) {
+			this.document = document$1;
+		}
+		scrape() {
+			showToast$2("scrape() function not defined in child", "danger");
+		}
+		htmlToNumeral(html) {
+			const str = this.cleanText(html.innerText);
+			return parseInt(str.replace(/[^0-9]/g, ""), 10) || 0;
+		}
+		cleanText(str) {
+			return str ? str.trim().replace(/\s+/g, " ") : "";
+		}
+		parseNumber(str) {
+			return parseInt(this.cleanText(str).replace(/[^0-9]/g, ""));
+		}
+	};
+	var { showToast: showToast$1 } = useToast();
+	var ImmowebScraper = class extends BaseScraper {
+		scrape() {
+			try {
+				const metadata = {
+					uid: window.location.pathname.split("/").at(-1),
+					link: window.location.href,
+					isEdited: false,
+					note: ""
+				};
+				const scraped = { advertisedPrice: this.htmlToNumeral(this.document.querySelector(".classified__price .sr-only")) };
+				const features = this._getTableData();
+				this._pushData(scraped, features, {
+					LA: {
+						key: "Usable floor area",
+						type: "int"
+					},
+					EPC: {
+						key: "Primary energy consumption",
+						type: "int"
+					},
+					EPCLabel: {
+						key: "EPC/EPC label",
+						type: "string"
+					},
+					CY: {
+						key: "Construction year",
+						type: "int"
+					}
+				});
+				const computes = { PSQM: (scraped.advertisedPrice / scraped.LA || 0).toFixed(0) };
+				return {
+					success: true,
+					data: {
+						uid: metadata.uid,
+						link: metadata.link,
+						advertisedPrice: scraped.advertisedPrice,
+						PSQM: computes.PSQM,
+						LA: scraped.LA,
+						EPC: scraped.EPC,
+						EPCLabel: scraped.EPCLabel,
+						CY: scraped.CY
+					}
+				};
+			} catch (e) {
+				return {
+					success: false,
+					e
+				};
+			}
+		}
+		_getTableData() {
+			const map = {};
+			this.document.querySelectorAll(".classified-table__row").forEach((row) => {
+				const header = row.querySelector(".classified-table__header");
+				const value = row.querySelector(".classified-table__data");
+				if (header && value) {
+					const key = header.innerText.trim();
+					map[key] = value.innerText.trim();
+				}
+			});
+			return map;
+		}
+		_pushData(obj, map, filters) {
+			for (let itemKey in filters) {
+				const config = filters[itemKey];
+				obj[itemKey] = config.type === "int" ? this.parseNumber(map[config.key]) : this.cleanText(map[config.key]);
+			}
+		}
+	};
 	var _hoisted_1 = { id: "myk--app" };
 	var _hoisted_2 = { id: "myk--app-header" };
 	var _hoisted_3 = { id: "myk--header-controls" };
@@ -5447,13 +5490,24 @@ Note: ${data.note}`;
 			watch(settings, (newSettings) => {
 				settingsStore.save();
 			}, { deep: true });
-			const { currentListing: currentListing$1, currentWindow: currentWindow$1, reloadCurrentListingData } = scrapImmowebData();
-			const { toast: toast$1, showToast: showToast$2 } = useToast();
+			function reloadCurrentListingData() {
+				const result = new ImmowebScraper(document).scrape();
+				if (result.success) {
+					currentListing.value = result.data;
+					showToast$4("Scraping successful", "info");
+				} else showToast$4("Scraping unsuccessful", "danger");
+			}
+			onMounted(() => {
+				reloadCurrentListingData();
+			});
+			const { toast: toast$1, showToast: showToast$4 } = useToast();
 			const { copyObjectToClipboard, copySummaryStatistics } = useClipboard();
 			const { valuationMetrics: valuationMetrics$1, dvmPrice: dvmPrice$1, dvmConfidenceIntervalARG: dvmConfidenceIntervalARG$1, dvmConfidenceIntervalING: dvmConfidenceIntervalING$1 } = useValuation();
 			const displayApp = ref(true);
+			const currentListing = ref({});
 			const activeTab = ref("Main");
 			const expandedPropertyId = ref(null);
+			const currentWindow = ref(window.location.hostname);
 			function toggleReferenceDetails(referenceUID) {
 				if (expandedPropertyId.value === referenceUID) expandedPropertyId.value = null;
 				else expandedPropertyId.value = referenceUID;
@@ -5492,19 +5546,19 @@ Note: ${data.note}`;
 							onClick: _cache[3] || (_cache[3] = ($event) => activeTab.value = "Settings")
 						}, "Settings", 2)
 					]),
-					activeTab.value === "Main" ? (openBlock(), createElementBlock("div", _hoisted_6, [unref(currentWindow$1) != "vs.rock.estate" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-						createBaseVNode("div", _hoisted_7, [unref(currentWindow$1).includes("immoweb") ? (openBlock(), createElementBlock("span", _hoisted_8, "Listing Information:")) : createCommentVNode("", true), createBaseVNode("div", _hoisted_9, [createBaseVNode("div", {
+					activeTab.value === "Main" ? (openBlock(), createElementBlock("div", _hoisted_6, [currentWindow.value != "vs.rock.estate" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
+						createBaseVNode("div", _hoisted_7, [currentWindow.value.includes("immoweb") ? (openBlock(), createElementBlock("span", _hoisted_8, "Listing Information:")) : createCommentVNode("", true), createBaseVNode("div", _hoisted_9, [createBaseVNode("div", {
 							class: "myk--reference-info-command-button severity-info myk--button",
-							onClick: _cache[4] || (_cache[4] = ($event) => unref(reloadCurrentListingData)())
+							onClick: _cache[4] || (_cache[4] = ($event) => reloadCurrentListingData())
 						}, "Reload")])]),
-						createBaseVNode("div", _hoisted_10, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(currentListing$1), (value, key, findex) => {
+						createBaseVNode("div", _hoisted_10, [(openBlock(true), createElementBlock(Fragment, null, renderList(currentListing.value, (value, key, findex) => {
 							return openBlock(), createElementBlock(Fragment, { key }, [![
 								"uid",
 								"link",
 								"isEdited"
 							].includes(key) ? (openBlock(), createElementBlock("div", {
 								key: 0,
-								class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(unref(currentListing$1)).length - 1 }])
+								class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(currentListing.value).length - 1 }])
 							}, [
 								createBaseVNode("span", null, toDisplayString(unref(capitalize)(key)) + ":", 1),
 								!["note"].includes(key) ? (openBlock(), createElementBlock("span", _hoisted_11, toDisplayString(value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [key] })), 1)) : createCommentVNode("", true),
@@ -5512,16 +5566,16 @@ Note: ${data.note}`;
 									key: 1,
 									type: "text",
 									placeholder: "Additonal Notes",
-									"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(currentListing$1).note = $event)
-								}, null, 512)), [[vModelText, unref(currentListing$1).note]]) : createCommentVNode("", true)
+									"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => currentListing.value.note = $event)
+								}, null, 512)), [[vModelText, currentListing.value.note]]) : createCommentVNode("", true)
 							], 2)) : createCommentVNode("", true)], 64);
 						}), 128))]),
 						createBaseVNode("div", _hoisted_12, [createBaseVNode("div", {
 							class: "myk--reference-info-command-button myk--button icon-start severity-info",
-							onClick: _cache[6] || (_cache[6] = ($event) => unref(copyObjectToClipboard)([unref(currentListing$1)]))
+							onClick: _cache[6] || (_cache[6] = ($event) => unref(copyObjectToClipboard)([currentListing.value]))
 						}, "Clipboard"), createBaseVNode("div", {
 							class: "myk--reference-info-command-button myk--button severity-info",
-							onClick: _cache[7] || (_cache[7] = ($event) => unref(propertyStore).addProperty(unref(currentListing$1)))
+							onClick: _cache[7] || (_cache[7] = ($event) => unref(propertyStore).addProperty(currentListing.value))
 						}, "Add")])
 					], 64)) : createCommentVNode("", true)])) : createCommentVNode("", true),
 					activeTab.value === "References" ? (openBlock(), createElementBlock("div", _hoisted_13, [
