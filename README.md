@@ -17,11 +17,10 @@ Refactor Plan:
   1. Shadow DOM [ V ]
   2. Pinia (State Management) [ V ]
   3. Service Layer [ V ]
-  4. Better Component Structure
+  4. Better Component Structure [ V ]
 
-TODO for Better Component Structure:
-  1. Delete deprecated folder (when ready)
-  2. Install ESLint/Pettier
-  3. Create factory.js (Service router)
-  4. Complete App.vue refactor
-  5. Nice to have: complete other TODOs scattered around the codebase (e.g, try/catch for _getTableData)
+TODOs:
+  1. Install ESLint/Pettier
+  2. Create factory.js (Service router)
+  3. Nice to have: complete other TODOs scattered around the codebase (e.g, try/catch for _getTableData)
+  4. Create New Construction features
