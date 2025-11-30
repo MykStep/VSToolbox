@@ -331,6 +331,7 @@ input {
   border-radius: 6px;
   border: 1px solid rgb(214, 226, 233);
   padding: 0 8px;
+  background: #fff;
 }
 
 .vstb--information-table .vstb--information-table-table-item:not(:last-child) {
@@ -340,8 +341,116 @@ input {
 /* TableItem.vue */
 
 .vstb--information-table-table-item{
-  margin: 3px 0;
+  padding: 3px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.vstb--information-table.small .vstb--information-table-table-item{
+  padding: calc(3px / 3) 0;
+}
+
+/* BasicContainer.vue */
+
+.vstb--basic-container {
+  margin: 5px 0;
+}
+
+.vstb--basic-container-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(0, 24, 55);
+}
+
+.vstb--basic-container-main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ReferenceTable.vue */
+
+.vstb--reference-table{
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+}
+
+.vtsb--toggle-card {
+  width: 100%;
+}
+
+.vtsb--toggle-card:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.vtsb--toggle-card-bar {
+  display: flex;
+  max-width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid rgb(214, 226, 233);
+  -webkit-user-select: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.vtsb--toggle-card-bar:hover {
+  background: #f7f9fb;
+}
+
+.vtsb--toggle-card-bar.active {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.vstb--toggle-card-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--secondary-color);
+}
+
+.vtsb--toggle-card-bar .icon-start {
+  border-right: 1px solid rgb(214, 226, 233);
+}
+
+.vtsb--toggle-card-bar .icon-end {
+  border-left: 1px solid rgb(214, 226, 233);
+}
+
+
+.vtsb--toggle-card-collapsed{
+  display: none;
+  flex-direction: column;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background: #fff;
+  border: 1px solid rgb(214, 226, 233);
+  border-top: 0;
+  padding: 10px;
+  font-size: 14px;
+  max-width: 100%;
+
+}
+
+.vtsb--toggle-card-collapsed.active{
+  display: flex;
+}
+
+.vtsb--toggle-card-action-bar{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

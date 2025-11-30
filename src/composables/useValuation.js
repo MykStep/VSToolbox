@@ -1,9 +1,16 @@
 import { reactive, computed } from 'vue';
 
-// 1. We move the reactive state from data() here
+function computeCI(tx, min, max){
+  // We can access the .value of another computed property
+  const price = parseFloat(tx);
+  const lower = price / max;
+  const upper = price / min;
+  return { lower: lower.toFixed(0), upper: upper.toFixed(0) };
+}
+
 const valuationMetrics = reactive({
   dvmLA: 150,
-  dvmPSQM: 0 // Added this, as your computed property uses it
+  dvmPSQM: 2500 // Added this, as your computed property uses it
 });
 
 // 2. We convert computed properties
@@ -14,18 +21,13 @@ const dvmPrice = computed(() => {
 });
 
 const dvmConfidenceIntervalARG = computed(() => {
-  // We can access the .value of another computed property
-  const price = parseFloat(dvmPrice.value);
-  const lower = price / 1.2;
-  const upper = price / 0.95;
-  return { lower: lower.toFixed(0), upper: upper.toFixed(0) };
+  const ci = computeCI(dvmPrice.value, 0.95, 1.2);
+  return `[ ${ ci.lower } ; ${ ci.upper } ]`;
 });
 
 const dvmConfidenceIntervalING = computed(() => {
-  const price = parseFloat(dvmPrice.value);
-  const lower = price / 1.1;
-  const upper = price / 0.9;
-  return { lower: lower.toFixed(0), upper: upper.toFixed(0) };
+  const ci = computeCI(dvmPrice.value, 0.9, 1.1);
+  return `[ ${ ci.lower } ; ${ ci.upper } ]`;
 });
 
 export function useValuation() {

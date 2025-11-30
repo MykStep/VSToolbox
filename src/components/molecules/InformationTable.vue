@@ -1,5 +1,5 @@
 <template>
-    <div class="vstb--information-table">
+    <div :class="['vstb--information-table', size ]">
         <template v-for="(value, key, index) in data" :key="key">
             <TableItem v-if="!omitObjectItems.includes(key)" :itemData="{value: value, key: key, index: index}" :editMode="editMode" v-model="data[key]">
             </TableItem>
@@ -23,6 +23,10 @@ defineProps({
   omitObjectItems: {
     type: Array,
     default: []
+  },
+  size: {
+    type: String,
+    default: 'large'
   }
 });
 </script>

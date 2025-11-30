@@ -1,5 +1,5 @@
 <template>
-    <button :class="['vstb--button', `severity-${severity}`]">
+    <button :class="['vstb--button', `severity-${severity}`, { active: active}]">
         <slot></slot>
     </button>
 </template>
@@ -9,6 +9,10 @@ defineProps({
   severity: {
     type: String,
     default: 'default' 
+  },
+  active: {
+    type: Boolean,
+    default: false
   }
 });
 </script>
