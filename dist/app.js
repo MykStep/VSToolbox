@@ -1171,6 +1171,25 @@
 	function proxyRefs(objectWithRefs) {
 		return isReactive(objectWithRefs) ? objectWithRefs : new Proxy(objectWithRefs, shallowUnwrapHandlers);
 	}
+	var CustomRefImpl = class {
+		constructor(factory) {
+			this["__v_isRef"] = true;
+			this._value = void 0;
+			const dep = this.dep = new Dep();
+			const { get, set } = factory(dep.track.bind(dep), dep.trigger.bind(dep));
+			this._get = get;
+			this._set = set;
+		}
+		get value() {
+			return this._value = this._get();
+		}
+		set value(newVal) {
+			this._set(newVal);
+		}
+	};
+	function customRef(factory) {
+		return new CustomRefImpl(factory);
+	}
 	function toRefs(object) {
 		const ret = isArray(object) ? new Array(object.length) : {};
 		for (const key in object) ret[key] = propertyToRef(object, key);
@@ -2031,6 +2050,30 @@
 		if (cache) cache[index] = ret;
 		return ret;
 	}
+	function renderSlot(slots, name, props = {}, fallback, noSlotted) {
+		if (currentRenderingInstance.ce || currentRenderingInstance.parent && isAsyncWrapper(currentRenderingInstance.parent) && currentRenderingInstance.parent.ce) {
+			const hasProps = Object.keys(props).length > 0;
+			if (name !== "default") props.name = name;
+			return openBlock(), createBlock(Fragment, null, [createVNode("slot", props, fallback && fallback())], hasProps ? -2 : 64);
+		}
+		let slot = slots[name];
+		if (slot && slot._c) slot._d = false;
+		openBlock();
+		const validSlotContent = slot && ensureValidVNode(slot(props));
+		const slotKey = props.key || validSlotContent && validSlotContent.key;
+		const rendered = createBlock(Fragment, { key: (slotKey && !isSymbol(slotKey) ? slotKey : `_${name}`) + (!validSlotContent && fallback ? "_fb" : "") }, validSlotContent || (fallback ? fallback() : []), validSlotContent && slots._ === 1 ? 64 : -2);
+		if (!noSlotted && rendered.scopeId) rendered.slotScopeIds = [rendered.scopeId + "-s"];
+		if (slot && slot._c) slot._d = true;
+		return rendered;
+	}
+	function ensureValidVNode(vnodes) {
+		return vnodes.some((child) => {
+			if (!isVNode(child)) return true;
+			if (child.type === Comment) return false;
+			if (child.type === Fragment && !ensureValidVNode(child.children)) return false;
+			return true;
+		}) ? vnodes : null;
+	}
 	var getPublicInstance = (i) => {
 		if (!i) return null;
 		if (isStatefulComponent(i)) return getComponentPublicInstance(i);
@@ -2119,6 +2162,11 @@
 	};
 	function normalizePropsOrEmits(props) {
 		return isArray(props) ? props.reduce((normalized, p$1) => (normalized[p$1] = null, normalized), {}) : props;
+	}
+	function mergeModels(a, b) {
+		if (!a || !b) return a || b;
+		if (isArray(a) && isArray(b)) return a.concat(b);
+		return extend({}, normalizePropsOrEmits(a), normalizePropsOrEmits(b));
 	}
 	var shouldCacheAccess = true;
 	function applyOptions(instance) {
@@ -3369,6 +3417,9 @@
 			return ctx;
 		}
 	};
+	function watchSyncEffect(effect$1, options) {
+		return doWatch(effect$1, null, { flush: "sync" });
+	}
 	function watch(source, cb, options) {
 		return doWatch(source, cb, options);
 	}
@@ -3440,6 +3491,54 @@
 			for (let i = 0; i < segments.length && cur; i++) cur = cur[segments[i]];
 			return cur;
 		};
+	}
+	function useModel(props, name, options = EMPTY_OBJ) {
+		const i = getCurrentInstance();
+		const camelizedName = camelize(name);
+		const hyphenatedName = hyphenate(name);
+		const modifiers = getModelModifiers(props, camelizedName);
+		const res = customRef((track$1, trigger$1) => {
+			let localValue;
+			let prevSetValue = EMPTY_OBJ;
+			let prevEmittedValue;
+			watchSyncEffect(() => {
+				const propValue = props[camelizedName];
+				if (hasChanged(localValue, propValue)) {
+					localValue = propValue;
+					trigger$1();
+				}
+			});
+			return {
+				get() {
+					track$1();
+					return options.get ? options.get(localValue) : localValue;
+				},
+				set(value) {
+					const emittedValue = options.set ? options.set(value) : value;
+					if (!hasChanged(emittedValue, localValue) && !(prevSetValue !== EMPTY_OBJ && hasChanged(value, prevSetValue))) return;
+					const rawProps = i.vnode.props;
+					if (!(rawProps && (name in rawProps || camelizedName in rawProps || hyphenatedName in rawProps) && (`onUpdate:${name}` in rawProps || `onUpdate:${camelizedName}` in rawProps || `onUpdate:${hyphenatedName}` in rawProps))) {
+						localValue = value;
+						trigger$1();
+					}
+					i.emit(`update:${name}`, emittedValue);
+					if (hasChanged(value, emittedValue) && hasChanged(value, prevSetValue) && !hasChanged(emittedValue, prevEmittedValue)) trigger$1();
+					prevSetValue = value;
+					prevEmittedValue = emittedValue;
+				}
+			};
+		});
+		res[Symbol.iterator] = () => {
+			let i2 = 0;
+			return { next() {
+				if (i2 < 2) return {
+					value: i2++ ? modifiers || EMPTY_OBJ : res,
+					done: false
+				};
+				else return { done: true };
+			} };
+		};
+		return res;
 	}
 	var getModelModifiers = (props, modelName) => {
 		return modelName === "modelValue" || modelName === "model-value" ? props.modelModifiers : props[`${modelName}Modifiers`] || props[`${camelize(modelName)}Modifiers`] || props[`${hyphenate(modelName)}Modifiers`];
@@ -5074,6 +5173,100 @@
 		}
 		return refs;
 	}
+	var _hoisted_1$9 = { id: "vstb--app-selector-menu" };
+	var _hoisted_2$5 = ["onClick"];
+	var TabBar_default = {
+		__name: "TabBar",
+		props: /* @__PURE__ */ mergeModels({ tabs: {
+			type: Array,
+			default: () => [
+				"Main",
+				"References",
+				"Settings"
+			]
+		} }, {
+			"modelValue": {
+				type: String,
+				default: "Main"
+			},
+			"modelModifiers": {}
+		}),
+		emits: ["update:modelValue"],
+		setup(__props) {
+			const activeTab = useModel(__props, "modelValue");
+			function switchTab(tab) {
+				activeTab.value = tab;
+			}
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$9, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.tabs, (tab) => {
+					return openBlock(), createElementBlock("span", {
+						onClick: ($event) => switchTab(tab),
+						class: normalizeClass(["vstb--selector-buttons", { active: activeTab.value === tab }])
+					}, toDisplayString(tab), 11, _hoisted_2$5);
+				}), 256))]);
+			};
+		}
+	};
+	var _hoisted_1$8 = { id: "vstb--app-header" };
+	var _hoisted_2$4 = { id: "vstb--header-controls" };
+	var Header_default = {
+		__name: "Header",
+		props: {
+			"modelValue": {
+				type: Boolean,
+				default: false
+			},
+			"modelModifiers": {}
+		},
+		emits: ["update:modelValue"],
+		setup(__props) {
+			const displayApp = useModel(__props, "modelValue");
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$8, [createBaseVNode("div", _hoisted_2$4, [createBaseVNode("div", { onClick: _cache[0] || (_cache[0] = ($event) => displayApp.value = !displayApp.value) }, "O/I")])]);
+			};
+		}
+	};
+	var __plugin_vue_export_helper_default = (sfc, props) => {
+		const target = sfc.__vccOpts || sfc;
+		for (const [key, val] of props) target[key] = val;
+		return target;
+	};
+	var _sfc_main$12 = {};
+	var _hoisted_1$7 = { class: "vstb--basic-container" };
+	var _hoisted_2$3 = { class: "vstb--basic-container-header" };
+	var _hoisted_3$2 = { class: "vstb--basic-container-main" };
+	function _sfc_render$1(_ctx, _cache) {
+		return openBlock(), createElementBlock("div", _hoisted_1$7, [createBaseVNode("div", _hoisted_2$3, [renderSlot(_ctx.$slots, "header")]), createBaseVNode("div", _hoisted_3$2, [renderSlot(_ctx.$slots, "main")])]);
+	}
+	var BasicContainer_default = /* @__PURE__ */ __plugin_vue_export_helper_default(_sfc_main$12, [["render", _sfc_render$1]]);
+	var _sfc_main$11 = {};
+	var _hoisted_1$6 = { class: "vstb--button-group" };
+	function _sfc_render(_ctx, _cache) {
+		return openBlock(), createElementBlock("div", _hoisted_1$6, [renderSlot(_ctx.$slots, "default")]);
+	}
+	var ButtonGroup_default = /* @__PURE__ */ __plugin_vue_export_helper_default(_sfc_main$11, [["render", _sfc_render]]);
+	var BaseButton_default = {
+		__name: "BaseButton",
+		props: {
+			severity: {
+				type: String,
+				default: "default"
+			},
+			active: {
+				type: Boolean,
+				default: false
+			}
+		},
+		setup(__props) {
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("button", { class: normalizeClass([
+					"vstb--button",
+					`severity-${__props.severity}`,
+					{ active: __props.active }
+				]) }, [renderSlot(_ctx.$slots, "default")], 2);
+			};
+		}
+	};
 	function capitalize(str) {
 		if (!str) return "";
 		return str.charAt(0).toUpperCase() + str.slice(1);
@@ -5094,6 +5287,89 @@
 	function openLink(link) {
 		window.open(link, "_blank", "noopener,noreferrer");
 	}
+	function omitObjectItems(object, filterArray) {
+		return Object.fromEntries(Object.entries(object).filter(([key]) => !filterArray.includes(key)));
+	}
+	var _hoisted_1$5 = { class: "vstb--information-table-table-item" };
+	var _hoisted_2$2 = {
+		key: 0,
+		style: { "color": "rgb(0, 24, 55)" }
+	};
+	var TableItem_default = {
+		__name: "TableItem",
+		props: /* @__PURE__ */ mergeModels({
+			editMode: {
+				type: Boolean,
+				default: false
+			},
+			itemData: {
+				type: Object,
+				default: {}
+			}
+		}, {
+			"modelValue": {},
+			"modelModifiers": {}
+		}),
+		emits: ["update:modelValue"],
+		setup(__props) {
+			const model = useModel(__props, "modelValue");
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$5, [
+					createBaseVNode("span", null, toDisplayString(unref(capitalize)(__props.itemData.key)) + ":", 1),
+					!__props.editMode ? (openBlock(), createElementBlock("span", _hoisted_2$2, toDisplayString(__props.itemData.value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [__props.itemData.key] })), 1)) : createCommentVNode("", true),
+					__props.editMode ? withDirectives((openBlock(), createElementBlock("input", {
+						key: 1,
+						type: "text",
+						placeholder: "Additonal Notes",
+						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event)
+					}, null, 512)), [[vModelText, model.value]]) : createCommentVNode("", true)
+				]);
+			};
+		}
+	};
+	var InformationTable_default = {
+		__name: "InformationTable",
+		props: {
+			data: {
+				type: Object,
+				default: {}
+			},
+			editMode: {
+				type: Boolean,
+				default: false
+			},
+			omitObjectItems: {
+				type: Array,
+				default: []
+			},
+			size: {
+				type: String,
+				default: "large"
+			}
+		},
+		setup(__props) {
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", { class: normalizeClass(["vstb--information-table", __props.size]) }, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.data, (value, key, index) => {
+					return openBlock(), createElementBlock(Fragment, { key }, [!__props.omitObjectItems.includes(key) ? (openBlock(), createBlock(TableItem_default, {
+						key: 0,
+						itemData: {
+							value,
+							key,
+							index
+						},
+						editMode: __props.editMode,
+						modelValue: __props.data[key],
+						"onUpdate:modelValue": ($event) => __props.data[key] = $event
+					}, null, 8, [
+						"itemData",
+						"editMode",
+						"modelValue",
+						"onUpdate:modelValue"
+					])) : createCommentVNode("", true)], 64);
+				}), 128)), renderSlot(_ctx.$slots, "default")], 2);
+			};
+		}
+	};
 	var toast = reactive({
 		visible: false,
 		message: "",
@@ -5101,7 +5377,7 @@
 		timeoutId: null
 	});
 	function useToast() {
-		const showToast$4 = (message, type = "success", duration = 3e3) => {
+		const showToast$5 = (message, type = "success", duration = 3e3) => {
 			if (toast.timeoutId) clearTimeout(toast.timeoutId);
 			toast.message = message;
 			toast.type = type;
@@ -5112,7 +5388,7 @@
 		};
 		return {
 			toast: reactive(toast),
-			showToast: showToast$4
+			showToast: showToast$5
 		};
 	}
 	function formatObjectForClipboard(data, index = null) {
@@ -5126,15 +5402,15 @@ PSQM: ${data.PSQM}
 Note: ${data.note}`;
 	}
 	function useClipboard() {
-		const { showToast: showToast$4 } = useToast();
+		const { showToast: showToast$5 } = useToast();
 		async function copyToClipboard(text) {
 			try {
 				await navigator.clipboard.writeText(text);
 				console.log("Text copied to clipboard successfully!");
-				showToast$4("Copied to clipboard", "info");
+				showToast$5("Copied to clipboard", "info");
 			} catch (err) {
 				console.error("Failed to copy text: ", err);
-				showToast$4("Failed to copy", "error");
+				showToast$5("Failed to copy", "error");
 			}
 		}
 		function copyObjectToClipboard(data) {
@@ -5164,141 +5440,13 @@ Note: ${data.note}`;
 			copySummaryStatistics
 		};
 	}
-	var valuationMetrics = reactive({
-		dvmLA: 150,
-		dvmPSQM: 0
-	});
-	var dvmPrice = computed(() => {
-		const area = parseFloat(valuationMetrics.dvmLA) || 0;
-		const psqm = parseFloat(valuationMetrics.dvmPSQM) || 0;
-		return (area * psqm).toFixed(0);
-	});
-	var dvmConfidenceIntervalARG = computed(() => {
-		const price = parseFloat(dvmPrice.value);
-		const lower = price / 1.2;
-		const upper = price / .95;
-		return {
-			lower: lower.toFixed(0),
-			upper: upper.toFixed(0)
-		};
-	});
-	var dvmConfidenceIntervalING = computed(() => {
-		const price = parseFloat(dvmPrice.value);
-		const lower = price / 1.1;
-		const upper = price / .9;
-		return {
-			lower: lower.toFixed(0),
-			upper: upper.toFixed(0)
-		};
-	});
-	function useValuation() {
-		return {
-			valuationMetrics,
-			dvmPrice,
-			dvmConfidenceIntervalARG,
-			dvmConfidenceIntervalING
-		};
-	}
-	var { showToast: showToast$3 } = useToast();
-	function init$1(key) {
-		const data = localStorage.getItem(key);
-		return data ? JSON.parse(data) : [];
-	}
-	function syncToLocalStorage$1(state, key) {
-		window.addEventListener("storage", (event) => {
-			if (event.key === key) if (event.newValue === null) {
-				state.value = [];
-				showToast$3(`${key} in localStorage was cleared.`, "danger");
-			} else try {
-				state.value = JSON.parse(event.newValue);
-				showToast$3(`Intercepted localStorage udpdate.`, "info");
-			} catch (e) {
-				showToast$3("Failed to parse intercepted JSON.", "danger");
-			}
-		});
-	}
-	const usePropertyStore = defineStore("properties", () => {
-		const STORAGE_KEY = "selectedProperties";
-		const savedProperties = ref(init$1(STORAGE_KEY));
-		syncToLocalStorage$1(savedProperties, STORAGE_KEY);
-		function addProperty(listing) {
-			if (!savedProperties.value.find((p$1) => p$1.uid === listing.uid)) {
-				savedProperties.value.push(listing);
-				save();
-				showToast$3("Property saved successfully!", "info");
-			}
-		}
-		function removeProperty(uid$2) {
-			savedProperties.value = savedProperties.value.filter((p$1) => p$1.uid !== uid$2);
-			save();
-			showToast$3(`Property with id ${uid$2} removed.`, "danger");
-		}
-		function removeAllProperty() {
-			savedProperties.value = [];
-			save();
-			showToast$3(`Properties removed.`, "danger");
-		}
-		function save() {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProperties.value));
-		}
-		const averagePSQM = computed(() => {
-			return {
-				formatted: average(savedProperties.value, "PSQM") + " " + returnUnitMetric({ key: "PSQM" }),
-				unformatted: average(savedProperties.value, "PSQM")
-			};
-		});
-		const averagePrice = computed(() => {
-			return {
-				formatted: average(savedProperties.value, "advertisedPrice") + " " + returnUnitMetric({ key: "advertisedPrice" }),
-				unformatted: average(savedProperties.value, "advertisedPrice")
-			};
-		});
-		return {
-			savedProperties,
-			addProperty,
-			removeProperty,
-			removeAllProperty,
-			save,
-			averagePSQM,
-			averagePrice
-		};
-	});
-	function init(key) {
-		const data = localStorage.getItem(key);
-		return data ? JSON.parse(data) : [];
-	}
-	function syncToLocalStorage(state, key) {
-		window.addEventListener("storage", (event) => {
-			if (event.key === key) if (event.newValue === null) {
-				state.value = [];
-				showToast(`${key} in localStorage was cleared.`, "danger");
-			} else try {
-				state.value = JSON.parse(event.newValue);
-				showToast(`Intercepted localStorage udpdate.`, "info");
-			} catch (e) {
-				showToast("Failed to parse intercepted JSON.", "danger");
-			}
-		});
-	}
-	const useSettingsStore = defineStore("settings", () => {
-		const STORAGE_KEY = "settingsMyk";
-		const settings = ref(init(STORAGE_KEY));
-		syncToLocalStorage(settings, STORAGE_KEY);
-		function save() {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(settings.value));
-		}
-		return {
-			settings,
-			save
-		};
-	});
-	var { showToast: showToast$2 } = useToast();
+	var { showToast: showToast$4 } = useToast();
 	var BaseScraper = class {
 		constructor(document$1) {
 			this.document = document$1;
 		}
 		scrape() {
-			showToast$2("scrape() function not defined in child", "danger");
+			showToast$4("scrape() function not defined in child", "danger");
 		}
 		htmlToNumeral(html) {
 			const str = this.cleanText(html.innerText);
@@ -5311,7 +5459,7 @@ Note: ${data.note}`;
 			return parseInt(this.cleanText(str).replace(/[^0-9]/g, ""));
 		}
 	};
-	var { showToast: showToast$1 } = useToast();
+	var { showToast: showToast$3 } = useToast();
 	var ImmowebScraper = class extends BaseScraper {
 		scrape() {
 			try {
@@ -5352,7 +5500,8 @@ Note: ${data.note}`;
 						LA: scraped.LA,
 						EPC: scraped.EPC,
 						EPCLabel: scraped.EPCLabel,
-						CY: scraped.CY
+						CY: scraped.CY,
+						note: metadata.note
 					}
 				};
 			} catch (e) {
@@ -5381,133 +5530,172 @@ Note: ${data.note}`;
 			}
 		}
 	};
-	var _hoisted_1 = { id: "myk--app" };
-	var _hoisted_2 = { id: "myk--app-header" };
-	var _hoisted_3 = { id: "myk--header-controls" };
-	var _hoisted_4 = {
-		key: 0,
-		id: "myk--app-container"
-	};
-	var _hoisted_5 = { id: "myk--app-selector-menu" };
-	var _hoisted_6 = {
-		key: 0,
-		class: "myk--tab-container"
-	};
-	var _hoisted_7 = {
-		class: "myk--container-basics",
-		style: {
-			display: "flex",
-			justifyContent: "space-between",
-			alignItems: "end"
+	var { showToast: showToast$2 } = useToast();
+	const useListingStore = defineStore("listing", () => {
+		const currentListing = ref({});
+		function reloadCurrentListingData() {
+			const result = new ImmowebScraper(document).scrape();
+			if (result.success) {
+				currentListing.value = result.data;
+				showToast$2("Scraping successful", "info");
+			} else showToast$2("Scraping unsuccessful", "danger");
 		}
-	};
-	var _hoisted_8 = {
-		key: 0,
-		class: "myk--section-header"
-	};
-	var _hoisted_9 = { class: "myk--reference-info-command-box" };
-	var _hoisted_10 = { class: "myk--reference-info-table" };
-	var _hoisted_11 = {
-		key: 0,
-		style: { "color": "rgb(0, 24, 55)" }
-	};
-	var _hoisted_12 = { class: "myk--reference-info-command-box" };
-	var _hoisted_13 = {
-		key: 1,
-		class: "myk--tab-container"
-	};
-	var _hoisted_14 = {
-		key: 0,
-		class: "myk--container-basics"
-	};
-	var _hoisted_15 = { class: "myk--reference-info-command-box" };
-	var _hoisted_16 = { class: "myk--container-basics" };
-	var _hoisted_17 = {
-		id: "myk--dropdown-reference-table-container",
-		class: "myk--container-basics"
-	};
-	var _hoisted_18 = ["onClick"];
-	var _hoisted_19 = {
-		class: "myk--within-bar-icon icon-start",
-		style: { "font-weight": "600" }
-	};
-	var _hoisted_20 = { class: "myk--within-bar-icon icon-last" };
-	var _hoisted_21 = {
-		key: 0,
-		class: "myk--reference-info"
-	};
-	var _hoisted_22 = { class: "myk--reference-info-table" };
-	var _hoisted_23 = {
-		key: 0,
-		style: {
-			"color": "rgb(0, 24, 55)",
-			"max-width": "80%",
-			"text-align": "right"
-		}
-	};
-	var _hoisted_24 = ["onUpdate:modelValue"];
-	var _hoisted_25 = { class: "myk--reference-info-command-box-container" };
-	var _hoisted_26 = { class: "myk--reference-info-command-box" };
-	var _hoisted_27 = ["onClick"];
-	var _hoisted_28 = ["onClick"];
-	var _hoisted_29 = ["onClick"];
-	var _hoisted_30 = { class: "myk--reference-info-command-box" };
-	var _hoisted_31 = ["onClick"];
-	var _hoisted_32 = {
-		key: 0,
-		class: "myk--reference-info-command-box"
-	};
-	var _hoisted_33 = { class: "myk--container-basics" };
-	var _hoisted_34 = { class: "myk--container-basics_negative" };
-	var _hoisted_35 = { class: "myk--reference-info-table-line myk--ruler-bottom" };
-	var _hoisted_36 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_37 = { class: "myk--reference-info-table-line" };
-	var _hoisted_38 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_39 = { class: "myk--container-basics_negative" };
-	var _hoisted_40 = { class: "myk--reference-info-table-line" };
-	var _hoisted_41 = { class: "myk--reference-info-table-line" };
-	var _hoisted_42 = { class: "myk--reference-info-table-line" };
-	var _hoisted_43 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_44 = { class: "myk--reference-info-table-line" };
-	var _hoisted_45 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_46 = { class: "myk--reference-info-table-line" };
-	var _hoisted_47 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_48 = {
-		key: 0,
-		class: "myk--reference-info-command-box"
-	};
-	var _hoisted_49 = {
-		key: 2,
-		class: "myk--tab-container"
-	};
-	var _hoisted_50 = { class: "myk--input-line" };
-	var App_default = {
-		__name: "App",
-		setup(__props) {
-			const propertyStore = usePropertyStore();
-			const settingsStore = useSettingsStore();
-			const { settings } = storeToRefs(settingsStore);
-			watch(settings, (newSettings) => {
-				settingsStore.save();
-			}, { deep: true });
-			function reloadCurrentListingData() {
-				const result = new ImmowebScraper(document).scrape();
-				if (result.success) {
-					currentListing.value = result.data;
-					showToast$4("Scraping successful", "info");
-				} else showToast$4("Scraping unsuccessful", "danger");
+		return {
+			currentListing,
+			reloadCurrentListingData
+		};
+	});
+	var { showToast: showToast$1 } = useToast();
+	function init$1(key) {
+		const data = localStorage.getItem(key);
+		return data ? JSON.parse(data) : [];
+	}
+	function syncToLocalStorage$1(state, key) {
+		window.addEventListener("storage", (event) => {
+			if (event.key === key) if (event.newValue === null) {
+				state.value = [];
+				showToast$1(`${key} in localStorage was cleared.`, "danger");
+			} else try {
+				state.value = JSON.parse(event.newValue);
+				showToast$1(`Intercepted localStorage udpdate.`, "info");
+			} catch (e) {
+				showToast$1("Failed to parse intercepted JSON.", "danger");
 			}
-			onMounted(() => {
-				reloadCurrentListingData();
-			});
-			const { toast: toast$1, showToast: showToast$4 } = useToast();
-			const { copyObjectToClipboard, copySummaryStatistics } = useClipboard();
-			const { valuationMetrics: valuationMetrics$1, dvmPrice: dvmPrice$1, dvmConfidenceIntervalARG: dvmConfidenceIntervalARG$1, dvmConfidenceIntervalING: dvmConfidenceIntervalING$1 } = useValuation();
-			const displayApp = ref(true);
-			const currentListing = ref({});
-			const activeTab = ref("Main");
+		});
+	}
+	const usePropertyStore = defineStore("properties", () => {
+		const STORAGE_KEY = "selectedProperties";
+		const savedProperties = ref(init$1(STORAGE_KEY));
+		syncToLocalStorage$1(savedProperties, STORAGE_KEY);
+		function addProperty(listing) {
+			if (!savedProperties.value.find((p$1) => p$1.uid === listing.uid)) {
+				savedProperties.value.push(listing);
+				save();
+				showToast$1("Property saved successfully!", "info");
+			}
+		}
+		function removeProperty(uid$2) {
+			savedProperties.value = savedProperties.value.filter((p$1) => p$1.uid !== uid$2);
+			save();
+			showToast$1(`Property with id ${uid$2} removed.`, "danger");
+		}
+		function removeAllProperty() {
+			savedProperties.value = [];
+			save();
+			showToast$1(`Properties removed.`, "danger");
+		}
+		function save() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProperties.value));
+		}
+		const averagePSQM = computed(() => {
+			return {
+				formatted: average(savedProperties.value, "PSQM") + " " + returnUnitMetric({ key: "PSQM" }),
+				unformatted: average(savedProperties.value, "PSQM")
+			};
+		});
+		const averagePrice = computed(() => {
+			return {
+				formatted: average(savedProperties.value, "advertisedPrice") + " " + returnUnitMetric({ key: "advertisedPrice" }),
+				unformatted: average(savedProperties.value, "advertisedPrice")
+			};
+		});
+		return {
+			savedProperties,
+			addProperty,
+			removeProperty,
+			removeAllProperty,
+			save,
+			averagePSQM,
+			averagePrice
+		};
+	});
+	var Dashboard_default = {
+		__name: "Dashboard",
+		setup(__props) {
+			const { copyObjectToClipboard } = useClipboard();
+			const listingStore = useListingStore();
+			const { currentListing } = storeToRefs(listingStore);
+			const propertyStore = usePropertyStore();
+			return (_ctx, _cache) => {
+				return openBlock(), createBlock(BasicContainer_default, null, {
+					header: withCtx(() => [_cache[5] || (_cache[5] = createTextVNode(" Listing Information ", -1)), createVNode(BaseButton_default, {
+						severity: "info",
+						onClick: _cache[0] || (_cache[0] = ($event) => unref(listingStore).reloadCurrentListingData())
+					}, {
+						default: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("Reload", -1)])]),
+						_: 1
+					})]),
+					main: withCtx(() => [createVNode(InformationTable_default, { data: unref(omitObjectItems)(unref(currentListing), [
+						"uid",
+						"link",
+						"isEdited",
+						"note"
+					]) }, {
+						default: withCtx(() => [createVNode(TableItem_default, {
+							editMode: true,
+							itemData: {
+								key: "note",
+								value: unref(currentListing).note
+							},
+							modelValue: unref(currentListing).note,
+							"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(currentListing).note = $event)
+						}, null, 8, ["itemData", "modelValue"])]),
+						_: 1
+					}, 8, ["data"]), createVNode(ButtonGroup_default, null, {
+						default: withCtx(() => [createVNode(BaseButton_default, {
+							severity: "info",
+							onClick: _cache[2] || (_cache[2] = ($event) => unref(copyObjectToClipboard)([unref(currentListing)]))
+						}, {
+							default: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("Clipboard", -1)])]),
+							_: 1
+						}), createVNode(BaseButton_default, {
+							severity: "info",
+							onClick: _cache[3] || (_cache[3] = ($event) => unref(propertyStore).addProperty(unref(currentListing)))
+						}, {
+							default: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Add", -1)])]),
+							_: 1
+						})]),
+						_: 1
+					})]),
+					_: 1
+				});
+			};
+		}
+	};
+	var _hoisted_1$4 = { class: "vtsb--toggle-card" };
+	var _hoisted_2$1 = { class: "vstb--toggle-card-icon icon-start" };
+	var _hoisted_3$1 = { class: "vstb--toggle-card-icon icon-end" };
+	var _hoisted_4 = { class: "vtsb--toggle-card-action-bar" };
+	var ToggleCard_default = {
+		__name: "ToggleCard",
+		props: { collapsed: {
+			type: Boolean,
+			default: true
+		} },
+		setup(__props) {
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$4, [createBaseVNode("div", {
+					class: normalizeClass(["vtsb--toggle-card-bar", { active: !__props.collapsed }]),
+					onClick: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("clicked"))
+				}, [
+					createBaseVNode("div", _hoisted_2$1, [renderSlot(_ctx.$slots, "start")]),
+					renderSlot(_ctx.$slots, "bar"),
+					createBaseVNode("div", _hoisted_3$1, [renderSlot(_ctx.$slots, "end")])
+				], 2), createBaseVNode("div", { class: normalizeClass(["vtsb--toggle-card-collapsed", { active: !__props.collapsed }]) }, [renderSlot(_ctx.$slots, "content"), createBaseVNode("div", _hoisted_4, [renderSlot(_ctx.$slots, "actionbar")])], 2)]);
+			};
+		}
+	};
+	var _hoisted_1$3 = { class: "vstb--reference-table" };
+	var ReferenceTable_default = {
+		__name: "ReferenceTable",
+		props: { data: {
+			type: Array,
+			default: []
+		} },
+		setup(__props) {
 			const expandedPropertyId = ref(null);
-			const currentWindow = ref(window.location.hostname);
+			const propertyStore = usePropertyStore();
+			const { copyObjectToClipboard, copySummaryStatistics } = useClipboard();
 			function toggleReferenceDetails(referenceUID) {
 				if (expandedPropertyId.value === referenceUID) expandedPropertyId.value = null;
 				else expandedPropertyId.value = referenceUID;
@@ -5517,165 +5705,320 @@ Note: ${data.note}`;
 				propertyStore.save();
 			}
 			return (_ctx, _cache) => {
-				return openBlock(), createElementBlock("div", _hoisted_1, [createBaseVNode("div", _hoisted_2, [createBaseVNode("div", _hoisted_3, [createBaseVNode("div", {
-					onClick: _cache[0] || (_cache[0] = ($event) => displayApp.value = !displayApp.value),
-					togglediv: "myk--app-container"
-				}, "O/I")])]), displayApp.value ? (openBlock(), createElementBlock("div", _hoisted_4, [
-					createVNode(Transition, { name: "toast-fade" }, {
-						default: withCtx(() => [unref(toast$1).visible ? (openBlock(), createElementBlock("div", {
-							key: 0,
-							class: normalizeClass(["toast-notification", "toast-" + unref(toast$1).type])
-						}, toDisplayString(unref(toast$1).message), 3)) : createCommentVNode("", true)]),
-						_: 1
-					}),
-					_cache[28] || (_cache[28] = createBaseVNode("img", {
-						id: "myk--bg-re-logo",
-						src: "https://cdn.prod.website-files.com/60781e1041c84501a6e9c2d8/60781e1041c8458cd8e9c348_rockestate-icon-white.svg"
-					}, null, -1)),
-					createBaseVNode("div", _hoisted_5, [
-						createBaseVNode("span", {
-							class: normalizeClass(["myk--selector-buttons", { active: activeTab.value === "Main" }]),
-							onClick: _cache[1] || (_cache[1] = ($event) => activeTab.value = "Main")
-						}, "Main", 2),
-						createBaseVNode("span", {
-							class: normalizeClass(["myk--selector-buttons", { active: activeTab.value === "References" }]),
-							onClick: _cache[2] || (_cache[2] = ($event) => activeTab.value = "References")
-						}, "References", 2),
-						createBaseVNode("span", {
-							class: normalizeClass(["myk--selector-buttons", { active: activeTab.value === "Settings" }]),
-							onClick: _cache[3] || (_cache[3] = ($event) => activeTab.value = "Settings")
-						}, "Settings", 2)
-					]),
-					activeTab.value === "Main" ? (openBlock(), createElementBlock("div", _hoisted_6, [currentWindow.value != "vs.rock.estate" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-						createBaseVNode("div", _hoisted_7, [currentWindow.value.includes("immoweb") ? (openBlock(), createElementBlock("span", _hoisted_8, "Listing Information:")) : createCommentVNode("", true), createBaseVNode("div", _hoisted_9, [createBaseVNode("div", {
-							class: "myk--reference-info-command-button severity-info myk--button",
-							onClick: _cache[4] || (_cache[4] = ($event) => reloadCurrentListingData())
-						}, "Reload")])]),
-						createBaseVNode("div", _hoisted_10, [(openBlock(true), createElementBlock(Fragment, null, renderList(currentListing.value, (value, key, findex) => {
-							return openBlock(), createElementBlock(Fragment, { key }, [![
+				return openBlock(), createElementBlock("div", _hoisted_1$3, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(propertyStore).savedProperties, (reference, index) => {
+					return openBlock(), createBlock(ToggleCard_default, {
+						collapsed: reference.uid != expandedPropertyId.value,
+						onClicked: ($event) => toggleReferenceDetails(reference.uid)
+					}, {
+						start: withCtx(() => [createTextVNode(toDisplayString(index + 1), 1)]),
+						bar: withCtx(() => [createTextVNode(toDisplayString(reference.advertisedPrice), 1)]),
+						end: withCtx(() => [createTextVNode(toDisplayString(_ctx.toggled ? "▲" : "▼"), 1)]),
+						content: withCtx(() => [createVNode(InformationTable_default, {
+							size: "small",
+							data: reference,
+							omitObjectItems: [
 								"uid",
 								"link",
 								"isEdited"
-							].includes(key) ? (openBlock(), createElementBlock("div", {
-								key: 0,
-								class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(currentListing.value).length - 1 }])
-							}, [
-								createBaseVNode("span", null, toDisplayString(unref(capitalize)(key)) + ":", 1),
-								!["note"].includes(key) ? (openBlock(), createElementBlock("span", _hoisted_11, toDisplayString(value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [key] })), 1)) : createCommentVNode("", true),
-								["note"].includes(key) ? withDirectives((openBlock(), createElementBlock("input", {
-									key: 1,
-									type: "text",
-									placeholder: "Additonal Notes",
-									"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => currentListing.value.note = $event)
-								}, null, 512)), [[vModelText, currentListing.value.note]]) : createCommentVNode("", true)
-							], 2)) : createCommentVNode("", true)], 64);
-						}), 128))]),
-						createBaseVNode("div", _hoisted_12, [createBaseVNode("div", {
-							class: "myk--reference-info-command-button myk--button icon-start severity-info",
-							onClick: _cache[6] || (_cache[6] = ($event) => unref(copyObjectToClipboard)([currentListing.value]))
-						}, "Clipboard"), createBaseVNode("div", {
-							class: "myk--reference-info-command-button myk--button severity-info",
-							onClick: _cache[7] || (_cache[7] = ($event) => unref(propertyStore).addProperty(currentListing.value))
-						}, "Add")])
-					], 64)) : createCommentVNode("", true)])) : createCommentVNode("", true),
-					activeTab.value === "References" ? (openBlock(), createElementBlock("div", _hoisted_13, [
-						unref(settingsStore).settings.additionalTools ? (openBlock(), createElementBlock("div", _hoisted_14, [_cache[17] || (_cache[17] = createBaseVNode("span", { class: "myk--section-header" }, "Valuation Type", -1)), createBaseVNode("div", _hoisted_15, [createBaseVNode("div", {
-							class: normalizeClass(["myk--reference-info-command-button myk--button icon-start severity-info", { active: unref(settingsStore).settings.valType === "Normal" }]),
-							onClick: _cache[8] || (_cache[8] = ($event) => unref(settingsStore).settings.valType = "Normal")
-						}, "Normal", 2), createBaseVNode("div", {
-							class: normalizeClass(["myk--reference-info-command-button myk--button severity-info", { active: unref(settingsStore).settings.valType === "New Construction" }]),
-							onClick: _cache[9] || (_cache[9] = ($event) => unref(settingsStore).settings.valType = "New Construction")
-						}, "New Construction", 2)])])) : createCommentVNode("", true),
-						unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("div", _hoisted_16, [
-							_cache[18] || (_cache[18] = createBaseVNode("span", { class: "myk--section-header" }, "Reference Table", -1)),
-							createBaseVNode("div", _hoisted_17, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(propertyStore).savedProperties, (reference, index) => {
-								return openBlock(), createElementBlock("div", {
-									key: reference.uid,
-									class: "myk--dropdown-reference-container"
-								}, [createBaseVNode("div", {
-									class: normalizeClass(["myk--reference-bar myk--button", { "active-reference": expandedPropertyId.value === reference.uid }]),
-									onClick: ($event) => toggleReferenceDetails(reference.uid)
-								}, [
-									createBaseVNode("div", _hoisted_19, toDisplayString(index + 1), 1),
-									createBaseVNode("span", null, toDisplayString(reference.advertisedPrice), 1),
-									createBaseVNode("div", _hoisted_20, toDisplayString(expandedPropertyId.value === reference.uid ? "▲" : "▼"), 1)
-								], 10, _hoisted_18), expandedPropertyId.value === reference.uid ? (openBlock(), createElementBlock("div", _hoisted_21, [createBaseVNode("div", _hoisted_22, [(openBlock(true), createElementBlock(Fragment, null, renderList(reference, (value, key, findex) => {
-									return openBlock(), createElementBlock(Fragment, { key }, [![
-										"uid",
-										"isEdited",
-										"link"
-									].includes(key) ? (openBlock(), createElementBlock("div", {
-										key: 0,
-										class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(reference).length - 1 }])
-									}, [
-										createBaseVNode("span", null, toDisplayString(unref(capitalize)(key)) + ":", 1),
-										!reference.isEdited ? (openBlock(), createElementBlock("span", _hoisted_23, toDisplayString(value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [key] })), 1)) : createCommentVNode("", true),
-										reference.isEdited ? withDirectives((openBlock(), createElementBlock("input", {
-											key: 1,
-											type: "text",
-											"onUpdate:modelValue": ($event) => reference[key] = $event
-										}, null, 8, _hoisted_24)), [[vModelText, reference[key]]]) : createCommentVNode("", true)
-									], 2)) : createCommentVNode("", true)], 64);
-								}), 128))]), createBaseVNode("div", _hoisted_25, [createBaseVNode("div", _hoisted_26, [
-									createBaseVNode("div", {
-										class: "myk--reference-info-command-button icon-start severity-danger myk--button",
-										onClick: ($event) => unref(propertyStore).removeProperty(reference.uid)
-									}, "Delete", 8, _hoisted_27),
-									createBaseVNode("div", {
-										class: "myk--reference-info-command-button myk--button",
-										onClick: ($event) => handleEditMode(reference.uid)
-									}, "Edit", 8, _hoisted_28),
-									createBaseVNode("div", {
-										class: "myk--reference-info-command-button icon-last severity-info myk--button",
-										onClick: ($event) => unref(copyObjectToClipboard)([reference])
-									}, "Clipboard", 8, _hoisted_29)
-								]), createBaseVNode("div", _hoisted_30, [createBaseVNode("div", {
-									class: "myk--reference-info-command-button severity-info myk--button",
-									onClick: ($event) => unref(openLink)(reference.link)
-								}, "Link", 8, _hoisted_31)])])])) : createCommentVNode("", true)]);
-							}), 128))]),
-							unref(propertyStore).savedProperties != 0 ? (openBlock(), createElementBlock("div", _hoisted_32, [createBaseVNode("div", {
-								class: "myk--reference-info-command-button myk--button icon-start severity-danger",
-								onClick: _cache[10] || (_cache[10] = ($event) => unref(propertyStore).removeAllProperty())
-							}, "Delete All"), createBaseVNode("div", {
-								class: "myk--reference-info-command-button myk--button severity-info",
-								onClick: _cache[11] || (_cache[11] = ($event) => unref(copyObjectToClipboard)(unref(propertyStore).savedProperties))
-							}, "Clipboard")])) : createCommentVNode("", true)
-						]), createBaseVNode("div", _hoisted_33, [
-							_cache[26] || (_cache[26] = createBaseVNode("span", { class: "myk--section-header" }, "Summary Stastics", -1)),
-							createBaseVNode("div", _hoisted_34, [createBaseVNode("div", _hoisted_35, [_cache[19] || (_cache[19] = createBaseVNode("span", null, "PSQM: ", -1)), createBaseVNode("span", _hoisted_36, toDisplayString(unref(propertyStore).averagePSQM.formatted), 1)]), createBaseVNode("div", _hoisted_37, [_cache[20] || (_cache[20] = createBaseVNode("span", null, "Price: ", -1)), createBaseVNode("span", _hoisted_38, toDisplayString(unref(propertyStore).averagePrice.formatted), 1)])]),
-							createBaseVNode("div", _hoisted_39, [
-								createBaseVNode("div", _hoisted_40, [_cache[21] || (_cache[21] = createBaseVNode("span", null, "Living area: ", -1)), withDirectives(createBaseVNode("input", {
-									type: "text",
-									"onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => unref(valuationMetrics$1).dvmLA = $event)
-								}, null, 512), [[vModelText, unref(valuationMetrics$1).dvmLA]])]),
-								createBaseVNode("div", _hoisted_41, [_cache[22] || (_cache[22] = createBaseVNode("span", null, "PSQM Correction: ", -1)), withDirectives(createBaseVNode("input", {
-									type: "text",
-									"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => unref(valuationMetrics$1).dvmPSQM = $event)
-								}, null, 512), [[vModelText, unref(valuationMetrics$1).dvmPSQM]])]),
-								createBaseVNode("div", _hoisted_42, [_cache[23] || (_cache[23] = createBaseVNode("span", null, "Valuation: ", -1)), createBaseVNode("span", _hoisted_43, toDisplayString(unref(dvmPrice$1)) + " " + toDisplayString(unref(returnUnitMetric)({ key: "advertisedPrice" })), 1)]),
-								createBaseVNode("div", _hoisted_44, [_cache[24] || (_cache[24] = createBaseVNode("span", null, "Confidence Interval ARG: ", -1)), createBaseVNode("span", _hoisted_45, "[ " + toDisplayString(unref(dvmConfidenceIntervalARG$1).lower) + " ; " + toDisplayString(unref(dvmConfidenceIntervalARG$1).upper) + " ]", 1)]),
-								createBaseVNode("div", _hoisted_46, [_cache[25] || (_cache[25] = createBaseVNode("span", null, "Confidence Interval ING: ", -1)), createBaseVNode("span", _hoisted_47, "[ " + toDisplayString(unref(dvmConfidenceIntervalING$1).lower) + " ; " + toDisplayString(unref(dvmConfidenceIntervalING$1).upper) + " ]", 1)])
+							],
+							editMode: reference.isEdited
+						}, null, 8, ["data", "editMode"])]),
+						actionbar: withCtx(() => [createVNode(ButtonGroup_default, null, {
+							default: withCtx(() => [
+								createVNode(BaseButton_default, {
+									severity: "danger",
+									onClick: ($event) => unref(propertyStore).removeProperty(reference.uid)
+								}, {
+									default: withCtx(() => [..._cache[2] || (_cache[2] = [createTextVNode("Delete", -1)])]),
+									_: 1
+								}, 8, ["onClick"]),
+								createVNode(BaseButton_default, { onClick: ($event) => handleEditMode(reference.uid) }, {
+									default: withCtx(() => [..._cache[3] || (_cache[3] = [createTextVNode("Edit", -1)])]),
+									_: 1
+								}, 8, ["onClick"]),
+								createVNode(BaseButton_default, {
+									severity: "info",
+									onClick: ($event) => unref(copyObjectToClipboard)([reference])
+								}, {
+									default: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("Clipboard", -1)])]),
+									_: 1
+								}, 8, ["onClick"])
 							]),
-							unref(propertyStore).averagePSQM.unformatted != 0 ? (openBlock(), createElementBlock("div", _hoisted_48, [createBaseVNode("div", {
-								class: "myk--reference-info-command-button myk--button icon-start severity-info",
-								onClick: _cache[14] || (_cache[14] = ($event) => unref(copySummaryStatistics)())
-							}, "Copy Statistics"), createBaseVNode("div", {
-								class: "myk--reference-info-command-button myk--button severity-info",
-								onClick: _cache[15] || (_cache[15] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(propertyStore).averagePSQM.formatted }, unref(propertyStore).savedProperties))
-							}, "Clipboard All")])) : createCommentVNode("", true)
-						])], 64)) : createCommentVNode("", true),
-						unref(settingsStore).settings.valType == "New Construction" && unref(settingsStore).settings.additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createTextVNode(" Still under construction... 🥁 ")], 64)) : createCommentVNode("", true)
-					])) : createCommentVNode("", true),
-					activeTab.value === "Settings" ? (openBlock(), createElementBlock("div", _hoisted_49, [createBaseVNode("div", _hoisted_50, [_cache[27] || (_cache[27] = createBaseVNode("span", null, "Toggle Extra Valuation Tools", -1)), withDirectives(createBaseVNode("input", {
-						type: "checkbox",
-						"onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => unref(settingsStore).settings.additionalTools = $event)
-					}, null, 512), [[vModelCheckbox, unref(settingsStore).settings.additionalTools]])]), createTextVNode(" " + toDisplayString(unref(settingsStore).settings), 1)])) : createCommentVNode("", true)
+							_: 2
+						}, 1024), createVNode(BaseButton_default, {
+							severity: "info",
+							onClick: ($event) => unref(openLink)(reference.link)
+						}, {
+							default: withCtx(() => [..._cache[5] || (_cache[5] = [createTextVNode("Link", -1)])]),
+							_: 1
+						}, 8, ["onClick"])]),
+						_: 2
+					}, 1032, ["collapsed", "onClicked"]);
+				}), 256)), unref(propertyStore).savedProperties != 0 ? (openBlock(), createBlock(ButtonGroup_default, { key: 0 }, {
+					default: withCtx(() => [createVNode(BaseButton_default, {
+						severity: "danger",
+						onClick: _cache[0] || (_cache[0] = ($event) => unref(propertyStore).removeAllProperty())
+					}, {
+						default: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("Delete All", -1)])]),
+						_: 1
+					}), createVNode(BaseButton_default, {
+						severity: "info",
+						onClick: _cache[1] || (_cache[1] = ($event) => unref(copyObjectToClipboard)(unref(propertyStore).savedProperties))
+					}, {
+						default: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Clipboard", -1)])]),
+						_: 1
+					})]),
+					_: 1
+				})) : createCommentVNode("", true)]);
+			};
+		}
+	};
+	function computeCI(tx, min, max) {
+		const price = parseFloat(tx);
+		const lower = price / max;
+		const upper = price / min;
+		return {
+			lower: lower.toFixed(0),
+			upper: upper.toFixed(0)
+		};
+	}
+	var valuationMetrics = reactive({
+		dvmLA: 150,
+		dvmPSQM: 2500
+	});
+	var dvmPrice = computed(() => {
+		const area = parseFloat(valuationMetrics.dvmLA) || 0;
+		const psqm = parseFloat(valuationMetrics.dvmPSQM) || 0;
+		return (area * psqm).toFixed(0);
+	});
+	var dvmConfidenceIntervalARG = computed(() => {
+		const ci = computeCI(dvmPrice.value, .95, 1.2);
+		return `[ ${ci.lower} ; ${ci.upper} ]`;
+	});
+	var dvmConfidenceIntervalING = computed(() => {
+		const ci = computeCI(dvmPrice.value, .9, 1.1);
+		return `[ ${ci.lower} ; ${ci.upper} ]`;
+	});
+	function useValuation() {
+		return {
+			valuationMetrics,
+			dvmPrice,
+			dvmConfidenceIntervalARG,
+			dvmConfidenceIntervalING
+		};
+	}
+	var _hoisted_1$2 = { class: "vtsb--toggle-card-action-bar" };
+	var ValuationCalculator_default = {
+		__name: "ValuationCalculator",
+		setup(__props) {
+			const { valuationMetrics: valuationMetrics$1, dvmPrice: dvmPrice$1, dvmConfidenceIntervalARG: dvmConfidenceIntervalARG$1, dvmConfidenceIntervalING: dvmConfidenceIntervalING$1 } = useValuation();
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock(Fragment, null, [createVNode(InformationTable_default, null, {
+					default: withCtx(() => [
+						createVNode(TableItem_default, {
+							itemData: {
+								key: "Living Area",
+								value: unref(valuationMetrics$1).dvmLA
+							},
+							editMode: "true",
+							modelValue: unref(valuationMetrics$1).dvmLA,
+							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(valuationMetrics$1).dvmLA = $event)
+						}, null, 8, ["itemData", "modelValue"]),
+						createVNode(TableItem_default, {
+							itemData: {
+								key: "PSQM Correction",
+								value: unref(valuationMetrics$1).dvmPSQM
+							},
+							editMode: "true",
+							modelValue: unref(valuationMetrics$1).dvmPSQM,
+							"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(valuationMetrics$1).dvmPSQM = $event)
+						}, null, 8, ["itemData", "modelValue"]),
+						createVNode(TableItem_default, { itemData: {
+							key: "Valuation",
+							value: unref(dvmPrice$1)
+						} }, null, 8, ["itemData"]),
+						createVNode(TableItem_default, { itemData: {
+							key: "Confidence Interval ARG",
+							value: unref(dvmConfidenceIntervalARG$1)
+						} }, null, 8, ["itemData"]),
+						createVNode(TableItem_default, { itemData: {
+							key: "Confidence Interval ING",
+							value: unref(dvmConfidenceIntervalING$1)
+						} }, null, 8, ["itemData"])
+					]),
+					_: 1
+				}), createBaseVNode("div", _hoisted_1$2, [renderSlot(_ctx.$slots, "actionbar")])], 64);
+			};
+		}
+	};
+	function init(key) {
+		const data = localStorage.getItem(key);
+		return data ? JSON.parse(data) : [];
+	}
+	function syncToLocalStorage(state, key) {
+		window.addEventListener("storage", (event) => {
+			if (event.key === key) if (event.newValue === null) {
+				state.value = [];
+				showToast(`${key} in localStorage was cleared.`, "danger");
+			} else try {
+				state.value = JSON.parse(event.newValue);
+				showToast(`Intercepted localStorage udpdate.`, "info");
+			} catch (e) {
+				showToast("Failed to parse intercepted JSON.", "danger");
+			}
+		});
+	}
+	const useSettingsStore = defineStore("settings", () => {
+		const STORAGE_KEY = "settingsMyk";
+		const settings = ref(init(STORAGE_KEY));
+		syncToLocalStorage(settings, STORAGE_KEY);
+		function save() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(settings.value));
+		}
+		return {
+			settings,
+			save
+		};
+	});
+	var Comparables_default = {
+		__name: "Comparables",
+		setup(__props) {
+			const settingsStore = useSettingsStore();
+			const propertyStore = usePropertyStore();
+			const { copySummaryStatistics } = useClipboard();
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock(Fragment, null, [
+					unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BasicContainer_default, { key: 0 }, {
+						header: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("Valuation Type", -1)])]),
+						main: withCtx(() => [createVNode(ButtonGroup_default, null, {
+							default: withCtx(() => [createVNode(BaseButton_default, {
+								severity: "info",
+								active: unref(settingsStore).settings.valType === "Normal",
+								onClick: _cache[0] || (_cache[0] = ($event) => unref(settingsStore).settings.valType = "Normal")
+							}, {
+								default: withCtx(() => [..._cache[5] || (_cache[5] = [createTextVNode("Normal", -1)])]),
+								_: 1
+							}, 8, ["active"]), createVNode(BaseButton_default, {
+								severity: "info",
+								active: unref(settingsStore).settings.valType === "New Construction",
+								onClick: _cache[1] || (_cache[1] = ($event) => unref(settingsStore).settings.valType = "New Construction")
+							}, {
+								default: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("New Construction", -1)])]),
+								_: 1
+							}, 8, ["active"])]),
+							_: 1
+						})]),
+						_: 1
+					})) : createCommentVNode("", true),
+					unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BasicContainer_default, { key: 1 }, {
+						header: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Reference Table", -1)])]),
+						main: withCtx(() => [createVNode(ReferenceTable_default)]),
+						_: 1
+					})) : createCommentVNode("", true),
+					unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BasicContainer_default, { key: 2 }, {
+						header: withCtx(() => [..._cache[8] || (_cache[8] = [createTextVNode("Summary Stastics", -1)])]),
+						main: withCtx(() => [createVNode(InformationTable_default, { data: {
+							pSQM: unref(propertyStore).averagePSQM.formatted,
+							price: unref(propertyStore).averagePrice.formatted
+						} }, null, 8, ["data"]), createVNode(ValuationCalculator_default, null, {
+							actionbar: withCtx(() => [createVNode(ButtonGroup_default, null, {
+								default: withCtx(() => [createVNode(BaseButton_default, {
+									severity: "info",
+									onClick: _cache[2] || (_cache[2] = ($event) => unref(copySummaryStatistics)())
+								}, {
+									default: withCtx(() => [..._cache[9] || (_cache[9] = [createTextVNode("Copy Statistics", -1)])]),
+									_: 1
+								}), createVNode(BaseButton_default, {
+									severity: "info",
+									onClick: _cache[3] || (_cache[3] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(propertyStore).averagePSQM.formatted }, unref(propertyStore).savedProperties))
+								}, {
+									default: withCtx(() => [..._cache[10] || (_cache[10] = [createTextVNode("Clipboard All", -1)])]),
+									_: 1
+								})]),
+								_: 1
+							})]),
+							_: 1
+						})]),
+						_: 1
+					})) : createCommentVNode("", true),
+					unref(settingsStore).settings.valType == "New Construction" && unref(settingsStore).settings.additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [createTextVNode(" Still under construction... 🥁 ")], 64)) : createCommentVNode("", true)
+				], 64);
+			};
+		}
+	};
+	var _hoisted_1$1 = { class: "vstb--input-line" };
+	var Settings_default = {
+		__name: "Settings",
+		setup(__props) {
+			const settingsStore = useSettingsStore();
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$1, [_cache[1] || (_cache[1] = createBaseVNode("span", null, "Toggle Extra Valuation Tools", -1)), withDirectives(createBaseVNode("input", {
+					type: "checkbox",
+					"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(settingsStore).settings.additionalTools = $event)
+				}, null, 512), [[vModelCheckbox, unref(settingsStore).settings.additionalTools]])]);
+			};
+		}
+	};
+	var Toast_default = {
+		__name: "Toast",
+		setup(__props) {
+			const { toast: toast$1 } = useToast();
+			return (_ctx, _cache) => {
+				return openBlock(), createBlock(Transition, { name: "toast-fade" }, {
+					default: withCtx(() => [unref(toast$1).visible ? (openBlock(), createElementBlock("div", {
+						key: 0,
+						class: normalizeClass(["toast-notification", "toast-" + unref(toast$1).type])
+					}, toDisplayString(unref(toast$1).message), 3)) : createCommentVNode("", true)]),
+					_: 1
+				});
+			};
+		}
+	};
+	var _hoisted_1 = { id: "vtsb--app" };
+	var _hoisted_2 = {
+		key: 0,
+		id: "vstb--app-container"
+	};
+	var _hoisted_3 = { class: "vstb--tab-container" };
+	var App_default = {
+		__name: "App",
+		setup(__props) {
+			const { toast: toast$1 } = useToast();
+			const listingStore = useListingStore();
+			const settingsStore = useSettingsStore();
+			const { settings } = storeToRefs(settingsStore);
+			const displayApp = ref(true);
+			const activeTab = ref("Main");
+			watch(settings, (newSettings) => {
+				settingsStore.save();
+			}, { deep: true });
+			onMounted(() => {
+				listingStore.reloadCurrentListingData();
+			});
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1, [createVNode(Header_default, {
+					modelValue: displayApp.value,
+					"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => displayApp.value = $event)
+				}, null, 8, ["modelValue"]), displayApp.value ? (openBlock(), createElementBlock("div", _hoisted_2, [
+					createVNode(Toast_default),
+					_cache[2] || (_cache[2] = createBaseVNode("img", {
+						id: "vstb--bg-re-logo",
+						src: "https://cdn.prod.website-files.com/60781e1041c84501a6e9c2d8/60781e1041c8458cd8e9c348_rockestate-icon-white.svg"
+					}, null, -1)),
+					createVNode(TabBar_default, {
+						modelValue: activeTab.value,
+						"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => activeTab.value = $event)
+					}, null, 8, ["modelValue"]),
+					createBaseVNode("div", _hoisted_3, [
+						activeTab.value === "Main" ? (openBlock(), createBlock(Dashboard_default, { key: 0 })) : createCommentVNode("", true),
+						activeTab.value === "References" ? (openBlock(), createBlock(Comparables_default, { key: 1 })) : createCommentVNode("", true),
+						activeTab.value === "Settings" ? (openBlock(), createBlock(Settings_default, { key: 2 })) : createCommentVNode("", true)
+					])
 				])) : createCommentVNode("", true)]);
 			};
 		}
 	};
-	var shadowStyle_default = "/* Text Color: #009CFF */\n\n:host {\n  --text-color: #009CFF;\n  --secondary-color:#798DA6;\n  --active-bg: rgb(204, 235.2, 255);\n  --active-hover-bg: rgb(191, 225, 247);\n\n}\n\ninput {\n  text-align: right;\n  font-size: 15px;\n}\n\n#myk--vue-app {\n  position: sticky;\n  top: 0;\n  z-index: 10000;\n}\n\n#myk--app {\n  top: 0;\n  left: 0;\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Satoshi', sans-serif;\n}\n\n.myk--container-basics{\n  margin: 5px 0;\n}\n\n.myk--container-basics_negative {\n  background: #fff;\n  border-radius: 6px;\n  margin: 5px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 10px;\n}\n\n#myk--app-header {\n    width: 100%;\n    height: 25px;\n    background-color: #fff;\n    border-bottom: 1px solid #d6e2e9;\n    color: var(--text-color);\n}\n\n#myk--app-container {\n    position: absolute;\n    right: 0;\n    width: 450px;\n    height: 700px;\n    background: rgb(247, 249, 251);\n    border-bottom: 1px solid #d6e2e9;\n    box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;\n}\n\n#myk--bg-re-logo{\n  position: absolute;\n  bottom: 30px;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 55px;\n  filter: invert(0.3) grayscale(1);\n  z-index: 1;\n}\n\n#myk--app-selector-menu{\n    display: flex;\n    width: 100%;\n    justify-content: space-between;\n\n}\n\n#myk--app-selector-menu>.myk--selector-buttons{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    width: calc(100% / 3);\n    height: 50px;\n    border-bottom: var(--text-color) 2px solid;\n    cursor: pointer;\n    font-weight: 600;\n}\n\n#myk--app-selector-menu>.myk--selector-buttons.active{\n  background-color: var(--active-bg); /* Light green */\n  color: var(--text-color);\n}\n\n.myk--selector-buttons:hover{\n    background: #f7f9fb;\n}\n\n.myk--tab-container {\n  padding: 15px;\n  display:flex;\n  position: relative;\n  height: calc(100% - 75px);\n  flex-direction: column;\n  overflow-y: scroll;\n  border-radius: 12px;\n  z-index: 5000;\n\n}\n\n.myk--section-header{\n  font-size: 16px;\n  color: rgb(0, 24, 55);\n  margin: 5px 0;\n  font-weight: 600;\n}\n\n.myk--dropdown-reference-container{\n  margin: 10px 0;\n}\n\n.myk--reference-bar{\n  display: flex;\n  width: 100%;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-bar.active-reference{\n  border-bottom-left-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n\n.myk--within-bar-icon{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 30px;\n  height: 30px;\n  font-size: 12px;\n  color: var(--secondary-color);\n}\n\n.myk--within-bar-icon.icon-start{\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.myk--within-bar-icon.icon-last{\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-info{\n  border-bottom-left-radius: 6px;\n  border-bottom-right-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  border-top: 0;\n  padding: 10px;\n  font-size: 14px;\n}\n\n.myk--reference-info-command-box {\n  display: flex;\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  width: max-content;\n  overflow: hidden;\n  width: max-content;\n  overflow: hidden;\n}\n\n.myk--reference-info-command-button{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 30px;\n  padding: 0 10px;\n  font-size: 14px;\n  background: #fff;\n}\n\n.myk--reference-info-command-button.icon-start{\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-info-command-button.icon-last{\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.myk--button{\n  -webkit-user-select: none;\n  cursor:pointer;\n  user-select: none;\n}\n\n.myk--button:hover{\n  background: #f7f9fb;\n}\n\n.myk--button.severity-info:hover, .myk--button.severity-info.active {\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n}\n\n.myk--button.severity-danger:hover, .myk--button.severity-danger.active{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n}\n\n.myk--ruler-bottom{\n  border-bottom: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-info-table-line{\n  margin: 3px 0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.myk--reference-info-table{\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 0 8px;\n}\n\n.toast-notification{\n  position: absolute;\n  bottom: 15px;\n  left: 50%;\n  width: max-content;\n  transform: translateX(-50%);\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border: 1px solid rgb(127.5, 205.5, 255);\n  padding: 5px 12px;\n  border-radius: 50px;\n  z-index: 10000;\n}\n\n.toast-info{\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border-color: rgb(14, 165, 233);\n}\n\n.toast-danger{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n  border-color: rgb(239, 68, 68);\n}\n\n.myk--reference-info-command-box-container {\n  display:flex;\n  justify-content: space-between;\n}\n\n.myk--input-line{\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}";
+	var shadowStyle_default = "/* This CSS file is impacting the Shadow DOM. Hence, the monolothic structure... */\n\n:host {\n  --text-color: #009CFF;\n  --secondary-color:#798DA6;\n  --active-bg: rgb(204, 235.2, 255);\n  --active-hover-bg: rgb(191, 225, 247);\n\n}\n\ninput {\n  text-align: right;\n  font-size: 15px;\n}\n\n#myk--vue-app {\n  position: sticky;\n  top: 0;\n  z-index: 10000;\n}\n\n/* -- Component specific (prep for Chrome Extension Migration) -- */\n\n/* App.vue */\n\n#vtsb--app {\n  top: 0;\n  left: 0;\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Satoshi', sans-serif;\n}\n\n#vstb--app-container {\n  position: absolute;\n  right: 0;\n  width: 450px;\n  height: 700px;\n  background: rgb(247, 249, 251);\n  border-bottom: 1px solid #d6e2e9;\n  overflow: hidden;\n  box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;\n}\n\n#vstb--bg-re-logo{\n  position: absolute;\n  bottom: 30px;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 55px;\n  filter: invert(0.3) grayscale(1);\n  z-index: 1;\n}\n\n.vstb--tab-container {\n  padding: 15px;\n  display:flex;\n  position: relative;\n  height: calc(100% - 82px);\n  flex-direction: column;\n  overflow-y: scroll;\n  border-radius: 12px;\n  z-index: 5000;\n\n}\n\n/* Dashboard.vue (N/A) */\n\n/* Comparables.vue (N/A) */\n\n/* Settings.vue */\n\n.vstb--input-line {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Header.vue */\n\n#vstb--app-header {\n  width: 100%;\n  height: 25px;\n  background-color: #fff;\n  border-bottom: 1px solid #d6e2e9;\n  color: var(--text-color);\n}\n\n/* TabBar.vue */\n\n#vstb--app-selector-menu{\n    display: flex;\n    width: 100%;\n    justify-content: space-between;\n\n}\n\n#vstb--app-selector-menu>.vstb--selector-buttons{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    width: calc(100% / 3);\n    height: 50px;\n    border-bottom: var(--text-color) 2px solid;\n    cursor: pointer;\n    font-weight: 600;\n}\n\n#vstb--app-selector-menu>.vstb--selector-buttons.active{\n  background-color: var(--active-bg); /* Light green */\n  color: var(--text-color);\n}\n\n.vstb--selector-buttons:hover{\n  background: #f7f9fb;\n}\n\n/* ValuationCalculator.vue (N/A)*/\n\n/* BaseButton.vue */\n\n.vstb--button{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 32px;\n  padding: 0 10px;\n  margin: 5px 0;\n  font-size: 14px;\n  background: #fff;\n  -webkit-user-select: none;\n  cursor:pointer;\n  user-select: none;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  color: rgb(99, 105, 125);\n}\n\n.vstb--button:hover{\n    background: #f7f9fb;\n}\n\n.vstb--button.severity-info:hover, .vstb--button.severity-info.active {\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n}\n\n.vstb--button.severity-danger:hover, .vstb--button.severity-danger.active{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n}\n\n/* ButtonGroup.vue */\n\n.vstb--button-group {\n  display: flex;\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  width: max-content;\n  overflow: hidden;\n}\n\n.vstb--button-group button {\n  border-radius: 0;\n  border: none;\n  margin: 0;\n  height: 30px;\n}\n\n.vstb--button-group button:not(:first-child) {\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n/* InformationTable.vue */\n\n.vstb--information-table {\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 0 8px;\n  background: #fff;\n}\n\n.vstb--information-table .vstb--information-table-table-item:not(:last-child) {\n  border-bottom: 1px solid rgb(214, 226, 233);\n}\n\n/* TableItem.vue */\n\n.vstb--information-table-table-item{\n  padding: 3px 0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.vstb--information-table.small .vstb--information-table-table-item{\n  padding: calc(3px / 3) 0;\n}\n\n/* BasicContainer.vue */\n\n.vstb--basic-container {\n  margin: 5px 0;\n}\n\n.vstb--basic-container-header {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: end;\n  font-size: 16px;\n  font-weight: 600;\n  color: rgb(0, 24, 55);\n}\n\n.vstb--basic-container-main {\n  display: flex;\n  flex-direction: column;\n}\n\n/* ReferenceTable.vue */\n\n.vstb--reference-table{\n  display: flex;\n  flex-direction: column;\n  margin: 5px 0;\n}\n\n/* ToggleCard.vue */\n\n.vtsb--toggle-card {\n  width: 100%;\n}\n\n.vtsb--toggle-card:not(:last-child) {\n  margin-bottom: 10px;\n}\n\n.vtsb--toggle-card-bar {\n  display: flex;\n  max-width: 100%;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  -webkit-user-select: none;\n  cursor: pointer;\n  user-select: none;\n}\n\n.vtsb--toggle-card-bar:hover {\n  background: #f7f9fb;\n}\n\n.vtsb--toggle-card-bar.active {\n  border-bottom-left-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n\n.vstb--toggle-card-icon {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 30px;\n  height: 30px;\n  font-size: 12px;\n  font-weight: 600;\n  color: var(--secondary-color);\n}\n\n.vtsb--toggle-card-bar .icon-start {\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.vtsb--toggle-card-bar .icon-end {\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.vtsb--toggle-card-collapsed{\n  display: none;\n  flex-direction: column;\n  border-bottom-left-radius: 6px;\n  border-bottom-right-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  border-top: 0;\n  padding: 10px;\n  font-size: 14px;\n  max-width: 100%;\n\n}\n\n.vtsb--toggle-card-collapsed.active{\n  display: flex;\n}\n\n.vtsb--toggle-card-action-bar{\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n}\n\n/* Toast.vue */\n\n.toast-notification{\n  position: absolute;\n  bottom: 15px;\n  left: 50%;\n  width: max-content;\n  transform: translateX(-50%);\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border: 1px solid rgb(127.5, 205.5, 255);\n  padding: 5px 12px;\n  border-radius: 50px;\n  z-index: 10000;\n}\n\n.toast-info{\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border-color: rgb(14, 165, 233);\n}\n\n.toast-danger{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n  border-color: rgb(239, 68, 68);\n}\n";
 	function mountApp() {
 		const host = document.createElement("div");
 		host.id = "vstoolbox-host";

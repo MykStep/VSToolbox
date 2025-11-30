@@ -15,6 +15,12 @@ Release v0.2:
 
 Refactor Plan:
   1. Shadow DOM [ V ]
-  2. Pinia (State Management)
-  3. Service Layer
-  4. Better Component Structure
+  2. Pinia (State Management) [ V ]
+  3. Service Layer [ V ]
+  4. Better Component Structure [ V ]
+
+TODOs:
+  1. Install ESLint/Pettier
+  2. Create factory.js (Service router)
+  3. Nice to have: complete other TODOs scattered around the codebase (e.g, try/catch for _getTableData)
+  4. Create New Construction features
