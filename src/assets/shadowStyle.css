@@ -1,0 +1,332 @@
+/* This CSS file is impacting the Shadow DOM. Hence, the monolothic structure... */
+
+:host {
+  --text-color: #009CFF;
+  --secondary-color:#798DA6;
+  --active-bg: rgb(204, 235.2, 255);
+  --active-hover-bg: rgb(191, 225, 247);
+
+}
+
+@import url('https://fonts.cdnfonts.com/css/satoshi');
+
+input {
+  text-align: right;
+  font-size: 15px;
+}
+
+
+#myk--vue-app {
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+}
+
+/* -- Component specific (prep for Chrome Extension Migration) -- */
+
+/* App.vue */
+#vtsb--app {
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Satoshi', sans-serif;
+}
+
+#vstb--app-container {
+  position: absolute;
+  right: 0;
+  width: 450px;
+  height: 700px;
+  background: rgb(247, 249, 251);
+  border-bottom: 1px solid #d6e2e9;
+  overflow: hidden;
+  box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;
+}
+
+#vstb--bg-re-logo{
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 55px;
+  filter: invert(0.3) grayscale(1);
+  z-index: 1;
+}
+
+.vstb--tab-container {
+  padding: 15px;
+  display:flex;
+  position: relative;
+  height: calc(100% - 82px);
+  flex-direction: column;
+  overflow-y: scroll;
+  border-radius: 12px;
+  z-index: 5000;
+
+}
+
+/* Dashboard.vue (N/A) */
+/* Comparables.vue (N/A) */
+/* Settings.vue */
+
+.vstb--input-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Header.vue */
+
+#vstb--app-header {
+  width: 100%;
+  height: 25px;
+  background-color: #fff;
+  border-bottom: 1px solid #d6e2e9;
+  color: var(--text-color);
+}
+
+/* TabBar.vue */
+
+#vstb--app-selector-menu{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+
+}
+#vstb--app-selector-menu>.vstb--selector-buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% / 3);
+    height: 50px;
+    border-bottom: var(--text-color) 2px solid;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#vstb--app-selector-menu>.vstb--selector-buttons.active{
+  background-color: var(--active-bg); /* Light green */
+  color: var(--text-color);
+}
+
+.vstb--selector-buttons:hover{
+  background: #f7f9fb;
+}
+
+/* ValuationCalculator.vue (N/A)*/
+/* BaseButton.vue */
+
+.vstb--button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  margin: 5px 0;
+  font-size: 14px;
+  background: #fff;
+  -webkit-user-select: none;
+  cursor:pointer;
+  user-select: none;
+  border-radius: 6px;
+  border: 1px solid rgb(214, 226, 233);
+  color: rgb(99, 105, 125);
+}
+
+.vstb--button:hover{
+    background: #f7f9fb;
+}
+
+.vstb--button.severity-info:hover, .vstb--button.severity-info.active {
+  color: rgb(14, 165, 233);
+  background: rgb(246, 429, 255);
+}
+
+.vstb--button.severity-danger:hover, .vstb--button.severity-danger.active{
+  color: rgb(239, 68, 68);
+  background: rgb(254,242,242);
+}
+
+/* ButtonGroup.vue */
+
+.vstb--button-group {
+  display: flex;
+  margin: 5px 0;
+  border-radius: 6px;
+  border: 1px solid rgb(214, 226, 233);
+  width: max-content;
+  overflow: hidden;
+}
+
+.vstb--button-group button {
+  border-radius: 0;
+  border: none;
+  margin: 0;
+  height: 30px;
+}
+
+.vstb--button-group button:not(:first-child) {
+  border-left: 1px solid rgb(214, 226, 233);
+}
+
+/* InformationTable.vue */
+
+.vstb--information-table {
+  margin: 5px 0;
+  border-radius: 6px;
+  border: 1px solid rgb(214, 226, 233);
+  padding: 0 8px;
+  background: #fff;
+}
+
+.vstb--information-table .vstb--information-table-table-item:not(:last-child) {
+  border-bottom: 1px solid rgb(214, 226, 233);
+} 
+
+/* TableItem.vue */
+
+.vstb--information-table-table-item{
+  padding: 3px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vstb--information-table.small .vstb--information-table-table-item{
+  padding: calc(3px / 3) 0;
+}
+
+/* BasicContainer.vue */
+
+.vstb--basic-container {
+  margin: 5px 0;
+}
+
+.vstb--basic-container-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(0, 24, 55);
+}
+
+.vstb--basic-container-main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ReferenceTable.vue */
+
+.vstb--reference-table{
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+}
+
+/* ToggleCard.vue */
+
+.vtsb--toggle-card {
+  width: 100%;
+}
+
+.vtsb--toggle-card:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.vtsb--toggle-card-bar {
+  display: flex;
+  max-width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid rgb(214, 226, 233);
+  -webkit-user-select: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.vtsb--toggle-card-bar:hover {
+  background: #f7f9fb;
+}
+
+.vtsb--toggle-card-bar.active {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.vstb--toggle-card-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--secondary-color);
+}
+
+.vtsb--toggle-card-bar .icon-start {
+  border-right: 1px solid rgb(214, 226, 233);
+}
+
+.vtsb--toggle-card-bar .icon-end {
+  border-left: 1px solid rgb(214, 226, 233);
+}
+
+
+.vtsb--toggle-card-collapsed{
+  display: none;
+  flex-direction: column;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background: #fff;
+  border: 1px solid rgb(214, 226, 233);
+  border-top: 0;
+  padding: 10px;
+  font-size: 14px;
+  max-width: 100%;
+
+}
+
+.vtsb--toggle-card-collapsed.active{
+  display: flex;
+}
+
+.vtsb--toggle-card-action-bar{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+/* Toast.vue */
+.toast-notification{
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  width: max-content;
+  transform: translateX(-50%);
+  color: rgb(14, 165, 233);
+  background: rgb(246, 429, 255);
+  border: 1px solid rgb(127.5, 205.5, 255);
+  padding: 5px 12px;
+  border-radius: 50px;
+  z-index: 10000;
+}
+
+.toast-info{
+  color: rgb(14, 165, 233);
+  background: rgb(246, 429, 255);
+  border-color: rgb(14, 165, 233);
+}
+
+.toast-danger{
+  color: rgb(239, 68, 68);
+  background: rgb(254,242,242);
+  border-color: rgb(239, 68, 68);
+}

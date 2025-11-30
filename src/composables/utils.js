@@ -33,3 +33,7 @@ export function average(properties, key = '') {
 export function openLink(link) {
   window.open(link, '_blank', 'noopener,noreferrer');
 }
+
+export function omitObjectItems(object, filterArray) {
+  return Object.fromEntries(Object.entries(object).filter(([key]) => !filterArray.includes(key)));
+}

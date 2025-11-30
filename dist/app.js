@@ -2,7 +2,7 @@
 	try {
 		if (typeof document != "undefined") {
 			var elementStyle = document.createElement("style");
-			elementStyle.appendChild(document.createTextNode("/* Text Color: #009CFF */\n\n:root {\n  --text-color: #009CFF;\n  --secondary-color:#798DA6;\n  --active-bg: rgb(204, 235.2, 255);\n  --active-hover-bg: rgb(191, 225, 247);\n\n}\n\nbody {\n  height: auto !important;\n}\n\ninput {\n  text-align: right;\n}\n\n.container--main-header{top: 25px !important;}\n\n.classified__header{top: calc(3.75em + 25px) !important;}\n\n#myk--app {\n  top: 0;\n  left: 0;\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Satoshi', sans-serif;\n}\n\n.myk--container-basics{\n  margin: 5px 0;\n}\n\n.myk--container-basics_negative {\n  background: #fff;\n  border-radius: 6px;\n  margin: 5px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 10px;\n}\n\n#myk--app-header {\n    width: 100%;\n    height: 25px;\n    background-color: #fff;\n    border-bottom: 1px solid #d6e2e9;\n    color: var(--text-color);\n}\n\n#myk--app-container {\n    position: absolute;\n    right: 0;\n    width: 450px;\n    height: 700px;\n    background: rgb(247, 249, 251);\n    border-bottom: 1px solid #d6e2e9;\n    box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;\n}\n\n#myk--bg-re-logo{\n  position: absolute;\n  bottom: 30px;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 55px;\n  filter: invert(0.3) grayscale(1);\n  z-index: 1;\n}\n\n#myk--app-selector-menu{\n    display: flex;\n    width: 100%;\n    justify-content: space-between;\n\n}\n\n#myk--app-selector-menu>.myk--selector-buttons{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    width: calc(100% / 3);\n    height: 50px;\n    border-bottom: var(--text-color) 2px solid;\n    cursor: pointer;\n    font-weight: 600;\n}\n\n#myk--app-selector-menu>.myk--selector-buttons.active{\n  background-color: var(--active-bg); /* Light green */\n  color: var(--text-color);\n}\n\n.myk--selector-buttons:hover{\n    background: #f7f9fb;\n}\n\n.myk--tab-container {\n  padding: 15px;\n  display:flex;\n  position: relative;\n  width: 100%;\n  height: calc(100% - 75px);\n  flex-direction: column;\n  overflow-y: scroll;\n  border-radius: 12px;\n  z-index: 5000;\n\n}\n\n.myk--section-header{\n  font-size: 16px;\n  color: rgb(0, 24, 55);\n  margin: 5px 0;\n  font-weight: 600;\n}\n\n.myk--dropdown-reference-container{\n  margin: 10px 0;\n}\n\n.myk--reference-bar{\n  display: flex;\n  width: 100%;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-bar.active-reference{\n  border-bottom-left-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n\n.myk--within-bar-icon{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 30px;\n  height: 30px;\n  font-size: 12px;\n  color: var(--secondary-color);\n}\n\n.myk--within-bar-icon.icon-start{\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.myk--within-bar-icon.icon-last{\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-info{\n  border-bottom-left-radius: 6px;\n  border-bottom-right-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  border-top: 0;\n  padding: 10px;\n  font-size: 14px;\n}\n\n.myk--reference-info-command-box {\n  display: flex;\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  width: max-content;\n  overflow: hidden;\n  width: max-content;\n  overflow: hidden;\n}\n\n.myk--reference-info-command-button{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 30px;\n  padding: 0 10px;\n  font-size: 14px;\n  background: #fff;\n}\n\n.myk--reference-info-command-button.icon-start{\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-info-command-button.icon-last{\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.myk--button{\n  -webkit-user-select: none;\n  cursor:pointer;\n  user-select: none;\n}\n\n.myk--button:hover{\n  background: #f7f9fb;\n}\n\n.myk--button.severity-info:hover, .myk--button.severity-info.active {\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n}\n\n.myk--button.severity-danger:hover, .myk--button.severity-danger.active{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n}\n\n.myk--ruler-bottom{\n  border-bottom: 1px solid rgb(214, 226, 233);\n}\n\n.myk--reference-info-table-line{\n  margin: 3px 0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.myk--reference-info-table{\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 0 8px;\n}\n\n.toast-notification{\n  position: absolute;\n  bottom: 15px;\n  left: 50%;\n  width: max-content;\n  transform: translateX(-50%);\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border: 1px solid rgb(127.5, 205.5, 255);\n  padding: 5px 12px;\n  border-radius: 50px;\n  z-index: 10000;\n}\n\n.toast-info{\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border-color: rgb(14, 165, 233);\n}\n\n.toast-danger{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n  border-color: rgb(239, 68, 68);\n}\n\n.myk--reference-info-command-box-container {\n  display:flex;\n  justify-content: space-between;\n}\n\n.myk--input-line{\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}/*$vite$:1*/"));
+			elementStyle.appendChild(document.createTextNode("body {\n  height: auto !important;\n}\n\n.container--main-header{top: 25px !important;}\n.classified__header{top: calc(3.75em + 25px) !important;}\n\n#vstoolbox-host {\n  position: sticky;\n  top: 0px;\n  z-index: 10000;\n}\n/*$vite$:1*/"));
 			document.head.appendChild(elementStyle);
 		}
 	} catch (e) {
@@ -50,7 +50,7 @@
 	var toRawType = (value) => {
 		return toTypeString(value).slice(8, -1);
 	};
-	var isPlainObject = (val) => toTypeString(val) === "[object Object]";
+	var isPlainObject$1 = (val) => toTypeString(val) === "[object Object]";
 	var isIntegerKey = (key) => isString(key) && key !== "NaN" && key[0] !== "-" && "" + parseInt(key, 10) === key;
 	var isReservedProp = /* @__PURE__ */ makeMap(",key,ref,ref_for,ref_key,onVnodeBeforeMount,onVnodeMounted,onVnodeBeforeUpdate,onVnodeUpdated,onVnodeBeforeUnmount,onVnodeUnmounted");
 	var cacheStringFunction = (fn) => {
@@ -186,7 +186,7 @@
 		}, {}) };
 		else if (isSet(val)) return { [`Set(${val.size})`]: [...val.values()].map((v) => stringifySymbol(v)) };
 		else if (isSymbol(val)) return stringifySymbol(val);
-		else if (isObject(val) && !isArray(val) && !isPlainObject(val)) return String(val);
+		else if (isObject(val) && !isArray(val) && !isPlainObject$1(val)) return String(val);
 		return val;
 	};
 	var stringifySymbol = (v, i = "") => {
@@ -272,8 +272,14 @@
 			}
 		}
 	};
+	function effectScope(detached) {
+		return new EffectScope(detached);
+	}
 	function getCurrentScope() {
 		return activeEffectScope;
+	}
+	function onScopeDispose(fn, failSilently = false) {
+		if (activeEffectScope) activeEffectScope.cleanups.push(fn);
 	}
 	var activeSub;
 	var pausedQueueEffects = /* @__PURE__ */ new WeakSet();
@@ -346,9 +352,9 @@
 	var batchDepth = 0;
 	var batchedSub;
 	var batchedComputed;
-	function batch(sub, isComputed = false) {
+	function batch(sub, isComputed$1 = false) {
 		sub.flags |= 8;
-		if (isComputed) {
+		if (isComputed$1) {
 			sub.next = batchedComputed;
 			batchedComputed = sub;
 			return;
@@ -638,6 +644,10 @@
 			}
 		}
 		endBatch();
+	}
+	function getDepFromReactive(object, key) {
+		const depMap = targetMap.get(object);
+		return depMap && depMap.get(key);
 	}
 	function reactiveReadArray(array) {
 		const raw = toRaw(array);
@@ -1161,6 +1171,70 @@
 	function proxyRefs(objectWithRefs) {
 		return isReactive(objectWithRefs) ? objectWithRefs : new Proxy(objectWithRefs, shallowUnwrapHandlers);
 	}
+	var CustomRefImpl = class {
+		constructor(factory) {
+			this["__v_isRef"] = true;
+			this._value = void 0;
+			const dep = this.dep = new Dep();
+			const { get, set } = factory(dep.track.bind(dep), dep.trigger.bind(dep));
+			this._get = get;
+			this._set = set;
+		}
+		get value() {
+			return this._value = this._get();
+		}
+		set value(newVal) {
+			this._set(newVal);
+		}
+	};
+	function customRef(factory) {
+		return new CustomRefImpl(factory);
+	}
+	function toRefs(object) {
+		const ret = isArray(object) ? new Array(object.length) : {};
+		for (const key in object) ret[key] = propertyToRef(object, key);
+		return ret;
+	}
+	var ObjectRefImpl = class {
+		constructor(_object, _key, _defaultValue) {
+			this._object = _object;
+			this._key = _key;
+			this._defaultValue = _defaultValue;
+			this["__v_isRef"] = true;
+			this._value = void 0;
+		}
+		get value() {
+			const val = this._object[this._key];
+			return this._value = val === void 0 ? this._defaultValue : val;
+		}
+		set value(newVal) {
+			this._object[this._key] = newVal;
+		}
+		get dep() {
+			return getDepFromReactive(toRaw(this._object), this._key);
+		}
+	};
+	var GetterRefImpl = class {
+		constructor(_getter) {
+			this._getter = _getter;
+			this["__v_isRef"] = true;
+			this["__v_isReadonly"] = true;
+			this._value = void 0;
+		}
+		get value() {
+			return this._value = this._getter();
+		}
+	};
+	function toRef(source, key, defaultValue) {
+		if (isRef(source)) return source;
+		else if (isFunction(source)) return new GetterRefImpl(source);
+		else if (isObject(source) && arguments.length > 1) return propertyToRef(source, key, defaultValue);
+		else return ref(source);
+	}
+	function propertyToRef(source, key, defaultValue) {
+		const val = source[key];
+		return isRef(val) ? val : new ObjectRefImpl(source, key, defaultValue);
+	}
 	var ComputedRefImpl = class {
 		constructor(fn, setter, isSSR) {
 			this.fn = fn;
@@ -1332,7 +1406,7 @@
 		else if (isSet(value) || isMap(value)) value.forEach((v) => {
 			traverse(v, depth, seen);
 		});
-		else if (isPlainObject(value)) {
+		else if (isPlainObject$1(value)) {
 			for (const key in value) traverse(value[key], depth, seen);
 			for (const key of Object.getOwnPropertySymbols(value)) if (Object.prototype.propertyIsEnumerable.call(value, key)) traverse(value[key], depth, seen);
 		}
@@ -1976,6 +2050,30 @@
 		if (cache) cache[index] = ret;
 		return ret;
 	}
+	function renderSlot(slots, name, props = {}, fallback, noSlotted) {
+		if (currentRenderingInstance.ce || currentRenderingInstance.parent && isAsyncWrapper(currentRenderingInstance.parent) && currentRenderingInstance.parent.ce) {
+			const hasProps = Object.keys(props).length > 0;
+			if (name !== "default") props.name = name;
+			return openBlock(), createBlock(Fragment, null, [createVNode("slot", props, fallback && fallback())], hasProps ? -2 : 64);
+		}
+		let slot = slots[name];
+		if (slot && slot._c) slot._d = false;
+		openBlock();
+		const validSlotContent = slot && ensureValidVNode(slot(props));
+		const slotKey = props.key || validSlotContent && validSlotContent.key;
+		const rendered = createBlock(Fragment, { key: (slotKey && !isSymbol(slotKey) ? slotKey : `_${name}`) + (!validSlotContent && fallback ? "_fb" : "") }, validSlotContent || (fallback ? fallback() : []), validSlotContent && slots._ === 1 ? 64 : -2);
+		if (!noSlotted && rendered.scopeId) rendered.slotScopeIds = [rendered.scopeId + "-s"];
+		if (slot && slot._c) slot._d = true;
+		return rendered;
+	}
+	function ensureValidVNode(vnodes) {
+		return vnodes.some((child) => {
+			if (!isVNode(child)) return true;
+			if (child.type === Comment) return false;
+			if (child.type === Fragment && !ensureValidVNode(child.children)) return false;
+			return true;
+		}) ? vnodes : null;
+	}
 	var getPublicInstance = (i) => {
 		if (!i) return null;
 		if (isStatefulComponent(i)) return getComponentPublicInstance(i);
@@ -2064,6 +2162,11 @@
 	};
 	function normalizePropsOrEmits(props) {
 		return isArray(props) ? props.reduce((normalized, p$1) => (normalized[p$1] = null, normalized), {}) : props;
+	}
+	function mergeModels(a, b) {
+		if (!a || !b) return a || b;
+		if (isArray(a) && isArray(b)) return a.concat(b);
+		return extend({}, normalizePropsOrEmits(a), normalizePropsOrEmits(b));
 	}
 	var shouldCacheAccess = true;
 	function applyOptions(instance) {
@@ -2385,6 +2488,9 @@
 			if (provides && key in provides) return provides[key];
 			else if (arguments.length > 1) return treatDefaultAsFactory && isFunction(defaultValue) ? defaultValue.call(instance && instance.proxy) : defaultValue;
 		}
+	}
+	function hasInjectionContext() {
+		return !!(getCurrentInstance() || currentApp);
 	}
 	var internalObjectProto = {};
 	var createInternalObject = () => Object.create(internalObjectProto);
@@ -3311,6 +3417,9 @@
 			return ctx;
 		}
 	};
+	function watchSyncEffect(effect$1, options) {
+		return doWatch(effect$1, null, { flush: "sync" });
+	}
 	function watch(source, cb, options) {
 		return doWatch(source, cb, options);
 	}
@@ -3382,6 +3491,54 @@
 			for (let i = 0; i < segments.length && cur; i++) cur = cur[segments[i]];
 			return cur;
 		};
+	}
+	function useModel(props, name, options = EMPTY_OBJ) {
+		const i = getCurrentInstance();
+		const camelizedName = camelize(name);
+		const hyphenatedName = hyphenate(name);
+		const modifiers = getModelModifiers(props, camelizedName);
+		const res = customRef((track$1, trigger$1) => {
+			let localValue;
+			let prevSetValue = EMPTY_OBJ;
+			let prevEmittedValue;
+			watchSyncEffect(() => {
+				const propValue = props[camelizedName];
+				if (hasChanged(localValue, propValue)) {
+					localValue = propValue;
+					trigger$1();
+				}
+			});
+			return {
+				get() {
+					track$1();
+					return options.get ? options.get(localValue) : localValue;
+				},
+				set(value) {
+					const emittedValue = options.set ? options.set(value) : value;
+					if (!hasChanged(emittedValue, localValue) && !(prevSetValue !== EMPTY_OBJ && hasChanged(value, prevSetValue))) return;
+					const rawProps = i.vnode.props;
+					if (!(rawProps && (name in rawProps || camelizedName in rawProps || hyphenatedName in rawProps) && (`onUpdate:${name}` in rawProps || `onUpdate:${camelizedName}` in rawProps || `onUpdate:${hyphenatedName}` in rawProps))) {
+						localValue = value;
+						trigger$1();
+					}
+					i.emit(`update:${name}`, emittedValue);
+					if (hasChanged(value, emittedValue) && hasChanged(value, prevSetValue) && !hasChanged(emittedValue, prevEmittedValue)) trigger$1();
+					prevSetValue = value;
+					prevEmittedValue = emittedValue;
+				}
+			};
+		});
+		res[Symbol.iterator] = () => {
+			let i2 = 0;
+			return { next() {
+				if (i2 < 2) return {
+					value: i2++ ? modifiers || EMPTY_OBJ : res,
+					done: false
+				};
+				else return { done: true };
+			} };
+		};
+		return res;
 	}
 	var getModelModifiers = (props, modelName) => {
 		return modelName === "modelValue" || modelName === "model-value" ? props.modelModifiers : props[`${modelName}Modifiers`] || props[`${camelize(modelName)}Modifiers`] || props[`${hyphenate(modelName)}Modifiers`];
@@ -4539,22 +4696,22 @@
 				const modelValue = el._modelValue;
 				const elementValue = getValue(el);
 				const checked = el.checked;
-				const assign = el[assignKey];
+				const assign$2 = el[assignKey];
 				if (isArray(modelValue)) {
 					const index = looseIndexOf(modelValue, elementValue);
 					const found = index !== -1;
-					if (checked && !found) assign(modelValue.concat(elementValue));
+					if (checked && !found) assign$2(modelValue.concat(elementValue));
 					else if (!checked && found) {
 						const filtered = [...modelValue];
 						filtered.splice(index, 1);
-						assign(filtered);
+						assign$2(filtered);
 					}
 				} else if (isSet(modelValue)) {
 					const cloned = new Set(modelValue);
 					if (checked) cloned.add(elementValue);
 					else cloned.delete(elementValue);
-					assign(cloned);
-				} else assign(getCheckboxValue(el, checked));
+					assign$2(cloned);
+				} else assign$2(getCheckboxValue(el, checked));
 			});
 		},
 		mounted: setChecked,
@@ -4612,52 +4769,504 @@
 		if (isString(container)) return document.querySelector(container);
 		return container;
 	}
-	var currentListing = ref(null);
-	var currentWindow = ref(window.location.hostname);
-	var tableInformation = ref([]);
-	function informationGathering() {
-		var price = document.getElementsByClassName("classified__price")[0].getElementsByClassName("sr-only")[0].innerText.split("€")[0];
-		classifyTableInformation();
-		currentListing.value = {
-			uid: window.location.pathname.split("/").at(-1),
-			link: window.location.href,
-			advertisedPrice: price,
-			PSQM: Math.round(price / parseFloat(callInfoByHeader("Living area"))),
-			LA: callInfoByHeader("Living area"),
-			EPC: callInfoByHeader("Primary energy consumption"),
-			EPCLabel: callInfoByHeader("Energy class"),
-			CY: callInfoByHeader("Construction year"),
-			isEdited: false,
-			note: ""
-		};
+	var IS_CLIENT = typeof window !== "undefined";
+	var activePinia;
+	var setActivePinia = (pinia) => activePinia = pinia;
+	var piniaSymbol = Symbol();
+	function isPlainObject(o) {
+		return o && typeof o === "object" && Object.prototype.toString.call(o) === "[object Object]" && typeof o.toJSON !== "function";
 	}
-	function classifyTableInformation() {
-		var rows = document.getElementsByClassName("classified-table__row");
-		if (rows.length > 0) Array.from(rows).forEach((row) => {
-			var tableInfoHeader = row.getElementsByClassName("classified-table__header")[0];
-			var tableInfoValue = row.getElementsByClassName("classified-table__data")[0];
-			if (tableInfoHeader != void 0 && tableInfoValue != void 0) tableInformation.value.push({
-				header: tableInfoHeader.innerText,
-				value: tableInfoValue.innerText
+	var MutationType;
+	(function(MutationType$1) {
+		MutationType$1["direct"] = "direct";
+		MutationType$1["patchObject"] = "patch object";
+		MutationType$1["patchFunction"] = "patch function";
+	})(MutationType || (MutationType = {}));
+	var _global = /* @__PURE__ */ (() => typeof window === "object" && window.window === window ? window : typeof self === "object" && self.self === self ? self : typeof global === "object" && global.global === global ? global : typeof globalThis === "object" ? globalThis : { HTMLElement: null })();
+	function bom(blob, { autoBom = false } = {}) {
+		if (autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) return new Blob([String.fromCharCode(65279), blob], { type: blob.type });
+		return blob;
+	}
+	function download(url, name, opts) {
+		const xhr = new XMLHttpRequest();
+		xhr.open("GET", url);
+		xhr.responseType = "blob";
+		xhr.onload = function() {
+			saveAs(xhr.response, name, opts);
+		};
+		xhr.onerror = function() {
+			console.error("could not download file");
+		};
+		xhr.send();
+	}
+	function corsEnabled(url) {
+		const xhr = new XMLHttpRequest();
+		xhr.open("HEAD", url, false);
+		try {
+			xhr.send();
+		} catch (e) {}
+		return xhr.status >= 200 && xhr.status <= 299;
+	}
+	function click(node) {
+		try {
+			node.dispatchEvent(new MouseEvent("click"));
+		} catch (e) {
+			const evt = new MouseEvent("click", {
+				bubbles: true,
+				cancelable: true,
+				view: window,
+				detail: 0,
+				screenX: 80,
+				screenY: 20,
+				clientX: 80,
+				clientY: 20,
+				ctrlKey: false,
+				altKey: false,
+				shiftKey: false,
+				metaKey: false,
+				button: 0,
+				relatedTarget: null
 			});
-		});
-		else console.log("Couldn't spot rows.");
-	}
-	function callInfoByHeader(header) {
-		return tableInformation.value.find((item) => item.header === header)?.value.split(" ")[0];
-	}
-	informationGathering();
-	function scrapImmowebData() {
-		function reloadCurrentListingData() {
-			informationGathering();
-			console.log(currentListing.value);
+			node.dispatchEvent(evt);
 		}
-		return {
-			currentListing,
-			currentWindow: readonly(currentWindow),
-			reloadCurrentListingData
-		};
 	}
+	var _navigator = typeof navigator === "object" ? navigator : { userAgent: "" };
+	var isMacOSWebView = /* @__PURE__ */ (() => /Macintosh/.test(_navigator.userAgent) && /AppleWebKit/.test(_navigator.userAgent) && !/Safari/.test(_navigator.userAgent))();
+	var saveAs = !IS_CLIENT ? () => {} : typeof HTMLAnchorElement !== "undefined" && "download" in HTMLAnchorElement.prototype && !isMacOSWebView ? downloadSaveAs : "msSaveOrOpenBlob" in _navigator ? msSaveAs : fileSaverSaveAs;
+	function downloadSaveAs(blob, name = "download", opts) {
+		const a = document.createElement("a");
+		a.download = name;
+		a.rel = "noopener";
+		if (typeof blob === "string") {
+			a.href = blob;
+			if (a.origin !== location.origin) if (corsEnabled(a.href)) download(blob, name, opts);
+			else {
+				a.target = "_blank";
+				click(a);
+			}
+			else click(a);
+		} else {
+			a.href = URL.createObjectURL(blob);
+			setTimeout(function() {
+				URL.revokeObjectURL(a.href);
+			}, 4e4);
+			setTimeout(function() {
+				click(a);
+			}, 0);
+		}
+	}
+	function msSaveAs(blob, name = "download", opts) {
+		if (typeof blob === "string") if (corsEnabled(blob)) download(blob, name, opts);
+		else {
+			const a = document.createElement("a");
+			a.href = blob;
+			a.target = "_blank";
+			setTimeout(function() {
+				click(a);
+			});
+		}
+		else navigator.msSaveOrOpenBlob(bom(blob, opts), name);
+	}
+	function fileSaverSaveAs(blob, name, opts, popup) {
+		popup = popup || open("", "_blank");
+		if (popup) popup.document.title = popup.document.body.innerText = "downloading...";
+		if (typeof blob === "string") return download(blob, name, opts);
+		const force = blob.type === "application/octet-stream";
+		const isSafari = /constructor/i.test(String(_global.HTMLElement)) || "safari" in _global;
+		const isChromeIOS = /CriOS\/[\d]+/.test(navigator.userAgent);
+		if ((isChromeIOS || force && isSafari || isMacOSWebView) && typeof FileReader !== "undefined") {
+			const reader = new FileReader();
+			reader.onloadend = function() {
+				let url = reader.result;
+				if (typeof url !== "string") {
+					popup = null;
+					throw new Error("Wrong reader.result type");
+				}
+				url = isChromeIOS ? url : url.replace(/^data:[^;]*;/, "data:attachment/file;");
+				if (popup) popup.location.href = url;
+				else location.assign(url);
+				popup = null;
+			};
+			reader.readAsDataURL(blob);
+		} else {
+			const url = URL.createObjectURL(blob);
+			if (popup) popup.location.assign(url);
+			else location.href = url;
+			popup = null;
+			setTimeout(function() {
+				URL.revokeObjectURL(url);
+			}, 4e4);
+		}
+	}
+	var { assign: assign$1 } = Object;
+	function createPinia() {
+		const scope = effectScope(true);
+		const state = scope.run(() => ref({}));
+		let _p = [];
+		let toBeInstalled = [];
+		const pinia = markRaw({
+			install(app) {
+				setActivePinia(pinia);
+				pinia._a = app;
+				app.provide(piniaSymbol, pinia);
+				app.config.globalProperties.$pinia = pinia;
+				toBeInstalled.forEach((plugin) => _p.push(plugin));
+				toBeInstalled = [];
+			},
+			use(plugin) {
+				if (!this._a) toBeInstalled.push(plugin);
+				else _p.push(plugin);
+				return this;
+			},
+			_p,
+			_a: null,
+			_e: scope,
+			_s: /* @__PURE__ */ new Map(),
+			state
+		});
+		return pinia;
+	}
+	var noop = () => {};
+	function addSubscription(subscriptions, callback, detached, onCleanup = noop) {
+		subscriptions.add(callback);
+		const removeSubscription = () => {
+			subscriptions.delete(callback) && onCleanup();
+		};
+		if (!detached && getCurrentScope()) onScopeDispose(removeSubscription);
+		return removeSubscription;
+	}
+	function triggerSubscriptions(subscriptions, ...args) {
+		subscriptions.forEach((callback) => {
+			callback(...args);
+		});
+	}
+	var fallbackRunWithContext = (fn) => fn();
+	var ACTION_MARKER = Symbol();
+	var ACTION_NAME = Symbol();
+	function mergeReactiveObjects(target, patchToApply) {
+		if (target instanceof Map && patchToApply instanceof Map) patchToApply.forEach((value, key) => target.set(key, value));
+		else if (target instanceof Set && patchToApply instanceof Set) patchToApply.forEach(target.add, target);
+		for (const key in patchToApply) {
+			if (!patchToApply.hasOwnProperty(key)) continue;
+			const subPatch = patchToApply[key];
+			const targetValue = target[key];
+			if (isPlainObject(targetValue) && isPlainObject(subPatch) && target.hasOwnProperty(key) && !isRef(subPatch) && !isReactive(subPatch)) target[key] = mergeReactiveObjects(targetValue, subPatch);
+			else target[key] = subPatch;
+		}
+		return target;
+	}
+	var skipHydrateSymbol = Symbol();
+	function shouldHydrate(obj) {
+		return !isPlainObject(obj) || !Object.prototype.hasOwnProperty.call(obj, skipHydrateSymbol);
+	}
+	var { assign } = Object;
+	function isComputed(o) {
+		return !!(isRef(o) && o.effect);
+	}
+	function createOptionsStore(id, options, pinia, hot) {
+		const { state, actions, getters } = options;
+		const initialState = pinia.state.value[id];
+		let store;
+		function setup() {
+			if (!initialState && true)
+ /* istanbul ignore if */
+			pinia.state.value[id] = state ? state() : {};
+			const localState = toRefs(pinia.state.value[id]);
+			return assign(localState, actions, Object.keys(getters || {}).reduce((computedGetters, name) => {
+				computedGetters[name] = markRaw(computed(() => {
+					setActivePinia(pinia);
+					const store$1 = pinia._s.get(id);
+					return getters[name].call(store$1, store$1);
+				}));
+				return computedGetters;
+			}, {}));
+		}
+		store = createSetupStore(id, setup, options, pinia, hot, true);
+		return store;
+	}
+	function createSetupStore($id, setup, options = {}, pinia, hot, isOptionsStore) {
+		let scope;
+		const optionsForPlugin = assign({ actions: {} }, options);
+		const $subscribeOptions = { deep: true };
+		let isListening;
+		let isSyncListening;
+		let subscriptions = /* @__PURE__ */ new Set();
+		let actionSubscriptions = /* @__PURE__ */ new Set();
+		let debuggerEvents;
+		const initialState = pinia.state.value[$id];
+		if (!isOptionsStore && !initialState && true)
+ /* istanbul ignore if */
+		pinia.state.value[$id] = {};
+		ref({});
+		let activeListener;
+		function $patch(partialStateOrMutator) {
+			let subscriptionMutation;
+			isListening = isSyncListening = false;
+			if (typeof partialStateOrMutator === "function") {
+				partialStateOrMutator(pinia.state.value[$id]);
+				subscriptionMutation = {
+					type: MutationType.patchFunction,
+					storeId: $id,
+					events: debuggerEvents
+				};
+			} else {
+				mergeReactiveObjects(pinia.state.value[$id], partialStateOrMutator);
+				subscriptionMutation = {
+					type: MutationType.patchObject,
+					payload: partialStateOrMutator,
+					storeId: $id,
+					events: debuggerEvents
+				};
+			}
+			const myListenerId = activeListener = Symbol();
+			nextTick().then(() => {
+				if (activeListener === myListenerId) isListening = true;
+			});
+			isSyncListening = true;
+			triggerSubscriptions(subscriptions, subscriptionMutation, pinia.state.value[$id]);
+		}
+		const $reset = isOptionsStore ? function $reset$1() {
+			const { state } = options;
+			const newState = state ? state() : {};
+			this.$patch(($state) => {
+				assign($state, newState);
+			});
+		} : noop;
+		function $dispose() {
+			scope.stop();
+			subscriptions.clear();
+			actionSubscriptions.clear();
+			pinia._s.delete($id);
+		}
+		const action = (fn, name = "") => {
+			if (ACTION_MARKER in fn) {
+				fn[ACTION_NAME] = name;
+				return fn;
+			}
+			const wrappedAction = function() {
+				setActivePinia(pinia);
+				const args = Array.from(arguments);
+				const afterCallbackSet = /* @__PURE__ */ new Set();
+				const onErrorCallbackSet = /* @__PURE__ */ new Set();
+				function after(callback) {
+					afterCallbackSet.add(callback);
+				}
+				function onError(callback) {
+					onErrorCallbackSet.add(callback);
+				}
+				triggerSubscriptions(actionSubscriptions, {
+					args,
+					name: wrappedAction[ACTION_NAME],
+					store,
+					after,
+					onError
+				});
+				let ret;
+				try {
+					ret = fn.apply(this && this.$id === $id ? this : store, args);
+				} catch (error) {
+					triggerSubscriptions(onErrorCallbackSet, error);
+					throw error;
+				}
+				if (ret instanceof Promise) return ret.then((value) => {
+					triggerSubscriptions(afterCallbackSet, value);
+					return value;
+				}).catch((error) => {
+					triggerSubscriptions(onErrorCallbackSet, error);
+					return Promise.reject(error);
+				});
+				triggerSubscriptions(afterCallbackSet, ret);
+				return ret;
+			};
+			wrappedAction[ACTION_MARKER] = true;
+			wrappedAction[ACTION_NAME] = name;
+			return wrappedAction;
+		};
+		const partialStore = {
+			_p: pinia,
+			$id,
+			$onAction: addSubscription.bind(null, actionSubscriptions),
+			$patch,
+			$reset,
+			$subscribe(callback, options$1 = {}) {
+				const removeSubscription = addSubscription(subscriptions, callback, options$1.detached, () => stopWatcher());
+				const stopWatcher = scope.run(() => watch(() => pinia.state.value[$id], (state) => {
+					if (options$1.flush === "sync" ? isSyncListening : isListening) callback({
+						storeId: $id,
+						type: MutationType.direct,
+						events: debuggerEvents
+					}, state);
+				}, assign({}, $subscribeOptions, options$1)));
+				return removeSubscription;
+			},
+			$dispose
+		};
+		const store = reactive(partialStore);
+		pinia._s.set($id, store);
+		const setupStore = (pinia._a && pinia._a.runWithContext || fallbackRunWithContext)(() => pinia._e.run(() => (scope = effectScope()).run(() => setup({ action }))));
+		for (const key in setupStore) {
+			const prop = setupStore[key];
+			if (isRef(prop) && !isComputed(prop) || isReactive(prop)) {
+				if (!isOptionsStore) {
+					if (initialState && shouldHydrate(prop)) if (isRef(prop)) prop.value = initialState[key];
+					else mergeReactiveObjects(prop, initialState[key]);
+					pinia.state.value[$id][key] = prop;
+				}
+			} else if (typeof prop === "function") {
+				setupStore[key] = action(prop, key);
+				optionsForPlugin.actions[key] = prop;
+			}
+		}
+		/* istanbul ignore if */
+		assign(store, setupStore);
+		assign(toRaw(store), setupStore);
+		Object.defineProperty(store, "$state", {
+			get: () => pinia.state.value[$id],
+			set: (state) => {
+				$patch(($state) => {
+					assign($state, state);
+				});
+			}
+		});
+		pinia._p.forEach((extender) => {
+			assign(store, scope.run(() => extender({
+				store,
+				app: pinia._a,
+				pinia,
+				options: optionsForPlugin
+			})));
+		});
+		if (initialState && isOptionsStore && options.hydrate) options.hydrate(store.$state, initialState);
+		isListening = true;
+		isSyncListening = true;
+		return store;
+	}
+	/*! #__NO_SIDE_EFFECTS__ */
+	function defineStore(id, setup, setupOptions) {
+		let options;
+		const isSetupStore = typeof setup === "function";
+		options = isSetupStore ? setupOptions : setup;
+		function useStore(pinia, hot) {
+			const hasContext = hasInjectionContext();
+			pinia = pinia || (hasContext ? inject(piniaSymbol, null) : null);
+			if (pinia) setActivePinia(pinia);
+			pinia = activePinia;
+			if (!pinia._s.has(id)) if (isSetupStore) createSetupStore(id, setup, options, pinia);
+			else createOptionsStore(id, options, pinia);
+			return pinia._s.get(id);
+		}
+		useStore.$id = id;
+		return useStore;
+	}
+	function storeToRefs(store) {
+		const rawStore = toRaw(store);
+		const refs = {};
+		for (const key in rawStore) {
+			const value = rawStore[key];
+			if (value.effect) refs[key] = computed({
+				get: () => store[key],
+				set(value$1) {
+					store[key] = value$1;
+				}
+			});
+			else if (isRef(value) || isReactive(value)) refs[key] = toRef(store, key);
+		}
+		return refs;
+	}
+	var _hoisted_1$9 = { id: "vstb--app-selector-menu" };
+	var _hoisted_2$5 = ["onClick"];
+	var TabBar_default = {
+		__name: "TabBar",
+		props: /* @__PURE__ */ mergeModels({ tabs: {
+			type: Array,
+			default: () => [
+				"Main",
+				"References",
+				"Settings"
+			]
+		} }, {
+			"modelValue": {
+				type: String,
+				default: "Main"
+			},
+			"modelModifiers": {}
+		}),
+		emits: ["update:modelValue"],
+		setup(__props) {
+			const activeTab = useModel(__props, "modelValue");
+			function switchTab(tab) {
+				activeTab.value = tab;
+			}
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$9, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.tabs, (tab) => {
+					return openBlock(), createElementBlock("span", {
+						onClick: ($event) => switchTab(tab),
+						class: normalizeClass(["vstb--selector-buttons", { active: activeTab.value === tab }])
+					}, toDisplayString(tab), 11, _hoisted_2$5);
+				}), 256))]);
+			};
+		}
+	};
+	var _hoisted_1$8 = { id: "vstb--app-header" };
+	var _hoisted_2$4 = { id: "vstb--header-controls" };
+	var Header_default = {
+		__name: "Header",
+		props: {
+			"modelValue": {
+				type: Boolean,
+				default: false
+			},
+			"modelModifiers": {}
+		},
+		emits: ["update:modelValue"],
+		setup(__props) {
+			const displayApp = useModel(__props, "modelValue");
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$8, [createBaseVNode("div", _hoisted_2$4, [createBaseVNode("div", { onClick: _cache[0] || (_cache[0] = ($event) => displayApp.value = !displayApp.value) }, "O/I")])]);
+			};
+		}
+	};
+	var __plugin_vue_export_helper_default = (sfc, props) => {
+		const target = sfc.__vccOpts || sfc;
+		for (const [key, val] of props) target[key] = val;
+		return target;
+	};
+	var _sfc_main$12 = {};
+	var _hoisted_1$7 = { class: "vstb--basic-container" };
+	var _hoisted_2$3 = { class: "vstb--basic-container-header" };
+	var _hoisted_3$2 = { class: "vstb--basic-container-main" };
+	function _sfc_render$1(_ctx, _cache) {
+		return openBlock(), createElementBlock("div", _hoisted_1$7, [createBaseVNode("div", _hoisted_2$3, [renderSlot(_ctx.$slots, "header")]), createBaseVNode("div", _hoisted_3$2, [renderSlot(_ctx.$slots, "main")])]);
+	}
+	var BasicContainer_default = /* @__PURE__ */ __plugin_vue_export_helper_default(_sfc_main$12, [["render", _sfc_render$1]]);
+	var _sfc_main$11 = {};
+	var _hoisted_1$6 = { class: "vstb--button-group" };
+	function _sfc_render(_ctx, _cache) {
+		return openBlock(), createElementBlock("div", _hoisted_1$6, [renderSlot(_ctx.$slots, "default")]);
+	}
+	var ButtonGroup_default = /* @__PURE__ */ __plugin_vue_export_helper_default(_sfc_main$11, [["render", _sfc_render]]);
+	var BaseButton_default = {
+		__name: "BaseButton",
+		props: {
+			severity: {
+				type: String,
+				default: "default"
+			},
+			active: {
+				type: Boolean,
+				default: false
+			}
+		},
+		setup(__props) {
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("button", { class: normalizeClass([
+					"vstb--button",
+					`severity-${__props.severity}`,
+					{ active: __props.active }
+				]) }, [renderSlot(_ctx.$slots, "default")], 2);
+			};
+		}
+	};
 	function capitalize(str) {
 		if (!str) return "";
 		return str.charAt(0).toUpperCase() + str.slice(1);
@@ -4678,49 +5287,89 @@
 	function openLink(link) {
 		window.open(link, "_blank", "noopener,noreferrer");
 	}
-	function useLocalStorage(key, defaultValue) {
-		const data = ref(defaultValue);
-		const storedValue = localStorage.getItem(key);
-		if (storedValue !== null) try {
-			data.value = JSON.parse(storedValue);
-		} catch (e) {
-			console.error(`[useLocalStorage] Error parsing stored value for key "${key}":`, e);
-			localStorage.setItem(key, JSON.stringify(defaultValue));
-		}
-		else localStorage.setItem(key, JSON.stringify(defaultValue));
-		watch(data, (newValue) => {
-			localStorage.setItem(key, JSON.stringify(newValue));
-		}, { deep: true });
-		const updateFromStorage = (event) => {
-			console.log("event key: " + event.key);
-			console.log("eventlistener from: " + key);
-			console.log(event.key === key);
-			console.log("--------");
-			if (event.key === key) {
-				console.log("first step with: " + key);
-				if (event.newValue === null) {
-					data.value = defaultValue;
-					console.log("operation consisted of a removal in: " + key);
-				} else try {
-					console.log(data.value);
-					data.value = JSON.parse(event.newValue);
-					console.log(data.value);
-					console.log(JSON.parse(event.newValue));
-				} catch (e) {
-					console.error(`[useLocalStorage] Error parsing broadcasted value for key "${key}":`, e);
-				}
-			}
-		};
-		onMounted(() => {
-			window.addEventListener("storage", updateFromStorage);
-			console.log("mounted: " + key);
-		});
-		onUnmounted(() => {
-			window.removeEventListener("storage", updateFromStorage);
-			console.log("unmounted: " + key);
-		});
-		return data;
+	function omitObjectItems(object, filterArray) {
+		return Object.fromEntries(Object.entries(object).filter(([key]) => !filterArray.includes(key)));
 	}
+	var _hoisted_1$5 = { class: "vstb--information-table-table-item" };
+	var _hoisted_2$2 = {
+		key: 0,
+		style: { "color": "rgb(0, 24, 55)" }
+	};
+	var TableItem_default = {
+		__name: "TableItem",
+		props: /* @__PURE__ */ mergeModels({
+			editMode: {
+				type: Boolean,
+				default: false
+			},
+			itemData: {
+				type: Object,
+				default: {}
+			}
+		}, {
+			"modelValue": {},
+			"modelModifiers": {}
+		}),
+		emits: ["update:modelValue"],
+		setup(__props) {
+			const model = useModel(__props, "modelValue");
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$5, [
+					createBaseVNode("span", null, toDisplayString(unref(capitalize)(__props.itemData.key)) + ":", 1),
+					!__props.editMode ? (openBlock(), createElementBlock("span", _hoisted_2$2, toDisplayString(__props.itemData.value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [__props.itemData.key] })), 1)) : createCommentVNode("", true),
+					__props.editMode ? withDirectives((openBlock(), createElementBlock("input", {
+						key: 1,
+						type: "text",
+						placeholder: "Additonal Notes",
+						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event)
+					}, null, 512)), [[vModelText, model.value]]) : createCommentVNode("", true)
+				]);
+			};
+		}
+	};
+	var InformationTable_default = {
+		__name: "InformationTable",
+		props: {
+			data: {
+				type: Object,
+				default: {}
+			},
+			editMode: {
+				type: Boolean,
+				default: false
+			},
+			omitObjectItems: {
+				type: Array,
+				default: []
+			},
+			size: {
+				type: String,
+				default: "large"
+			}
+		},
+		setup(__props) {
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", { class: normalizeClass(["vstb--information-table", __props.size]) }, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.data, (value, key, index) => {
+					return openBlock(), createElementBlock(Fragment, { key }, [!__props.omitObjectItems.includes(key) ? (openBlock(), createBlock(TableItem_default, {
+						key: 0,
+						itemData: {
+							value,
+							key,
+							index
+						},
+						editMode: __props.editMode,
+						modelValue: __props.data[key],
+						"onUpdate:modelValue": ($event) => __props.data[key] = $event
+					}, null, 8, [
+						"itemData",
+						"editMode",
+						"modelValue",
+						"onUpdate:modelValue"
+					])) : createCommentVNode("", true)], 64);
+				}), 128)), renderSlot(_ctx.$slots, "default")], 2);
+			};
+		}
+	};
 	var toast = reactive({
 		visible: false,
 		message: "",
@@ -4728,7 +5377,7 @@
 		timeoutId: null
 	});
 	function useToast() {
-		const showToast$1 = (message, type = "success", duration = 3e3) => {
+		const showToast$5 = (message, type = "success", duration = 3e3) => {
 			if (toast.timeoutId) clearTimeout(toast.timeoutId);
 			toast.message = message;
 			toast.type = type;
@@ -4739,32 +5388,7 @@
 		};
 		return {
 			toast: reactive(toast),
-			showToast: showToast$1
-		};
-	}
-	var { showToast } = useToast();
-	function useProperties() {
-		const selectedProperties = useLocalStorage("selectedProperties", []);
-		function addProperty(property) {
-			if (!selectedProperties.value.map((x) => x.uid).includes(property.uid)) {
-				selectedProperties.value.push(property);
-				showToast("Property saved successfully!", "info");
-			}
-		}
-		function removeProperty(propertyId) {
-			selectedProperties.value = selectedProperties.value.filter((p$1) => p$1.uid !== propertyId);
-			console.log(`Property with id ${propertyId} removed.`);
-			showToast(`Property with id ${propertyId} removed.`, "danger");
-		}
-		function removeAllProperty() {
-			selectedProperties.value = [];
-			showToast(`Properties removed.`, "danger");
-		}
-		return {
-			selectedProperties,
-			addProperty,
-			removeProperty,
-			removeAllProperty
+			showToast: showToast$5
 		};
 	}
 	function formatObjectForClipboard(data, index = null) {
@@ -4778,15 +5402,15 @@ PSQM: ${data.PSQM}
 Note: ${data.note}`;
 	}
 	function useClipboard() {
-		const { showToast: showToast$1 } = useToast();
+		const { showToast: showToast$5 } = useToast();
 		async function copyToClipboard(text) {
 			try {
 				await navigator.clipboard.writeText(text);
 				console.log("Text copied to clipboard successfully!");
-				showToast$1("Copied to clipboard", "info");
+				showToast$5("Copied to clipboard", "info");
 			} catch (err) {
 				console.error("Failed to copy text: ", err);
-				showToast$1("Failed to copy", "error");
+				showToast$5("Failed to copy", "error");
 			}
 		}
 		function copyObjectToClipboard(data) {
@@ -4816,9 +5440,351 @@ Note: ${data.note}`;
 			copySummaryStatistics
 		};
 	}
+	var { showToast: showToast$4 } = useToast();
+	var BaseScraper = class {
+		constructor(document$1) {
+			this.document = document$1;
+		}
+		scrape() {
+			showToast$4("scrape() function not defined in child", "danger");
+		}
+		htmlToNumeral(html) {
+			const str = this.cleanText(html.innerText);
+			return parseInt(str.replace(/[^0-9]/g, ""), 10) || 0;
+		}
+		cleanText(str) {
+			return str ? str.trim().replace(/\s+/g, " ") : "";
+		}
+		parseNumber(str) {
+			return parseInt(this.cleanText(str).replace(/[^0-9]/g, ""));
+		}
+	};
+	var { showToast: showToast$3 } = useToast();
+	var ImmowebScraper = class extends BaseScraper {
+		scrape() {
+			try {
+				const metadata = {
+					uid: window.location.pathname.split("/").at(-1),
+					link: window.location.href,
+					isEdited: false,
+					note: ""
+				};
+				const scraped = { advertisedPrice: this.htmlToNumeral(this.document.querySelector(".classified__price .sr-only")) };
+				const features = this._getTableData();
+				this._pushData(scraped, features, {
+					LA: {
+						key: "Usable floor area",
+						type: "int"
+					},
+					EPC: {
+						key: "Primary energy consumption",
+						type: "int"
+					},
+					EPCLabel: {
+						key: "EPC/EPC label",
+						type: "string"
+					},
+					CY: {
+						key: "Construction year",
+						type: "int"
+					}
+				});
+				const computes = { PSQM: (scraped.advertisedPrice / scraped.LA || 0).toFixed(0) };
+				return {
+					success: true,
+					data: {
+						uid: metadata.uid,
+						link: metadata.link,
+						advertisedPrice: scraped.advertisedPrice,
+						PSQM: computes.PSQM,
+						LA: scraped.LA,
+						EPC: scraped.EPC,
+						EPCLabel: scraped.EPCLabel,
+						CY: scraped.CY,
+						note: metadata.note
+					}
+				};
+			} catch (e) {
+				return {
+					success: false,
+					e
+				};
+			}
+		}
+		_getTableData() {
+			const map = {};
+			this.document.querySelectorAll(".classified-table__row").forEach((row) => {
+				const header = row.querySelector(".classified-table__header");
+				const value = row.querySelector(".classified-table__data");
+				if (header && value) {
+					const key = header.innerText.trim();
+					map[key] = value.innerText.trim();
+				}
+			});
+			return map;
+		}
+		_pushData(obj, map, filters) {
+			for (let itemKey in filters) {
+				const config = filters[itemKey];
+				obj[itemKey] = config.type === "int" ? this.parseNumber(map[config.key]) : this.cleanText(map[config.key]);
+			}
+		}
+	};
+	var { showToast: showToast$2 } = useToast();
+	const useListingStore = defineStore("listing", () => {
+		const currentListing = ref({});
+		function reloadCurrentListingData() {
+			const result = new ImmowebScraper(document).scrape();
+			if (result.success) {
+				currentListing.value = result.data;
+				showToast$2("Scraping successful", "info");
+			} else showToast$2("Scraping unsuccessful", "danger");
+		}
+		return {
+			currentListing,
+			reloadCurrentListingData
+		};
+	});
+	var { showToast: showToast$1 } = useToast();
+	function init$1(key) {
+		const data = localStorage.getItem(key);
+		return data ? JSON.parse(data) : [];
+	}
+	function syncToLocalStorage$1(state, key) {
+		window.addEventListener("storage", (event) => {
+			if (event.key === key) if (event.newValue === null) {
+				state.value = [];
+				showToast$1(`${key} in localStorage was cleared.`, "danger");
+			} else try {
+				state.value = JSON.parse(event.newValue);
+				showToast$1(`Intercepted localStorage udpdate.`, "info");
+			} catch (e) {
+				showToast$1("Failed to parse intercepted JSON.", "danger");
+			}
+		});
+	}
+	const usePropertyStore = defineStore("properties", () => {
+		const STORAGE_KEY = "selectedProperties";
+		const savedProperties = ref(init$1(STORAGE_KEY));
+		syncToLocalStorage$1(savedProperties, STORAGE_KEY);
+		function addProperty(listing) {
+			if (!savedProperties.value.find((p$1) => p$1.uid === listing.uid)) {
+				savedProperties.value.push(listing);
+				save();
+				showToast$1("Property saved successfully!", "info");
+			}
+		}
+		function removeProperty(uid$2) {
+			savedProperties.value = savedProperties.value.filter((p$1) => p$1.uid !== uid$2);
+			save();
+			showToast$1(`Property with id ${uid$2} removed.`, "danger");
+		}
+		function removeAllProperty() {
+			savedProperties.value = [];
+			save();
+			showToast$1(`Properties removed.`, "danger");
+		}
+		function save() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProperties.value));
+		}
+		const averagePSQM = computed(() => {
+			return {
+				formatted: average(savedProperties.value, "PSQM") + " " + returnUnitMetric({ key: "PSQM" }),
+				unformatted: average(savedProperties.value, "PSQM")
+			};
+		});
+		const averagePrice = computed(() => {
+			return {
+				formatted: average(savedProperties.value, "advertisedPrice") + " " + returnUnitMetric({ key: "advertisedPrice" }),
+				unformatted: average(savedProperties.value, "advertisedPrice")
+			};
+		});
+		return {
+			savedProperties,
+			addProperty,
+			removeProperty,
+			removeAllProperty,
+			save,
+			averagePSQM,
+			averagePrice
+		};
+	});
+	var Dashboard_default = {
+		__name: "Dashboard",
+		setup(__props) {
+			const { copyObjectToClipboard } = useClipboard();
+			const listingStore = useListingStore();
+			const { currentListing } = storeToRefs(listingStore);
+			const propertyStore = usePropertyStore();
+			return (_ctx, _cache) => {
+				return openBlock(), createBlock(BasicContainer_default, null, {
+					header: withCtx(() => [_cache[5] || (_cache[5] = createTextVNode(" Listing Information ", -1)), createVNode(BaseButton_default, {
+						severity: "info",
+						onClick: _cache[0] || (_cache[0] = ($event) => unref(listingStore).reloadCurrentListingData())
+					}, {
+						default: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("Reload", -1)])]),
+						_: 1
+					})]),
+					main: withCtx(() => [createVNode(InformationTable_default, { data: unref(omitObjectItems)(unref(currentListing), [
+						"uid",
+						"link",
+						"isEdited",
+						"note"
+					]) }, {
+						default: withCtx(() => [createVNode(TableItem_default, {
+							editMode: true,
+							itemData: {
+								key: "note",
+								value: unref(currentListing).note
+							},
+							modelValue: unref(currentListing).note,
+							"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(currentListing).note = $event)
+						}, null, 8, ["itemData", "modelValue"])]),
+						_: 1
+					}, 8, ["data"]), createVNode(ButtonGroup_default, null, {
+						default: withCtx(() => [createVNode(BaseButton_default, {
+							severity: "info",
+							onClick: _cache[2] || (_cache[2] = ($event) => unref(copyObjectToClipboard)([unref(currentListing)]))
+						}, {
+							default: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("Clipboard", -1)])]),
+							_: 1
+						}), createVNode(BaseButton_default, {
+							severity: "info",
+							onClick: _cache[3] || (_cache[3] = ($event) => unref(propertyStore).addProperty(unref(currentListing)))
+						}, {
+							default: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Add", -1)])]),
+							_: 1
+						})]),
+						_: 1
+					})]),
+					_: 1
+				});
+			};
+		}
+	};
+	var _hoisted_1$4 = { class: "vtsb--toggle-card" };
+	var _hoisted_2$1 = { class: "vstb--toggle-card-icon icon-start" };
+	var _hoisted_3$1 = { class: "vstb--toggle-card-icon icon-end" };
+	var _hoisted_4 = { class: "vtsb--toggle-card-action-bar" };
+	var ToggleCard_default = {
+		__name: "ToggleCard",
+		props: { collapsed: {
+			type: Boolean,
+			default: true
+		} },
+		setup(__props) {
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$4, [createBaseVNode("div", {
+					class: normalizeClass(["vtsb--toggle-card-bar", { active: !__props.collapsed }]),
+					onClick: _cache[0] || (_cache[0] = ($event) => _ctx.$emit("clicked"))
+				}, [
+					createBaseVNode("div", _hoisted_2$1, [renderSlot(_ctx.$slots, "start")]),
+					renderSlot(_ctx.$slots, "bar"),
+					createBaseVNode("div", _hoisted_3$1, [renderSlot(_ctx.$slots, "end")])
+				], 2), createBaseVNode("div", { class: normalizeClass(["vtsb--toggle-card-collapsed", { active: !__props.collapsed }]) }, [renderSlot(_ctx.$slots, "content"), createBaseVNode("div", _hoisted_4, [renderSlot(_ctx.$slots, "actionbar")])], 2)]);
+			};
+		}
+	};
+	var _hoisted_1$3 = { class: "vstb--reference-table" };
+	var ReferenceTable_default = {
+		__name: "ReferenceTable",
+		props: { data: {
+			type: Array,
+			default: []
+		} },
+		setup(__props) {
+			const expandedPropertyId = ref(null);
+			const propertyStore = usePropertyStore();
+			const { copyObjectToClipboard, copySummaryStatistics } = useClipboard();
+			function toggleReferenceDetails(referenceUID) {
+				if (expandedPropertyId.value === referenceUID) expandedPropertyId.value = null;
+				else expandedPropertyId.value = referenceUID;
+			}
+			function handleEditMode(referenceUID) {
+				propertyStore.savedProperties.find((i) => i.uid == referenceUID).isEdited = !propertyStore.savedProperties.find((i) => i.uid == referenceUID).isEdited;
+				propertyStore.save();
+			}
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$3, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(propertyStore).savedProperties, (reference, index) => {
+					return openBlock(), createBlock(ToggleCard_default, {
+						collapsed: reference.uid != expandedPropertyId.value,
+						onClicked: ($event) => toggleReferenceDetails(reference.uid)
+					}, {
+						start: withCtx(() => [createTextVNode(toDisplayString(index + 1), 1)]),
+						bar: withCtx(() => [createTextVNode(toDisplayString(reference.advertisedPrice), 1)]),
+						end: withCtx(() => [createTextVNode(toDisplayString(_ctx.toggled ? "▲" : "▼"), 1)]),
+						content: withCtx(() => [createVNode(InformationTable_default, {
+							size: "small",
+							data: reference,
+							omitObjectItems: [
+								"uid",
+								"link",
+								"isEdited"
+							],
+							editMode: reference.isEdited
+						}, null, 8, ["data", "editMode"])]),
+						actionbar: withCtx(() => [createVNode(ButtonGroup_default, null, {
+							default: withCtx(() => [
+								createVNode(BaseButton_default, {
+									severity: "danger",
+									onClick: ($event) => unref(propertyStore).removeProperty(reference.uid)
+								}, {
+									default: withCtx(() => [..._cache[2] || (_cache[2] = [createTextVNode("Delete", -1)])]),
+									_: 1
+								}, 8, ["onClick"]),
+								createVNode(BaseButton_default, { onClick: ($event) => handleEditMode(reference.uid) }, {
+									default: withCtx(() => [..._cache[3] || (_cache[3] = [createTextVNode("Edit", -1)])]),
+									_: 1
+								}, 8, ["onClick"]),
+								createVNode(BaseButton_default, {
+									severity: "info",
+									onClick: ($event) => unref(copyObjectToClipboard)([reference])
+								}, {
+									default: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("Clipboard", -1)])]),
+									_: 1
+								}, 8, ["onClick"])
+							]),
+							_: 2
+						}, 1024), createVNode(BaseButton_default, {
+							severity: "info",
+							onClick: ($event) => unref(openLink)(reference.link)
+						}, {
+							default: withCtx(() => [..._cache[5] || (_cache[5] = [createTextVNode("Link", -1)])]),
+							_: 1
+						}, 8, ["onClick"])]),
+						_: 2
+					}, 1032, ["collapsed", "onClicked"]);
+				}), 256)), unref(propertyStore).savedProperties != 0 ? (openBlock(), createBlock(ButtonGroup_default, { key: 0 }, {
+					default: withCtx(() => [createVNode(BaseButton_default, {
+						severity: "danger",
+						onClick: _cache[0] || (_cache[0] = ($event) => unref(propertyStore).removeAllProperty())
+					}, {
+						default: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("Delete All", -1)])]),
+						_: 1
+					}), createVNode(BaseButton_default, {
+						severity: "info",
+						onClick: _cache[1] || (_cache[1] = ($event) => unref(copyObjectToClipboard)(unref(propertyStore).savedProperties))
+					}, {
+						default: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Clipboard", -1)])]),
+						_: 1
+					})]),
+					_: 1
+				})) : createCommentVNode("", true)]);
+			};
+		}
+	};
+	function computeCI(tx, min, max) {
+		const price = parseFloat(tx);
+		const lower = price / max;
+		const upper = price / min;
+		return {
+			lower: lower.toFixed(0),
+			upper: upper.toFixed(0)
+		};
+	}
 	var valuationMetrics = reactive({
 		dvmLA: 150,
-		dvmPSQM: 0
+		dvmPSQM: 2500
 	});
 	var dvmPrice = computed(() => {
 		const area = parseFloat(valuationMetrics.dvmLA) || 0;
@@ -4826,22 +5792,12 @@ Note: ${data.note}`;
 		return (area * psqm).toFixed(0);
 	});
 	var dvmConfidenceIntervalARG = computed(() => {
-		const price = parseFloat(dvmPrice.value);
-		const lower = price / 1.2;
-		const upper = price / .95;
-		return {
-			lower: lower.toFixed(0),
-			upper: upper.toFixed(0)
-		};
+		const ci = computeCI(dvmPrice.value, .95, 1.2);
+		return `[ ${ci.lower} ; ${ci.upper} ]`;
 	});
 	var dvmConfidenceIntervalING = computed(() => {
-		const price = parseFloat(dvmPrice.value);
-		const lower = price / 1.1;
-		const upper = price / .9;
-		return {
-			lower: lower.toFixed(0),
-			upper: upper.toFixed(0)
-		};
+		const ci = computeCI(dvmPrice.value, .9, 1.1);
+		return `[ ${ci.lower} ; ${ci.upper} ]`;
 	});
 	function useValuation() {
 		return {
@@ -4851,295 +5807,233 @@ Note: ${data.note}`;
 			dvmConfidenceIntervalING
 		};
 	}
-	var _hoisted_1 = { id: "myk--app" };
-	var _hoisted_2 = { id: "myk--app-header" };
-	var _hoisted_3 = { id: "myk--header-controls" };
-	var _hoisted_4 = {
-		key: 0,
-		id: "myk--app-container"
-	};
-	var _hoisted_5 = { id: "myk--app-selector-menu" };
-	var _hoisted_6 = {
-		key: 0,
-		class: "myk--tab-container"
-	};
-	var _hoisted_7 = {
-		class: "myk--container-basics",
-		style: {
-			display: "flex",
-			justifyContent: "space-between",
-			alignItems: "end"
+	var _hoisted_1$2 = { class: "vtsb--toggle-card-action-bar" };
+	var ValuationCalculator_default = {
+		__name: "ValuationCalculator",
+		setup(__props) {
+			const { valuationMetrics: valuationMetrics$1, dvmPrice: dvmPrice$1, dvmConfidenceIntervalARG: dvmConfidenceIntervalARG$1, dvmConfidenceIntervalING: dvmConfidenceIntervalING$1 } = useValuation();
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock(Fragment, null, [createVNode(InformationTable_default, null, {
+					default: withCtx(() => [
+						createVNode(TableItem_default, {
+							itemData: {
+								key: "Living Area",
+								value: unref(valuationMetrics$1).dvmLA
+							},
+							editMode: "true",
+							modelValue: unref(valuationMetrics$1).dvmLA,
+							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(valuationMetrics$1).dvmLA = $event)
+						}, null, 8, ["itemData", "modelValue"]),
+						createVNode(TableItem_default, {
+							itemData: {
+								key: "PSQM Correction",
+								value: unref(valuationMetrics$1).dvmPSQM
+							},
+							editMode: "true",
+							modelValue: unref(valuationMetrics$1).dvmPSQM,
+							"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(valuationMetrics$1).dvmPSQM = $event)
+						}, null, 8, ["itemData", "modelValue"]),
+						createVNode(TableItem_default, { itemData: {
+							key: "Valuation",
+							value: unref(dvmPrice$1)
+						} }, null, 8, ["itemData"]),
+						createVNode(TableItem_default, { itemData: {
+							key: "Confidence Interval ARG",
+							value: unref(dvmConfidenceIntervalARG$1)
+						} }, null, 8, ["itemData"]),
+						createVNode(TableItem_default, { itemData: {
+							key: "Confidence Interval ING",
+							value: unref(dvmConfidenceIntervalING$1)
+						} }, null, 8, ["itemData"])
+					]),
+					_: 1
+				}), createBaseVNode("div", _hoisted_1$2, [renderSlot(_ctx.$slots, "actionbar")])], 64);
+			};
 		}
 	};
-	var _hoisted_8 = {
-		key: 0,
-		class: "myk--section-header"
-	};
-	var _hoisted_9 = { class: "myk--reference-info-command-box" };
-	var _hoisted_10 = { class: "myk--reference-info-table" };
-	var _hoisted_11 = {
-		key: 0,
-		style: { "color": "rgb(0, 24, 55)" }
-	};
-	var _hoisted_12 = { class: "myk--reference-info-command-box" };
-	var _hoisted_13 = {
-		key: 1,
-		class: "myk--tab-container"
-	};
-	var _hoisted_14 = {
-		key: 0,
-		class: "myk--container-basics"
-	};
-	var _hoisted_15 = { class: "myk--reference-info-command-box" };
-	var _hoisted_16 = { class: "myk--container-basics" };
-	var _hoisted_17 = {
-		id: "myk--dropdown-reference-table-container",
-		class: "myk--container-basics"
-	};
-	var _hoisted_18 = ["onClick"];
-	var _hoisted_19 = {
-		class: "myk--within-bar-icon icon-start",
-		style: { "font-weight": "600" }
-	};
-	var _hoisted_20 = { class: "myk--within-bar-icon icon-last" };
-	var _hoisted_21 = {
-		key: 0,
-		class: "myk--reference-info"
-	};
-	var _hoisted_22 = { class: "myk--reference-info-table" };
-	var _hoisted_23 = {
-		key: 0,
-		style: {
-			"color": "rgb(0, 24, 55)",
-			"max-width": "80%",
-			"text-align": "right"
+	function init(key) {
+		const data = localStorage.getItem(key);
+		return data ? JSON.parse(data) : [];
+	}
+	function syncToLocalStorage(state, key) {
+		window.addEventListener("storage", (event) => {
+			if (event.key === key) if (event.newValue === null) {
+				state.value = [];
+				showToast(`${key} in localStorage was cleared.`, "danger");
+			} else try {
+				state.value = JSON.parse(event.newValue);
+				showToast(`Intercepted localStorage udpdate.`, "info");
+			} catch (e) {
+				showToast("Failed to parse intercepted JSON.", "danger");
+			}
+		});
+	}
+	const useSettingsStore = defineStore("settings", () => {
+		const STORAGE_KEY = "settingsMyk";
+		const settings = ref(init(STORAGE_KEY));
+		syncToLocalStorage(settings, STORAGE_KEY);
+		function save() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(settings.value));
+		}
+		return {
+			settings,
+			save
+		};
+	});
+	var Comparables_default = {
+		__name: "Comparables",
+		setup(__props) {
+			const settingsStore = useSettingsStore();
+			const propertyStore = usePropertyStore();
+			const { copySummaryStatistics } = useClipboard();
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock(Fragment, null, [
+					unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BasicContainer_default, { key: 0 }, {
+						header: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("Valuation Type", -1)])]),
+						main: withCtx(() => [createVNode(ButtonGroup_default, null, {
+							default: withCtx(() => [createVNode(BaseButton_default, {
+								severity: "info",
+								active: unref(settingsStore).settings.valType === "Normal",
+								onClick: _cache[0] || (_cache[0] = ($event) => unref(settingsStore).settings.valType = "Normal")
+							}, {
+								default: withCtx(() => [..._cache[5] || (_cache[5] = [createTextVNode("Normal", -1)])]),
+								_: 1
+							}, 8, ["active"]), createVNode(BaseButton_default, {
+								severity: "info",
+								active: unref(settingsStore).settings.valType === "New Construction",
+								onClick: _cache[1] || (_cache[1] = ($event) => unref(settingsStore).settings.valType = "New Construction")
+							}, {
+								default: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("New Construction", -1)])]),
+								_: 1
+							}, 8, ["active"])]),
+							_: 1
+						})]),
+						_: 1
+					})) : createCommentVNode("", true),
+					unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BasicContainer_default, { key: 1 }, {
+						header: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Reference Table", -1)])]),
+						main: withCtx(() => [createVNode(ReferenceTable_default)]),
+						_: 1
+					})) : createCommentVNode("", true),
+					unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BasicContainer_default, { key: 2 }, {
+						header: withCtx(() => [..._cache[8] || (_cache[8] = [createTextVNode("Summary Stastics", -1)])]),
+						main: withCtx(() => [createVNode(InformationTable_default, { data: {
+							pSQM: unref(propertyStore).averagePSQM.formatted,
+							price: unref(propertyStore).averagePrice.formatted
+						} }, null, 8, ["data"]), createVNode(ValuationCalculator_default, null, {
+							actionbar: withCtx(() => [createVNode(ButtonGroup_default, null, {
+								default: withCtx(() => [createVNode(BaseButton_default, {
+									severity: "info",
+									onClick: _cache[2] || (_cache[2] = ($event) => unref(copySummaryStatistics)())
+								}, {
+									default: withCtx(() => [..._cache[9] || (_cache[9] = [createTextVNode("Copy Statistics", -1)])]),
+									_: 1
+								}), createVNode(BaseButton_default, {
+									severity: "info",
+									onClick: _cache[3] || (_cache[3] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(propertyStore).averagePSQM.formatted }, unref(propertyStore).savedProperties))
+								}, {
+									default: withCtx(() => [..._cache[10] || (_cache[10] = [createTextVNode("Clipboard All", -1)])]),
+									_: 1
+								})]),
+								_: 1
+							})]),
+							_: 1
+						})]),
+						_: 1
+					})) : createCommentVNode("", true),
+					unref(settingsStore).settings.valType == "New Construction" && unref(settingsStore).settings.additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [createTextVNode(" Still under construction... 🥁 ")], 64)) : createCommentVNode("", true)
+				], 64);
+			};
 		}
 	};
-	var _hoisted_24 = ["onUpdate:modelValue"];
-	var _hoisted_25 = { class: "myk--reference-info-command-box-container" };
-	var _hoisted_26 = { class: "myk--reference-info-command-box" };
-	var _hoisted_27 = ["onClick"];
-	var _hoisted_28 = ["onClick"];
-	var _hoisted_29 = ["onClick"];
-	var _hoisted_30 = { class: "myk--reference-info-command-box" };
-	var _hoisted_31 = ["onClick"];
-	var _hoisted_32 = {
+	var _hoisted_1$1 = { class: "vstb--input-line" };
+	var Settings_default = {
+		__name: "Settings",
+		setup(__props) {
+			const settingsStore = useSettingsStore();
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$1, [_cache[1] || (_cache[1] = createBaseVNode("span", null, "Toggle Extra Valuation Tools", -1)), withDirectives(createBaseVNode("input", {
+					type: "checkbox",
+					"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(settingsStore).settings.additionalTools = $event)
+				}, null, 512), [[vModelCheckbox, unref(settingsStore).settings.additionalTools]])]);
+			};
+		}
+	};
+	var Toast_default = {
+		__name: "Toast",
+		setup(__props) {
+			const { toast: toast$1 } = useToast();
+			return (_ctx, _cache) => {
+				return openBlock(), createBlock(Transition, { name: "toast-fade" }, {
+					default: withCtx(() => [unref(toast$1).visible ? (openBlock(), createElementBlock("div", {
+						key: 0,
+						class: normalizeClass(["toast-notification", "toast-" + unref(toast$1).type])
+					}, toDisplayString(unref(toast$1).message), 3)) : createCommentVNode("", true)]),
+					_: 1
+				});
+			};
+		}
+	};
+	var _hoisted_1 = { id: "vtsb--app" };
+	var _hoisted_2 = {
 		key: 0,
-		class: "myk--reference-info-command-box"
+		id: "vstb--app-container"
 	};
-	var _hoisted_33 = { class: "myk--container-basics" };
-	var _hoisted_34 = { class: "myk--container-basics_negative" };
-	var _hoisted_35 = { class: "myk--reference-info-table-line myk--ruler-bottom" };
-	var _hoisted_36 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_37 = { class: "myk--reference-info-table-line" };
-	var _hoisted_38 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_39 = { class: "myk--container-basics_negative" };
-	var _hoisted_40 = { class: "myk--reference-info-table-line" };
-	var _hoisted_41 = { class: "myk--reference-info-table-line" };
-	var _hoisted_42 = { class: "myk--reference-info-table-line" };
-	var _hoisted_43 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_44 = { class: "myk--reference-info-table-line" };
-	var _hoisted_45 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_46 = { class: "myk--reference-info-table-line" };
-	var _hoisted_47 = { style: { "color": "rgb(0, 24, 55)" } };
-	var _hoisted_48 = {
-		key: 0,
-		class: "myk--reference-info-command-box"
-	};
-	var _hoisted_49 = {
-		key: 2,
-		class: "myk--tab-container"
-	};
-	var _hoisted_50 = { class: "myk--input-line" };
+	var _hoisted_3 = { class: "vstb--tab-container" };
 	var App_default = {
 		__name: "App",
 		setup(__props) {
-			const { currentListing: currentListing$1, currentWindow: currentWindow$1, reloadCurrentListingData } = scrapImmowebData();
-			const { selectedProperties, addProperty, removeProperty, removeAllProperty } = useProperties();
-			const { toast: toast$1, showToast: showToast$1 } = useToast();
-			const { copyObjectToClipboard, copySummaryStatistics } = useClipboard();
-			const { valuationMetrics: valuationMetrics$1, dvmPrice: dvmPrice$1, dvmConfidenceIntervalARG: dvmConfidenceIntervalARG$1, dvmConfidenceIntervalING: dvmConfidenceIntervalING$1 } = useValuation();
-			const settings = useLocalStorage("settingsMyk", {
-				additionalTools: false,
-				valType: "Normal"
-			});
+			const { toast: toast$1 } = useToast();
+			const listingStore = useListingStore();
+			const settingsStore = useSettingsStore();
+			const { settings } = storeToRefs(settingsStore);
 			const displayApp = ref(true);
 			const activeTab = ref("Main");
-			const expandedPropertyId = ref(null);
-			function toggleReferenceDetails(referenceUID) {
-				if (expandedPropertyId.value === referenceUID) expandedPropertyId.value = null;
-				else expandedPropertyId.value = referenceUID;
-			}
-			function handleEditMode(referenceUID) {
-				selectedProperties.value.find((i) => i.uid == referenceUID).isEdited = !selectedProperties.value.find((i) => i.uid == referenceUID).isEdited;
-			}
+			watch(settings, (newSettings) => {
+				settingsStore.save();
+			}, { deep: true });
+			onMounted(() => {
+				listingStore.reloadCurrentListingData();
+			});
 			return (_ctx, _cache) => {
-				return openBlock(), createElementBlock("div", _hoisted_1, [createBaseVNode("div", _hoisted_2, [createBaseVNode("div", _hoisted_3, [createBaseVNode("div", {
-					onClick: _cache[0] || (_cache[0] = ($event) => displayApp.value = !displayApp.value),
-					togglediv: "myk--app-container"
-				}, "O/I")])]), displayApp.value ? (openBlock(), createElementBlock("div", _hoisted_4, [
-					createVNode(Transition, { name: "toast-fade" }, {
-						default: withCtx(() => [unref(toast$1).visible ? (openBlock(), createElementBlock("div", {
-							key: 0,
-							class: normalizeClass(["toast-notification", "toast-" + unref(toast$1).type])
-						}, toDisplayString(unref(toast$1).message), 3)) : createCommentVNode("", true)]),
-						_: 1
-					}),
-					_cache[28] || (_cache[28] = createBaseVNode("img", {
-						id: "myk--bg-re-logo",
+				return openBlock(), createElementBlock("div", _hoisted_1, [createVNode(Header_default, {
+					modelValue: displayApp.value,
+					"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => displayApp.value = $event)
+				}, null, 8, ["modelValue"]), displayApp.value ? (openBlock(), createElementBlock("div", _hoisted_2, [
+					createVNode(Toast_default),
+					_cache[2] || (_cache[2] = createBaseVNode("img", {
+						id: "vstb--bg-re-logo",
 						src: "https://cdn.prod.website-files.com/60781e1041c84501a6e9c2d8/60781e1041c8458cd8e9c348_rockestate-icon-white.svg"
 					}, null, -1)),
-					createBaseVNode("div", _hoisted_5, [
-						createBaseVNode("span", {
-							class: normalizeClass(["myk--selector-buttons", { active: activeTab.value === "Main" }]),
-							onClick: _cache[1] || (_cache[1] = ($event) => activeTab.value = "Main")
-						}, "Main", 2),
-						createBaseVNode("span", {
-							class: normalizeClass(["myk--selector-buttons", { active: activeTab.value === "References" }]),
-							onClick: _cache[2] || (_cache[2] = ($event) => activeTab.value = "References")
-						}, "References", 2),
-						createBaseVNode("span", {
-							class: normalizeClass(["myk--selector-buttons", { active: activeTab.value === "Settings" }]),
-							onClick: _cache[3] || (_cache[3] = ($event) => activeTab.value = "Settings")
-						}, "Settings", 2)
-					]),
-					activeTab.value === "Main" ? (openBlock(), createElementBlock("div", _hoisted_6, [unref(currentWindow$1) != "vs.rock.estate" ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-						createBaseVNode("div", _hoisted_7, [unref(currentWindow$1).includes("immoweb") ? (openBlock(), createElementBlock("span", _hoisted_8, "Listing Information:")) : createCommentVNode("", true), createBaseVNode("div", _hoisted_9, [createBaseVNode("div", {
-							class: "myk--reference-info-command-button severity-info myk--button",
-							onClick: _cache[4] || (_cache[4] = ($event) => unref(reloadCurrentListingData)())
-						}, "Reload")])]),
-						createBaseVNode("div", _hoisted_10, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(currentListing$1), (value, key, findex) => {
-							return openBlock(), createElementBlock(Fragment, { key }, [![
-								"uid",
-								"link",
-								"isEdited"
-							].includes(key) ? (openBlock(), createElementBlock("div", {
-								key: 0,
-								class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(unref(currentListing$1)).length - 1 }])
-							}, [
-								createBaseVNode("span", null, toDisplayString(unref(capitalize)(key)) + ":", 1),
-								!["note"].includes(key) ? (openBlock(), createElementBlock("span", _hoisted_11, toDisplayString(value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [key] })), 1)) : createCommentVNode("", true),
-								["note"].includes(key) ? withDirectives((openBlock(), createElementBlock("input", {
-									key: 1,
-									type: "text",
-									placeholder: "Additonal Notes",
-									"onUpdate:modelValue": _cache[5] || (_cache[5] = ($event) => unref(currentListing$1).note = $event)
-								}, null, 512)), [[vModelText, unref(currentListing$1).note]]) : createCommentVNode("", true)
-							], 2)) : createCommentVNode("", true)], 64);
-						}), 128))]),
-						createBaseVNode("div", _hoisted_12, [createBaseVNode("div", {
-							class: "myk--reference-info-command-button myk--button icon-start severity-info",
-							onClick: _cache[6] || (_cache[6] = ($event) => unref(copyObjectToClipboard)([unref(currentListing$1)]))
-						}, "Clipboard"), createBaseVNode("div", {
-							class: "myk--reference-info-command-button myk--button severity-info",
-							onClick: _cache[7] || (_cache[7] = ($event) => unref(addProperty)(unref(currentListing$1)))
-						}, "Add")])
-					], 64)) : createCommentVNode("", true)])) : createCommentVNode("", true),
-					activeTab.value === "References" ? (openBlock(), createElementBlock("div", _hoisted_13, [
-						unref(settings).additionalTools ? (openBlock(), createElementBlock("div", _hoisted_14, [_cache[17] || (_cache[17] = createBaseVNode("span", { class: "myk--section-header" }, "Valuation Type", -1)), createBaseVNode("div", _hoisted_15, [createBaseVNode("div", {
-							class: normalizeClass(["myk--reference-info-command-button myk--button icon-start severity-info", { active: unref(settings).valType === "Normal" }]),
-							onClick: _cache[8] || (_cache[8] = ($event) => unref(settings).valType = "Normal")
-						}, "Normal", 2), createBaseVNode("div", {
-							class: normalizeClass(["myk--reference-info-command-button myk--button severity-info", { active: unref(settings).valType === "New Construction" }]),
-							onClick: _cache[9] || (_cache[9] = ($event) => unref(settings).valType = "New Construction")
-						}, "New Construction", 2)])])) : createCommentVNode("", true),
-						unref(settings).valType == "Normal" || !unref(settings).additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 1 }, [createBaseVNode("div", _hoisted_16, [
-							_cache[18] || (_cache[18] = createBaseVNode("span", { class: "myk--section-header" }, "Reference Table", -1)),
-							createBaseVNode("div", _hoisted_17, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(selectedProperties), (reference, index) => {
-								return openBlock(), createElementBlock("div", {
-									key: reference.uid,
-									class: "myk--dropdown-reference-container"
-								}, [createBaseVNode("div", {
-									class: normalizeClass(["myk--reference-bar myk--button", { "active-reference": expandedPropertyId.value === reference.uid }]),
-									onClick: ($event) => toggleReferenceDetails(reference.uid)
-								}, [
-									createBaseVNode("div", _hoisted_19, toDisplayString(index + 1), 1),
-									createBaseVNode("span", null, toDisplayString(reference.advertisedPrice), 1),
-									createBaseVNode("div", _hoisted_20, toDisplayString(expandedPropertyId.value === reference.uid ? "▲" : "▼"), 1)
-								], 10, _hoisted_18), expandedPropertyId.value === reference.uid ? (openBlock(), createElementBlock("div", _hoisted_21, [createBaseVNode("div", _hoisted_22, [(openBlock(true), createElementBlock(Fragment, null, renderList(reference, (value, key, findex) => {
-									return openBlock(), createElementBlock(Fragment, { key }, [![
-										"uid",
-										"isEdited",
-										"link"
-									].includes(key) ? (openBlock(), createElementBlock("div", {
-										key: 0,
-										class: normalizeClass(["myk--reference-info-table-line", { "myk--ruler-bottom": findex < Object.keys(reference).length - 1 }])
-									}, [
-										createBaseVNode("span", null, toDisplayString(unref(capitalize)(key)) + ":", 1),
-										!reference.isEdited ? (openBlock(), createElementBlock("span", _hoisted_23, toDisplayString(value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [key] })), 1)) : createCommentVNode("", true),
-										reference.isEdited ? withDirectives((openBlock(), createElementBlock("input", {
-											key: 1,
-											type: "text",
-											"onUpdate:modelValue": ($event) => reference[key] = $event
-										}, null, 8, _hoisted_24)), [[vModelText, reference[key]]]) : createCommentVNode("", true)
-									], 2)) : createCommentVNode("", true)], 64);
-								}), 128))]), createBaseVNode("div", _hoisted_25, [createBaseVNode("div", _hoisted_26, [
-									createBaseVNode("div", {
-										class: "myk--reference-info-command-button icon-start severity-danger myk--button",
-										onClick: ($event) => unref(removeProperty)(reference.uid)
-									}, "Delete", 8, _hoisted_27),
-									createBaseVNode("div", {
-										class: "myk--reference-info-command-button myk--button",
-										onClick: ($event) => handleEditMode(reference.uid)
-									}, "Edit", 8, _hoisted_28),
-									createBaseVNode("div", {
-										class: "myk--reference-info-command-button icon-last severity-info myk--button",
-										onClick: ($event) => unref(copyObjectToClipboard)([reference])
-									}, "Clipboard", 8, _hoisted_29)
-								]), createBaseVNode("div", _hoisted_30, [createBaseVNode("div", {
-									class: "myk--reference-info-command-button severity-info myk--button",
-									onClick: ($event) => unref(openLink)(reference.link)
-								}, "Link", 8, _hoisted_31)])])])) : createCommentVNode("", true)]);
-							}), 128))]),
-							unref(selectedProperties) != 0 ? (openBlock(), createElementBlock("div", _hoisted_32, [createBaseVNode("div", {
-								class: "myk--reference-info-command-button myk--button icon-start severity-danger",
-								onClick: _cache[10] || (_cache[10] = ($event) => unref(removeAllProperty)())
-							}, "Delete All"), createBaseVNode("div", {
-								class: "myk--reference-info-command-button myk--button severity-info",
-								onClick: _cache[11] || (_cache[11] = ($event) => unref(copyObjectToClipboard)(unref(selectedProperties)))
-							}, "Clipboard")])) : createCommentVNode("", true)
-						]), createBaseVNode("div", _hoisted_33, [
-							_cache[26] || (_cache[26] = createBaseVNode("span", { class: "myk--section-header" }, "Summary Stastics", -1)),
-							createBaseVNode("div", _hoisted_34, [createBaseVNode("div", _hoisted_35, [_cache[19] || (_cache[19] = createBaseVNode("span", null, "PSQM: ", -1)), createBaseVNode("span", _hoisted_36, toDisplayString(unref(average)(unref(selectedProperties), "PSQM")) + " " + toDisplayString(unref(returnUnitMetric)({ key: "PSQM" })), 1)]), createBaseVNode("div", _hoisted_37, [_cache[20] || (_cache[20] = createBaseVNode("span", null, "Price: ", -1)), createBaseVNode("span", _hoisted_38, toDisplayString(unref(average)(unref(selectedProperties), "advertisedPrice")) + " " + toDisplayString(unref(returnUnitMetric)({ key: "advertisedPrice" })), 1)])]),
-							createBaseVNode("div", _hoisted_39, [
-								createBaseVNode("div", _hoisted_40, [_cache[21] || (_cache[21] = createBaseVNode("span", null, "Living area: ", -1)), withDirectives(createBaseVNode("input", {
-									type: "text",
-									"onUpdate:modelValue": _cache[12] || (_cache[12] = ($event) => unref(valuationMetrics$1).dvmLA = $event)
-								}, null, 512), [[vModelText, unref(valuationMetrics$1).dvmLA]])]),
-								createBaseVNode("div", _hoisted_41, [_cache[22] || (_cache[22] = createBaseVNode("span", null, "PSQM Correction: ", -1)), withDirectives(createBaseVNode("input", {
-									type: "text",
-									"onUpdate:modelValue": _cache[13] || (_cache[13] = ($event) => unref(valuationMetrics$1).dvmPSQM = $event)
-								}, null, 512), [[vModelText, unref(valuationMetrics$1).dvmPSQM]])]),
-								createBaseVNode("div", _hoisted_42, [_cache[23] || (_cache[23] = createBaseVNode("span", null, "Valuation: ", -1)), createBaseVNode("span", _hoisted_43, toDisplayString(unref(dvmPrice$1)) + " " + toDisplayString(unref(returnUnitMetric)({ key: "advertisedPrice" })), 1)]),
-								createBaseVNode("div", _hoisted_44, [_cache[24] || (_cache[24] = createBaseVNode("span", null, "Confidence Interval ARG: ", -1)), createBaseVNode("span", _hoisted_45, "[ " + toDisplayString(unref(dvmConfidenceIntervalARG$1).lower) + " ; " + toDisplayString(unref(dvmConfidenceIntervalARG$1).upper) + " ]", 1)]),
-								createBaseVNode("div", _hoisted_46, [_cache[25] || (_cache[25] = createBaseVNode("span", null, "Confidence Interval ING: ", -1)), createBaseVNode("span", _hoisted_47, "[ " + toDisplayString(unref(dvmConfidenceIntervalING$1).lower) + " ; " + toDisplayString(unref(dvmConfidenceIntervalING$1).upper) + " ]", 1)])
-							]),
-							unref(average)(unref(selectedProperties), "PSQM") != 0 ? (openBlock(), createElementBlock("div", _hoisted_48, [createBaseVNode("div", {
-								class: "myk--reference-info-command-button myk--button icon-start severity-info",
-								onClick: _cache[14] || (_cache[14] = ($event) => unref(copySummaryStatistics)())
-							}, "Copy Statistics"), createBaseVNode("div", {
-								class: "myk--reference-info-command-button myk--button severity-info",
-								onClick: _cache[15] || (_cache[15] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(average)(unref(selectedProperties), "PSQM") + unref(returnUnitMetric)({ key: "PSQM" }) }, unref(selectedProperties)))
-							}, "Clipboard All")])) : createCommentVNode("", true)
-						])], 64)) : createCommentVNode("", true),
-						unref(settings).valType == "New Construction" && unref(settings).additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 2 }, [createTextVNode(" Still under construction... 🥁 ")], 64)) : createCommentVNode("", true)
-					])) : createCommentVNode("", true),
-					activeTab.value === "Settings" ? (openBlock(), createElementBlock("div", _hoisted_49, [createBaseVNode("div", _hoisted_50, [_cache[27] || (_cache[27] = createBaseVNode("span", null, "Toggle Extra Valuation Tools", -1)), withDirectives(createBaseVNode("input", {
-						type: "checkbox",
-						"onUpdate:modelValue": _cache[16] || (_cache[16] = ($event) => unref(settings).additionalTools = $event)
-					}, null, 512), [[vModelCheckbox, unref(settings).additionalTools]])])])) : createCommentVNode("", true)
+					createVNode(TabBar_default, {
+						modelValue: activeTab.value,
+						"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => activeTab.value = $event)
+					}, null, 8, ["modelValue"]),
+					createBaseVNode("div", _hoisted_3, [
+						activeTab.value === "Main" ? (openBlock(), createBlock(Dashboard_default, { key: 0 })) : createCommentVNode("", true),
+						activeTab.value === "References" ? (openBlock(), createBlock(Comparables_default, { key: 1 })) : createCommentVNode("", true),
+						activeTab.value === "Settings" ? (openBlock(), createBlock(Settings_default, { key: 2 })) : createCommentVNode("", true)
+					])
 				])) : createCommentVNode("", true)]);
 			};
 		}
 	};
+	var shadowStyle_default = "/* This CSS file is impacting the Shadow DOM. Hence, the monolothic structure... */\n\n:host {\n  --text-color: #009CFF;\n  --secondary-color:#798DA6;\n  --active-bg: rgb(204, 235.2, 255);\n  --active-hover-bg: rgb(191, 225, 247);\n\n}\n\ninput {\n  text-align: right;\n  font-size: 15px;\n}\n\n#myk--vue-app {\n  position: sticky;\n  top: 0;\n  z-index: 10000;\n}\n\n/* -- Component specific (prep for Chrome Extension Migration) -- */\n\n/* App.vue */\n\n#vtsb--app {\n  top: 0;\n  left: 0;\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Satoshi', sans-serif;\n}\n\n#vstb--app-container {\n  position: absolute;\n  right: 0;\n  width: 450px;\n  height: 700px;\n  background: rgb(247, 249, 251);\n  border-bottom: 1px solid #d6e2e9;\n  overflow: hidden;\n  box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;\n}\n\n#vstb--bg-re-logo{\n  position: absolute;\n  bottom: 30px;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 55px;\n  filter: invert(0.3) grayscale(1);\n  z-index: 1;\n}\n\n.vstb--tab-container {\n  padding: 15px;\n  display:flex;\n  position: relative;\n  height: calc(100% - 82px);\n  flex-direction: column;\n  overflow-y: scroll;\n  border-radius: 12px;\n  z-index: 5000;\n\n}\n\n/* Dashboard.vue (N/A) */\n\n/* Comparables.vue (N/A) */\n\n/* Settings.vue */\n\n.vstb--input-line {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Header.vue */\n\n#vstb--app-header {\n  width: 100%;\n  height: 25px;\n  background-color: #fff;\n  border-bottom: 1px solid #d6e2e9;\n  color: var(--text-color);\n}\n\n/* TabBar.vue */\n\n#vstb--app-selector-menu{\n    display: flex;\n    width: 100%;\n    justify-content: space-between;\n\n}\n\n#vstb--app-selector-menu>.vstb--selector-buttons{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    width: calc(100% / 3);\n    height: 50px;\n    border-bottom: var(--text-color) 2px solid;\n    cursor: pointer;\n    font-weight: 600;\n}\n\n#vstb--app-selector-menu>.vstb--selector-buttons.active{\n  background-color: var(--active-bg); /* Light green */\n  color: var(--text-color);\n}\n\n.vstb--selector-buttons:hover{\n  background: #f7f9fb;\n}\n\n/* ValuationCalculator.vue (N/A)*/\n\n/* BaseButton.vue */\n\n.vstb--button{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 32px;\n  padding: 0 10px;\n  margin: 5px 0;\n  font-size: 14px;\n  background: #fff;\n  -webkit-user-select: none;\n  cursor:pointer;\n  user-select: none;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  color: rgb(99, 105, 125);\n}\n\n.vstb--button:hover{\n    background: #f7f9fb;\n}\n\n.vstb--button.severity-info:hover, .vstb--button.severity-info.active {\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n}\n\n.vstb--button.severity-danger:hover, .vstb--button.severity-danger.active{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n}\n\n/* ButtonGroup.vue */\n\n.vstb--button-group {\n  display: flex;\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  width: max-content;\n  overflow: hidden;\n}\n\n.vstb--button-group button {\n  border-radius: 0;\n  border: none;\n  margin: 0;\n  height: 30px;\n}\n\n.vstb--button-group button:not(:first-child) {\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n/* InformationTable.vue */\n\n.vstb--information-table {\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 0 8px;\n  background: #fff;\n}\n\n.vstb--information-table .vstb--information-table-table-item:not(:last-child) {\n  border-bottom: 1px solid rgb(214, 226, 233);\n}\n\n/* TableItem.vue */\n\n.vstb--information-table-table-item{\n  padding: 3px 0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.vstb--information-table.small .vstb--information-table-table-item{\n  padding: calc(3px / 3) 0;\n}\n\n/* BasicContainer.vue */\n\n.vstb--basic-container {\n  margin: 5px 0;\n}\n\n.vstb--basic-container-header {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: end;\n  font-size: 16px;\n  font-weight: 600;\n  color: rgb(0, 24, 55);\n}\n\n.vstb--basic-container-main {\n  display: flex;\n  flex-direction: column;\n}\n\n/* ReferenceTable.vue */\n\n.vstb--reference-table{\n  display: flex;\n  flex-direction: column;\n  margin: 5px 0;\n}\n\n/* ToggleCard.vue */\n\n.vtsb--toggle-card {\n  width: 100%;\n}\n\n.vtsb--toggle-card:not(:last-child) {\n  margin-bottom: 10px;\n}\n\n.vtsb--toggle-card-bar {\n  display: flex;\n  max-width: 100%;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  -webkit-user-select: none;\n  cursor: pointer;\n  user-select: none;\n}\n\n.vtsb--toggle-card-bar:hover {\n  background: #f7f9fb;\n}\n\n.vtsb--toggle-card-bar.active {\n  border-bottom-left-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n\n.vstb--toggle-card-icon {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 30px;\n  height: 30px;\n  font-size: 12px;\n  font-weight: 600;\n  color: var(--secondary-color);\n}\n\n.vtsb--toggle-card-bar .icon-start {\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.vtsb--toggle-card-bar .icon-end {\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.vtsb--toggle-card-collapsed{\n  display: none;\n  flex-direction: column;\n  border-bottom-left-radius: 6px;\n  border-bottom-right-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  border-top: 0;\n  padding: 10px;\n  font-size: 14px;\n  max-width: 100%;\n\n}\n\n.vtsb--toggle-card-collapsed.active{\n  display: flex;\n}\n\n.vtsb--toggle-card-action-bar{\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n}\n\n/* Toast.vue */\n\n.toast-notification{\n  position: absolute;\n  bottom: 15px;\n  left: 50%;\n  width: max-content;\n  transform: translateX(-50%);\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border: 1px solid rgb(127.5, 205.5, 255);\n  padding: 5px 12px;\n  border-radius: 50px;\n  z-index: 10000;\n}\n\n.toast-info{\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border-color: rgb(14, 165, 233);\n}\n\n.toast-danger{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n  border-color: rgb(239, 68, 68);\n}\n";
 	function mountApp() {
-		const appContainer = document.createElement("div");
-		appContainer.id = "myk--vue-app";
-		appContainer.style.position = "sticky";
-		appContainer.style.top = "0";
-		appContainer.style.zIndex = "10000";
-		document.body.prepend(appContainer);
-		createApp(App_default).mount("#myk--vue-app");
+		const host = document.createElement("div");
+		host.id = "vstoolbox-host";
+		document.body.prepend(host);
+		const shadow = host.attachShadow({ mode: "open" });
+		const styleTag = document.createElement("style");
+		styleTag.textContent = shadowStyle_default;
+		shadow.appendChild(styleTag);
+		const appRoot = document.createElement("div");
+		appRoot.id = "myk--vue-app";
+		shadow.appendChild(appRoot);
+		const app = createApp(App_default);
+		const pinia = createPinia();
+		app.use(pinia);
+		app.mount(appRoot);
 	}
 	var hostname = window.location.host;
 	if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mountApp);
