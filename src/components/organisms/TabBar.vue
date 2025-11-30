@@ -1,9 +1,9 @@
 <template>
-    <div id="myk--app-selector-menu">
+    <div id="vstb--app-selector-menu">
         <span 
             v-for="tab in tabs" 
             @click="switchTab(tab)" 
-            :class="['myk--selector-buttons', { active: activeTab === tab}]"
+            :class="['vstb--selector-buttons', { active: activeTab === tab}]"
         >
             {{ tab }}
         </span>

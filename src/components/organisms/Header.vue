@@ -1,6 +1,6 @@
 <template>
-    <div id="myk--app-header">
-        <div id="myk--header-controls">
+    <div id="vstb--app-header">
+        <div id="vstb--header-controls">
             <div @click="displayApp = !displayApp">O/I</div>
         </div>
     </div>

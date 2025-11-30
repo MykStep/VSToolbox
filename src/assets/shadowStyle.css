@@ -1,4 +1,4 @@
-/* Text Color: #009CFF */
+/* This CSS file is impacting the Shadow DOM. Hence, the monolothic structure... */
 
 :host {
   --text-color: #009CFF;
@@ -22,7 +22,10 @@ input {
   z-index: 10000;
 }
 
-#myk--app {
+/* -- Component specific (prep for Chrome Extension Migration) -- */
+
+/* App.vue */
+#vtsb--app {
   top: 0;
   left: 0;
   margin: 0;
@@ -31,37 +34,18 @@ input {
   font-family: 'Satoshi', sans-serif;
 }
 
-.myk--container-basics{
-  margin: 5px 0;
+#vstb--app-container {
+  position: absolute;
+  right: 0;
+  width: 450px;
+  height: 700px;
+  background: rgb(247, 249, 251);
+  border-bottom: 1px solid #d6e2e9;
+  overflow: hidden;
+  box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;
 }
 
-.myk--container-basics_negative {
-  background: #fff;
-  border-radius: 6px;
-  margin: 5px;
-  border: 1px solid rgb(214, 226, 233);
-  padding: 10px;
-}
-
-#myk--app-header {
-    width: 100%;
-    height: 25px;
-    background-color: #fff;
-    border-bottom: 1px solid #d6e2e9;
-    color: var(--text-color);
-}
-
-#myk--app-container {
-    position: absolute;
-    right: 0;
-    width: 450px;
-    height: 700px;
-    background: rgb(247, 249, 251);
-    border-bottom: 1px solid #d6e2e9;
-    box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;
-}
-
-#myk--bg-re-logo{
+#vstb--bg-re-logo{
   position: absolute;
   bottom: 30px;
   left: 50%;
@@ -71,13 +55,47 @@ input {
   z-index: 1;
 }
 
-#myk--app-selector-menu{
+.vstb--tab-container {
+  padding: 15px;
+  display:flex;
+  position: relative;
+  height: calc(100% - 82px);
+  flex-direction: column;
+  overflow-y: scroll;
+  border-radius: 12px;
+  z-index: 5000;
+
+}
+
+/* Dashboard.vue (N/A) */
+/* Comparables.vue (N/A) */
+/* Settings.vue */
+
+.vstb--input-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Header.vue */
+
+#vstb--app-header {
+  width: 100%;
+  height: 25px;
+  background-color: #fff;
+  border-bottom: 1px solid #d6e2e9;
+  color: var(--text-color);
+}
+
+/* TabBar.vue */
+
+#vstb--app-selector-menu{
     display: flex;
     width: 100%;
     justify-content: space-between;
 
 }
-#myk--app-selector-menu>.myk--selector-buttons{
+#vstb--app-selector-menu>.vstb--selector-buttons{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -88,187 +106,16 @@ input {
     font-weight: 600;
 }
 
-#myk--app-selector-menu>.myk--selector-buttons.active{
+#vstb--app-selector-menu>.vstb--selector-buttons.active{
   background-color: var(--active-bg); /* Light green */
   color: var(--text-color);
 }
 
-.myk--selector-buttons:hover{
-    background: #f7f9fb;
-}
-
-.myk--tab-container {
-  padding: 15px;
-  display:flex;
-  position: relative;
-  height: calc(100% - 75px);
-  flex-direction: column;
-  overflow-y: scroll;
-  border-radius: 12px;
-  z-index: 5000;
-
-}
-
-.myk--section-header{
-  font-size: 16px;
-  color: rgb(0, 24, 55);
-  margin: 5px 0;
-  font-weight: 600;
-}
-
-.myk--dropdown-reference-container{
-  margin: 10px 0;
-}
-
-.myk--reference-bar{
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 6px;
-  background: #fff;
-  border: 1px solid rgb(214, 226, 233);
-}
-
-.myk--reference-bar.active-reference{
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-
-.myk--within-bar-icon{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-  font-size: 12px;
-  color: var(--secondary-color);
-}
-
-.myk--within-bar-icon.icon-start{
-  border-right: 1px solid rgb(214, 226, 233);
-}
-
-.myk--within-bar-icon.icon-last{
-  border-left: 1px solid rgb(214, 226, 233);
-}
-
-.myk--reference-info{
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  background: #fff;
-  border: 1px solid rgb(214, 226, 233);
-  border-top: 0;
-  padding: 10px;
-  font-size: 14px;
-}
-
-
-.myk--reference-info-command-box {
-  display: flex;
-  margin: 5px 0;
-  border-radius: 6px;
-  border: 1px solid rgb(214, 226, 233);
-  width: max-content;
-  overflow: hidden;
-  width: max-content;
-  overflow: hidden;
-}
-.myk--reference-info-command-button{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 30px;
-  padding: 0 10px;
-  font-size: 14px;
-  background: #fff;
-}
-
-.myk--reference-info-command-button.icon-start{
-  border-right: 1px solid rgb(214, 226, 233);
-}
-
-.myk--reference-info-command-button.icon-last{
-  border-left: 1px solid rgb(214, 226, 233);
-}
-
-.myk--button{
-  -webkit-user-select: none;
-  cursor:pointer;
-  user-select: none;
-}
-
-.myk--button:hover{
+.vstb--selector-buttons:hover{
   background: #f7f9fb;
 }
 
-.myk--button.severity-info:hover, .myk--button.severity-info.active {
-  color: rgb(14, 165, 233);
-  background: rgb(246, 429, 255);
-}
-
-.myk--button.severity-danger:hover, .myk--button.severity-danger.active{
-  color: rgb(239, 68, 68);
-  background: rgb(254,242,242);
-}
-
-.myk--ruler-bottom{
-  border-bottom: 1px solid rgb(214, 226, 233);
-}
-
-.myk--reference-info-table-line{
-  margin: 3px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.myk--reference-info-table{
-  margin: 5px 0;
-  border-radius: 6px;
-  border: 1px solid rgb(214, 226, 233);
-  padding: 0 8px;
-}
-
-.toast-notification{
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  width: max-content;
-  transform: translateX(-50%);
-  color: rgb(14, 165, 233);
-  background: rgb(246, 429, 255);
-  border: 1px solid rgb(127.5, 205.5, 255);
-  padding: 5px 12px;
-  border-radius: 50px;
-  z-index: 10000;
-}
-
-.toast-info{
-  color: rgb(14, 165, 233);
-  background: rgb(246, 429, 255);
-  border-color: rgb(14, 165, 233);
-}
-
-.toast-danger{
-  color: rgb(239, 68, 68);
-  background: rgb(254,242,242);
-  border-color: rgb(239, 68, 68);
-}
-
-.myk--reference-info-command-box-container {
-  display:flex;
-  justify-content: space-between;
-}
-
-.myk--input-line{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* -- Component specific (prep for Chrome Extension Migration) -- */
-
+/* ValuationCalculator.vue (N/A)*/
 /* BaseButton.vue */
 
 .vstb--button{
@@ -380,6 +227,8 @@ input {
   margin: 5px 0;
 }
 
+/* ToggleCard.vue */
+
 .vtsb--toggle-card {
   width: 100%;
 }
@@ -453,4 +302,31 @@ input {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+/* Toast.vue */
+.toast-notification{
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  width: max-content;
+  transform: translateX(-50%);
+  color: rgb(14, 165, 233);
+  background: rgb(246, 429, 255);
+  border: 1px solid rgb(127.5, 205.5, 255);
+  padding: 5px 12px;
+  border-radius: 50px;
+  z-index: 10000;
+}
+
+.toast-info{
+  color: rgb(14, 165, 233);
+  background: rgb(246, 429, 255);
+  border-color: rgb(14, 165, 233);
+}
+
+.toast-danger{
+  color: rgb(239, 68, 68);
+  background: rgb(254,242,242);
+  border-color: rgb(239, 68, 68);
 }

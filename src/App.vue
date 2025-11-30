@@ -1,15 +1,15 @@
 <template>
-  <div id="myk--app">
+  <div id="vtsb--app">
     <Header v-model="displayApp"></Header>
 
-    <div v-if="displayApp" id="myk--app-container">
+    <div v-if="displayApp" id="vstb--app-container">
       <Toast></Toast>
 
-      <img id="myk--bg-re-logo" src="https://cdn.prod.website-files.com/60781e1041c84501a6e9c2d8/60781e1041c8458cd8e9c348_rockestate-icon-white.svg"/>
+      <img id="vstb--bg-re-logo" src="https://cdn.prod.website-files.com/60781e1041c84501a6e9c2d8/60781e1041c8458cd8e9c348_rockestate-icon-white.svg"/>
 
       <TabBar v-model="activeTab"></TabBar>
 
-      <div class="myk--tab-container">
+      <div class="vstb--tab-container">
         <Dashboard    v-if="activeTab === 'Main'"       ></Dashboard>
         <Comparables  v-if="activeTab === 'References'" ></Comparables>
         <Settings     v-if="activeTab === 'Settings'"   ></Settings>

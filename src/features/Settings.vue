@@ -1,5 +1,5 @@
 <template>
-    <div class="myk--input-line">
+    <div class="vstb--input-line">
         <span>Toggle Extra Valuation Tools</span>
         <input type="checkbox" v-model="settingsStore.settings.additionalTools" />
     </div>
