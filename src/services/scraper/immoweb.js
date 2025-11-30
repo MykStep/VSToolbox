@@ -44,6 +44,7 @@ export class ImmowebScraper extends BaseScraper {
                 EPC: scraped.EPC,
                 EPCLabel: scraped.EPCLabel,
                 CY: scraped.CY,
+                note: metadata.note
             };
 
             return { success: true, data }

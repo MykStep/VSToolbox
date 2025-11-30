@@ -266,3 +266,82 @@ input {
   justify-content: space-between;
   align-items: center;
 }
+
+/* -- Component specific (prep for Chrome Extension Migration) -- */
+
+/* BaseButton.vue */
+
+.vstb--button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  margin: 5px 0;
+  font-size: 14px;
+  background: #fff;
+  -webkit-user-select: none;
+  cursor:pointer;
+  user-select: none;
+  border-radius: 6px;
+  border: 1px solid rgb(214, 226, 233);
+  color: rgb(99, 105, 125);
+}
+
+.vstb--button:hover{
+    background: #f7f9fb;
+}
+
+.vstb--button.severity-info:hover, .vstb--button.severity-info.active {
+  color: rgb(14, 165, 233);
+  background: rgb(246, 429, 255);
+}
+
+.vstb--button.severity-danger:hover, .vstb--button.severity-danger.active{
+  color: rgb(239, 68, 68);
+  background: rgb(254,242,242);
+}
+
+/* ButtonGroup.vue */
+
+.vstb--button-group {
+  display: flex;
+  margin: 5px 0;
+  border-radius: 6px;
+  border: 1px solid rgb(214, 226, 233);
+  width: max-content;
+  overflow: hidden;
+}
+
+.vstb--button-group button {
+  border-radius: 0;
+  border: none;
+  margin: 0;
+  height: 30px;
+}
+
+.vstb--button-group button:not(:first-child) {
+  border-left: 1px solid rgb(214, 226, 233);
+}
+
+/* InformationTable.vue */
+
+.vstb--information-table {
+  margin: 5px 0;
+  border-radius: 6px;
+  border: 1px solid rgb(214, 226, 233);
+  padding: 0 8px;
+}
+
+.vstb--information-table .vstb--information-table-table-item:not(:last-child) {
+  border-bottom: 1px solid rgb(214, 226, 233);
+} 
+
+/* TableItem.vue */
+
+.vstb--information-table-table-item{
+  margin: 3px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

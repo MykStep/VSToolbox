@@ -38,32 +38,19 @@
           >
             
             <span v-if="currentWindow.includes('immoweb')" class="myk--section-header">Listing Information:</span>
-            
-            <div class="myk--reference-info-command-box">
-              <div class="myk--reference-info-command-button severity-info myk--button" @click="reloadCurrentListingData()">Reload</div> 
-            </div>
+
+            <BaseButton severity="info" @click="listingStore.reloadCurrentListingData()">Reload</BaseButton>
 
           </div>
           
-          <div class="myk--reference-info-table">
-            <template v-for="(value, key, findex) in currentListing" :key="key">
-              <div 
-                v-if="!['uid','link','isEdited'].includes(key)"
-                class="myk--reference-info-table-line"
-                :class="{ 'myk--ruler-bottom': findex < (Object.keys(currentListing).length - 1) }"
-              >
-                <span>{{ capitalize(key) }}:</span>
-                <span v-if="!['note'].includes(key)" style="color: rgb(0, 24, 55)">{{ value }} {{ returnUnitMetric({key: [key]}) }}</span>
-                <input v-if="['note'].includes(key)" type="text" placeholder="Additonal Notes" v-model="currentListing.note"/>
-              </div>
-            </template>
-          </div>
+          <InformationTable :data="omitObjectItems(currentListing, ['uid','link','isEdited','note'])">
+            <TableItem :editMode="true" :itemData="{key: 'note', value: currentListing.note}" v-model="currentListing.note" ></TableItem>
+          </InformationTable>
 
-          <div class="myk--reference-info-command-box">
-            <div class="myk--reference-info-command-button myk--button icon-start severity-info" @click="copyObjectToClipboard([currentListing])">Clipboard</div>
-            <div class="myk--reference-info-command-button myk--button severity-info" @click="propertyStore.addProperty(currentListing)">Add</div>
-          </div>
-          
+          <ButtonGroup>
+            <BaseButton severity="info" @click="copyObjectToClipboard([currentListing])">Clipboard</BaseButton>
+            <BaseButton severity="info" @click="propertyStore.addProperty(currentListing)">Add</BaseButton>
+          </ButtonGroup>
 
         </template>
 
@@ -89,40 +76,30 @@
                   <div class="myk--within-bar-icon icon-last">{{ expandedPropertyId === reference.uid ? '▲' : '▼' }}</div>
                 </div>
                 <div class="myk--reference-info" v-if="expandedPropertyId === reference.uid">
-                  
-                  <div class="myk--reference-info-table">
-                    
-                      <template v-for="(value, key, findex) in reference" :key="key">
-                        <div 
-                          v-if="!['uid','isEdited','link'].includes(key)"
-                          class="myk--reference-info-table-line"
-                          :class="{ 'myk--ruler-bottom': findex < (Object.keys(reference).length - 1) }"
-                        >
-                          <span>{{ capitalize(key) }}:</span>
-                          <span v-if="!reference.isEdited" style="color: rgb(0, 24, 55); max-width: 80%;text-align:right;">{{ value }} {{ returnUnitMetric({key: [key]}) }}</span>
-                          <input v-if="reference.isEdited" type="text" v-model="reference[key]"/> 
-                        </div>
-                      </template>
-                    
-                  </div>
+
+                  <InformationTable :data="reference" :omitObjectItems="['uid','link','isEdited']" :editMode="reference.isEdited">
+
+                  </InformationTable>
+
                   <div class="myk--reference-info-command-box-container">
-                    <div class="myk--reference-info-command-box">
-                      <div class="myk--reference-info-command-button icon-start severity-danger myk--button" @click="propertyStore.removeProperty(reference.uid)">Delete</div>
-                      <div class="myk--reference-info-command-button myk--button" @click="handleEditMode(reference.uid)">Edit</div>
-                      <div class="myk--reference-info-command-button icon-last severity-info myk--button" @click="copyObjectToClipboard([reference])">Clipboard</div> 
-                    </div>
-                    <div class="myk--reference-info-command-box">
-                      <div class="myk--reference-info-command-button severity-info myk--button" @click="openLink(reference.link)">Link</div> 
-                    </div>
+                    <ButtonGroup>
+                      <BaseButton severity="danger" @click="propertyStore.removeProperty(reference.uid)">Delete</BaseButton>
+                      <BaseButton @click="handleEditMode(reference.uid)">Edit</BaseButton>
+                      <BaseButton severity="info" @click="copyObjectToClipboard([reference])">Clipboard</BaseButton>
+                    </ButtonGroup>
+
+                    <BaseButton severity="info" @click="openLink(reference.link)">Link</BaseButton>
                   </div>
                   
                 </div>
               </div>
             </div>
-            <div v-if="propertyStore.savedProperties != 0" class="myk--reference-info-command-box">
-              <div class="myk--reference-info-command-button myk--button icon-start severity-danger" @click="propertyStore.removeAllProperty()">Delete All</div>
-              <div class="myk--reference-info-command-button myk--button severity-info" @click="copyObjectToClipboard(propertyStore.savedProperties)">Clipboard</div>
-            </div>
+
+            <ButtonGroup v-if="propertyStore.savedProperties != 0">
+              <BaseButton severity="danger" @click="propertyStore.removeAllProperty()">Delete All</BaseButton>
+              <BaseButton severity="info" @click="copyObjectToClipboard(propertyStore.savedProperties)">Clipboard</BaseButton>
+            </ButtonGroup>
+            
           </div>
 
           <div class="myk--container-basics">
@@ -152,10 +129,12 @@
                 <span>Confidence Interval ING: </span><span style="color: rgb(0, 24, 55)">[ {{ dvmConfidenceIntervalING.lower }} ; {{ dvmConfidenceIntervalING.upper }} ]</span>
               </div>
             </div>
-            <div v-if="propertyStore.averagePSQM.unformatted != 0" class="myk--reference-info-command-box">
-              <div class="myk--reference-info-command-button myk--button icon-start severity-info" @click="copySummaryStatistics()">Copy Statistics</div>
-              <div class="myk--reference-info-command-button myk--button severity-info" @click="copySummaryStatistics(sumStats = {'PSQM Average':  propertyStore.averagePSQM.formatted},propertyStore.savedProperties)">Clipboard All</div>
-            </div>
+
+            <ButtonGroup>
+              <BaseButton severity="info" @click="copySummaryStatistics()">Copy Statistics</BaseButton>
+              <BaseButton severity="info" @click="copySummaryStatistics(sumStats = {'PSQM Average':  propertyStore.averagePSQM.formatted},propertyStore.savedProperties)">Clipboard All</BaseButton>
+            </ButtonGroup>
+
           </div>
         </template>
         
@@ -178,25 +157,36 @@
 </template>
 
 <script setup>
+// Imports of components
+import BaseButton from './components/atoms/BaseButton.vue';
+import ButtonGroup from './components/molecules/ButtonGroup.vue';
+import InformationTable from './components/molecules/InformationTable.vue';
+import TableItem from './components/atoms/TableItem.vue';
+
+
 // --- Imports ---
 import { ref, watch, onMounted } from 'vue';
 
 // composables
-import { capitalize, returnUnitMetric, average, openLink } from './composables/utils';
+import { capitalize, returnUnitMetric, omitObjectItems, openLink } from './composables/utils';
 
 import { useToast } from './composables/useToast';
 import { useClipboard } from './composables/useClipboard';
 import { useValuation } from './composables/useValuation';
 
 import { storeToRefs } from 'pinia'
+import { useListingStore } from './stores/listing.js';
 import { usePropertyStore } from './stores/properties';
 import { useSettingsStore } from './stores/settings';
 
-import { ImmowebScraper } from './services/scraper/immoweb.js';
 
 // Stores
+const listingStore = useListingStore();
 const propertyStore = usePropertyStore();
 const settingsStore = useSettingsStore();
+
+const { currentListing } = storeToRefs(listingStore);
+
 const { settings } = storeToRefs(settingsStore);
 
 watch( settings, (newSettings) => {
@@ -205,20 +195,9 @@ watch( settings, (newSettings) => {
 
 // Services
 // TODO: create a wrapper function that routes towards the correct scraper
-function reloadCurrentListingData() {
-    const scraper = new ImmowebScraper(document);
-    const result = scraper.scrape();
-    
-    if (result.success) {
-        currentListing.value = result.data;
-        showToast('Scraping successful', 'info');
-    } else {
-        showToast('Scraping unsuccessful', 'danger');
-    }
-}
 
 onMounted(() => {
-  reloadCurrentListingData();
+  listingStore.reloadCurrentListingData();
 })
 
 // --- State and Methods Usage ---
@@ -247,8 +226,7 @@ const {
 
 // --- UI State ---
 const displayApp = ref(true);
-const currentListing = ref({});
-const activeTab = ref('Main');
+const activeTab = ref('References');
 const expandedPropertyId = ref(null);
 const currentWindow = ref(window.location.hostname);
 
