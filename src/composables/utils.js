@@ -10,7 +10,9 @@ export function returnUnitMetric(informationItem) {
     advertisedPrice: "€",
     EPC: "kWh/m²",
     LA: "sqm",
-    PSQM: "€/sqm"
+    PSQM: "€/sqm",
+    'Portion Ground': "%",
+    'VAT': '%'
   };
   return unitList[informationItem.key] || undefined;
 }

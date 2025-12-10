@@ -5,13 +5,26 @@
             <BaseButton severity="info" @click="listingStore.reloadCurrentListingData()">Reload</BaseButton>
         </template>
         <template #main>
-            <InformationTable :data="omitObjectItems(currentListing, ['uid','link','isEdited','note'])">
+            <InformationTable :data="omitObjectItems(listingStore.filteredData, ['note'])">
             <TableItem :editMode="true" :itemData="{key: 'note', value: currentListing.note}" v-model="currentListing.note" ></TableItem>
             </InformationTable>
 
             <ButtonGroup>
             <BaseButton severity="info" @click="copyObjectToClipboard([currentListing])">Clipboard</BaseButton>
-            <BaseButton severity="info" @click="propertyStore.addProperty(currentListing)">Add</BaseButton>
+            <BaseButton 
+                v-if="settingsStore.settings.valType == 'Normal' || !settingsStore.settings.additionalTools" 
+                severity="info" 
+                @click="propertyStore.addProperty(listingStore.validData)"
+            >
+                Add
+            </BaseButton>
+            <BaseButton 
+                v-else 
+                severity="info" 
+                @click="newConstructionsStore.addProperty(listingStore.validData)"
+                >
+                Add
+            </BaseButton>
             </ButtonGroup>
         </template>
     </BasicContainer>
@@ -29,8 +42,8 @@ import InformationTable from '../components/molecules/InformationTable.vue';
 import TableItem from '../components/atoms/TableItem.vue';
 
 // Composables
-import { omitObjectItems } from '../composables/utils';
 import { useClipboard } from '../composables/useClipboard';
+import { omitObjectItems } from '../composables/utils.js';
 
 const { 
   copyObjectToClipboard
@@ -39,10 +52,15 @@ const {
 // Stores
 import { useListingStore } from '../stores/listing.js';
 import { usePropertyStore } from '../stores/properties';
+import { useSettingsStore } from '../stores/settings';
+import { useNewConstructionsStore } from '../stores/newConstructions.js';
+
 
 const listingStore = useListingStore();
 const { currentListing } = storeToRefs(listingStore);
 
 const propertyStore = usePropertyStore();
+const settingsStore = useSettingsStore();
+const newConstructionsStore = useNewConstructionsStore();
 
 </script>

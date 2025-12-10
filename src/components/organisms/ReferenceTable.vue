@@ -1,20 +1,20 @@
 <template>
     <div class="vstb--reference-table">
 
-        <template v-for="(reference, index) in propertyStore.savedProperties">
+        <template v-for="(reference, index) in store.savedProperties">
             <ToggleCard :collapsed="reference.uid != expandedPropertyId" @clicked="toggleReferenceDetails(reference.uid)">
                 
               <!-- Item Bar -->
                 <template #start>{{ index + 1 }}</template>
-                <template #bar>{{ reference.advertisedPrice }}</template>
+                <template #bar>{{ reference.advertisedPrice }} {{ reference.hasVAT ? '' : '(excl. VAT)' }}</template>
                 <template #end>{{ toggled ? '▲' : '▼' }}</template>
               <!-- Collapsed info below -->
                 <template #content>
-                    <InformationTable size="small" :data="reference" :omitObjectItems="['uid','link','isEdited']" :editMode="reference.isEdited"></InformationTable>
+                    <InformationTable size="small" :data="reference" :omitObjectItems="['uid','link','isEdited','hasVAT']" :editMode="reference.isEdited"></InformationTable>
                 </template>
                 <template #actionbar>
                     <ButtonGroup>
-                      <BaseButton severity="danger" @click="propertyStore.removeProperty(reference.uid)">Delete</BaseButton>
+                      <BaseButton severity="danger" @click="store.removeProperty(reference.uid)">Delete</BaseButton>
                       <BaseButton @click="handleEditMode(reference.uid)">Edit</BaseButton>
                       <BaseButton severity="info" @click="copyObjectToClipboard([reference])">Clipboard</BaseButton>
                     </ButtonGroup>
@@ -24,12 +24,10 @@
 
             </ToggleCard>
         </template>
-
-        <ButtonGroup v-if="propertyStore.savedProperties != 0">
-            <BaseButton severity="danger" @click="propertyStore.removeAllProperty()">Delete All</BaseButton>
-            <BaseButton severity="info" @click="copyObjectToClipboard(propertyStore.savedProperties)">Clipboard</BaseButton>
+        <ButtonGroup v-if="store.savedProperties != 0">
+            <BaseButton severity="danger" @click="store.removeAllProperty()">Delete All</BaseButton>
+            <BaseButton severity="info" @click="copyObjectToClipboard(store.savedProperties)">Clipboard</BaseButton>
         </ButtonGroup>
-        
     </div>
 </template>
 
@@ -39,23 +37,26 @@ import InformationTable from '../molecules/InformationTable.vue';
 import ButtonGroup from '../molecules/ButtonGroup.vue';
 import BaseButton from '../atoms/BaseButton.vue';
 
-import { usePropertyStore } from '../../stores/properties';
+
 import { ref } from 'vue';
 import { openLink } from '../../composables/utils';
 import { useClipboard } from '../../composables/useClipboard';
 
 const expandedPropertyId = ref(null);
-const propertyStore = usePropertyStore();
 
 const { 
   copyObjectToClipboard, 
   copySummaryStatistics 
 } = useClipboard();
 
-defineProps({
+const props = defineProps({
   data: {
     type: Array,
     default: []
+  },
+  store: {
+    type: Object,
+    required: true
   }
 });
 
@@ -70,7 +71,9 @@ function toggleReferenceDetails(referenceUID) {
 }
 
 function handleEditMode(referenceUID) {
-  propertyStore.savedProperties.find(i => i.uid == referenceUID).isEdited = !propertyStore.savedProperties.find(i => i.uid == referenceUID).isEdited;
-  propertyStore.save();
+  let reference = props.store.savedProperties.find(i => i.uid == referenceUID);
+  
+  reference.isEdited = !reference.isEdited;
+  props.store.save();
 }
 </script>

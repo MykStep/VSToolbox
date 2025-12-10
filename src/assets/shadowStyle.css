@@ -23,6 +23,18 @@ input {
 }
 
 /* -- Component specific (prep for Chrome Extension Migration) -- */
+.vtsb--conditional-two-col {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.vtsb--conditional-two-col > * {
+  flex: 1;
+  min-width: 0; 
+}
+
 
 /* App.vue */
 #vtsb--app {
@@ -179,6 +191,10 @@ input {
   border: 1px solid rgb(214, 226, 233);
   padding: 0 8px;
   background: #fff;
+}
+
+.vstb--information-table:not(:has(*)) {
+    display: none;
 }
 
 .vstb--information-table .vstb--information-table-table-item:not(:last-child) {

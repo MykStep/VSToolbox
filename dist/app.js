@@ -5173,7 +5173,7 @@
 		}
 		return refs;
 	}
-	var _hoisted_1$9 = { id: "vstb--app-selector-menu" };
+	var _hoisted_1$10 = { id: "vstb--app-selector-menu" };
 	var _hoisted_2$5 = ["onClick"];
 	var TabBar_default = {
 		__name: "TabBar",
@@ -5198,7 +5198,7 @@
 				activeTab.value = tab;
 			}
 			return (_ctx, _cache) => {
-				return openBlock(), createElementBlock("div", _hoisted_1$9, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.tabs, (tab) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$10, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.tabs, (tab) => {
 					return openBlock(), createElementBlock("span", {
 						onClick: ($event) => switchTab(tab),
 						class: normalizeClass(["vstb--selector-buttons", { active: activeTab.value === tab }])
@@ -5207,7 +5207,7 @@
 			};
 		}
 	};
-	var _hoisted_1$8 = { id: "vstb--app-header" };
+	var _hoisted_1$9 = { id: "vstb--app-header" };
 	var _hoisted_2$4 = { id: "vstb--header-controls" };
 	var Header_default = {
 		__name: "Header",
@@ -5222,7 +5222,7 @@
 		setup(__props) {
 			const displayApp = useModel(__props, "modelValue");
 			return (_ctx, _cache) => {
-				return openBlock(), createElementBlock("div", _hoisted_1$8, [createBaseVNode("div", _hoisted_2$4, [createBaseVNode("div", { onClick: _cache[0] || (_cache[0] = ($event) => displayApp.value = !displayApp.value) }, "O/I")])]);
+				return openBlock(), createElementBlock("div", _hoisted_1$9, [createBaseVNode("div", _hoisted_2$4, [createBaseVNode("div", { onClick: _cache[0] || (_cache[0] = ($event) => displayApp.value = !displayApp.value) }, "O/I")])]);
 			};
 		}
 	};
@@ -5231,20 +5231,20 @@
 		for (const [key, val] of props) target[key] = val;
 		return target;
 	};
-	var _sfc_main$12 = {};
-	var _hoisted_1$7 = { class: "vstb--basic-container" };
+	var _sfc_main$15 = {};
+	var _hoisted_1$8 = { class: "vstb--basic-container" };
 	var _hoisted_2$3 = { class: "vstb--basic-container-header" };
 	var _hoisted_3$2 = { class: "vstb--basic-container-main" };
 	function _sfc_render$1(_ctx, _cache) {
-		return openBlock(), createElementBlock("div", _hoisted_1$7, [createBaseVNode("div", _hoisted_2$3, [renderSlot(_ctx.$slots, "header")]), createBaseVNode("div", _hoisted_3$2, [renderSlot(_ctx.$slots, "main")])]);
+		return openBlock(), createElementBlock("div", _hoisted_1$8, [createBaseVNode("div", _hoisted_2$3, [renderSlot(_ctx.$slots, "header")]), createBaseVNode("div", _hoisted_3$2, [renderSlot(_ctx.$slots, "main")])]);
 	}
-	var BasicContainer_default = /* @__PURE__ */ __plugin_vue_export_helper_default(_sfc_main$12, [["render", _sfc_render$1]]);
-	var _sfc_main$11 = {};
-	var _hoisted_1$6 = { class: "vstb--button-group" };
+	var BasicContainer_default = /* @__PURE__ */ __plugin_vue_export_helper_default(_sfc_main$15, [["render", _sfc_render$1]]);
+	var _sfc_main$14 = {};
+	var _hoisted_1$7 = { class: "vstb--button-group" };
 	function _sfc_render(_ctx, _cache) {
-		return openBlock(), createElementBlock("div", _hoisted_1$6, [renderSlot(_ctx.$slots, "default")]);
+		return openBlock(), createElementBlock("div", _hoisted_1$7, [renderSlot(_ctx.$slots, "default")]);
 	}
-	var ButtonGroup_default = /* @__PURE__ */ __plugin_vue_export_helper_default(_sfc_main$11, [["render", _sfc_render]]);
+	var ButtonGroup_default = /* @__PURE__ */ __plugin_vue_export_helper_default(_sfc_main$14, [["render", _sfc_render]]);
 	var BaseButton_default = {
 		__name: "BaseButton",
 		props: {
@@ -5276,7 +5276,9 @@
 			advertisedPrice: "€",
 			EPC: "kWh/m²",
 			LA: "sqm",
-			PSQM: "€/sqm"
+			PSQM: "€/sqm",
+			"Portion Ground": "%",
+			"VAT": "%"
 		}[informationItem.key] || void 0;
 	}
 	function average(properties, key = "") {
@@ -5290,7 +5292,10 @@
 	function omitObjectItems(object, filterArray) {
 		return Object.fromEntries(Object.entries(object).filter(([key]) => !filterArray.includes(key)));
 	}
-	var _hoisted_1$5 = { class: "vstb--information-table-table-item" };
+	var _hoisted_1$6 = {
+		key: 0,
+		class: "vstb--information-table-table-item"
+	};
 	var _hoisted_2$2 = {
 		key: 0,
 		style: { "color": "rgb(0, 24, 55)" }
@@ -5314,7 +5319,7 @@
 		setup(__props) {
 			const model = useModel(__props, "modelValue");
 			return (_ctx, _cache) => {
-				return openBlock(), createElementBlock("div", _hoisted_1$5, [
+				return __props.editMode || !String(__props.itemData.value).includes("NaN") ? (openBlock(), createElementBlock("div", _hoisted_1$6, [
 					createBaseVNode("span", null, toDisplayString(unref(capitalize)(__props.itemData.key)) + ":", 1),
 					!__props.editMode ? (openBlock(), createElementBlock("span", _hoisted_2$2, toDisplayString(__props.itemData.value) + " " + toDisplayString(unref(returnUnitMetric)({ key: [__props.itemData.key] })), 1)) : createCommentVNode("", true),
 					__props.editMode ? withDirectives((openBlock(), createElementBlock("input", {
@@ -5323,7 +5328,7 @@
 						placeholder: "Additonal Notes",
 						"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => model.value = $event)
 					}, null, 512)), [[vModelText, model.value]]) : createCommentVNode("", true)
-				]);
+				])) : createCommentVNode("", true);
 			};
 		}
 	};
@@ -5377,7 +5382,7 @@
 		timeoutId: null
 	});
 	function useToast() {
-		const showToast$5 = (message, type = "success", duration = 3e3) => {
+		const showToast$6 = (message, type = "success", duration = 3e3) => {
 			if (toast.timeoutId) clearTimeout(toast.timeoutId);
 			toast.message = message;
 			toast.type = type;
@@ -5388,7 +5393,7 @@
 		};
 		return {
 			toast: reactive(toast),
-			showToast: showToast$5
+			showToast: showToast$6
 		};
 	}
 	function formatObjectForClipboard(data, index = null) {
@@ -5402,15 +5407,15 @@ PSQM: ${data.PSQM}
 Note: ${data.note}`;
 	}
 	function useClipboard() {
-		const { showToast: showToast$5 } = useToast();
+		const { showToast: showToast$6 } = useToast();
 		async function copyToClipboard(text) {
 			try {
 				await navigator.clipboard.writeText(text);
 				console.log("Text copied to clipboard successfully!");
-				showToast$5("Copied to clipboard", "info");
+				showToast$6("Copied to clipboard", "info");
 			} catch (err) {
 				console.error("Failed to copy text: ", err);
-				showToast$5("Failed to copy", "error");
+				showToast$6("Failed to copy", "error");
 			}
 		}
 		function copyObjectToClipboard(data) {
@@ -5440,13 +5445,13 @@ Note: ${data.note}`;
 			copySummaryStatistics
 		};
 	}
-	var { showToast: showToast$4 } = useToast();
+	var { showToast: showToast$5 } = useToast();
 	var BaseScraper = class {
 		constructor(document$1) {
 			this.document = document$1;
 		}
 		scrape() {
-			showToast$4("scrape() function not defined in child", "danger");
+			showToast$5("scrape() function not defined in child", "danger");
 		}
 		htmlToNumeral(html) {
 			const str = this.cleanText(html.innerText);
@@ -5459,7 +5464,7 @@ Note: ${data.note}`;
 			return parseInt(this.cleanText(str).replace(/[^0-9]/g, ""));
 		}
 	};
-	var { showToast: showToast$3 } = useToast();
+	var { showToast: showToast$4 } = useToast();
 	var ImmowebScraper = class extends BaseScraper {
 		scrape() {
 			try {
@@ -5469,7 +5474,12 @@ Note: ${data.note}`;
 					isEdited: false,
 					note: ""
 				};
-				const scraped = { advertisedPrice: this.htmlToNumeral(this.document.querySelector(".classified__price .sr-only")) };
+				const priceContainer = this.document.querySelector(".classified__price .sr-only");
+				const hasVAT = !priceContainer.innerText.includes("*");
+				const scraped = {
+					advertisedPrice: this.htmlToNumeral(priceContainer),
+					hasVAT
+				};
 				const features = this._getTableData();
 				this._pushData(scraped, features, {
 					LA: {
@@ -5501,6 +5511,7 @@ Note: ${data.note}`;
 						EPC: scraped.EPC,
 						EPCLabel: scraped.EPCLabel,
 						CY: scraped.CY,
+						hasVAT: scraped.hasVAT,
 						note: metadata.note
 					}
 				};
@@ -5530,27 +5541,146 @@ Note: ${data.note}`;
 			}
 		}
 	};
-	var { showToast: showToast$2 } = useToast();
+	var { showToast: showToast$3 } = useToast();
 	const useListingStore = defineStore("listing", () => {
 		const currentListing = ref({});
 		function reloadCurrentListingData() {
 			const result = new ImmowebScraper(document).scrape();
 			if (result.success) {
 				currentListing.value = result.data;
-				showToast$2("Scraping successful", "info");
-			} else showToast$2("Scraping unsuccessful", "danger");
+				showToast$3("Scraping successful", "info");
+			} else showToast$3("Scraping unsuccessful", "danger");
 		}
+		const renderListingData = computed(() => {
+			let validData$1 = {};
+			let missing = [];
+			for (const [key, value] of Object.entries(currentListing.value)) if ((value == null || value == void 0 || value == "Not specified" || value == 0 || Number.isNaN(value)) && key != "note") missing.push(key);
+			else validData$1[key] = value;
+			const filteredData$1 = omitObjectItems(validData$1, [
+				"uid",
+				"link",
+				"isEdited",
+				"hasVAT"
+			]);
+			return {
+				valid: validData$1,
+				filtered: filteredData$1,
+				missing
+			};
+		});
+		const validData = computed(() => {
+			return renderListingData.value.valid;
+		});
+		const filteredData = computed(() => {
+			return renderListingData.value.filtered;
+		});
 		return {
 			currentListing,
+			renderListingData,
+			validData,
+			filteredData,
 			reloadCurrentListingData
 		};
 	});
-	var { showToast: showToast$1 } = useToast();
+	var { showToast: showToast$2 } = useToast();
+	function init$2(key) {
+		const data = localStorage.getItem(key);
+		return data ? JSON.parse(data) : [];
+	}
+	function syncToLocalStorage$2(state, key) {
+		window.addEventListener("storage", (event) => {
+			if (event.key === key) if (event.newValue === null) {
+				state.value = [];
+				showToast$2(`${key} in localStorage was cleared.`, "danger");
+			} else try {
+				state.value = JSON.parse(event.newValue);
+				showToast$2(`Intercepted localStorage udpdate.`, "info");
+			} catch (e) {
+				showToast$2("Failed to parse intercepted JSON.", "danger");
+			}
+		});
+	}
+	const usePropertyStore = defineStore("properties", () => {
+		const STORAGE_KEY = "selectedProperties";
+		const savedProperties = ref(init$2(STORAGE_KEY));
+		syncToLocalStorage$2(savedProperties, STORAGE_KEY);
+		function addProperty(listing) {
+			if (!savedProperties.value.find((p$1) => p$1.uid === listing.uid)) {
+				savedProperties.value.push(listing);
+				save();
+				showToast$2("Property saved successfully!", "info");
+			}
+		}
+		function removeProperty(uid$2) {
+			savedProperties.value = savedProperties.value.filter((p$1) => p$1.uid !== uid$2);
+			save();
+			showToast$2(`Property with id ${uid$2} removed.`, "danger");
+		}
+		function removeAllProperty() {
+			savedProperties.value = [];
+			save();
+			showToast$2(`Properties removed.`, "danger");
+		}
+		function save() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(savedProperties.value));
+		}
+		const averagePSQM = computed(() => {
+			return {
+				formatted: average(savedProperties.value, "PSQM") + " " + returnUnitMetric({ key: "PSQM" }),
+				unformatted: average(savedProperties.value, "PSQM")
+			};
+		});
+		const averagePrice = computed(() => {
+			return {
+				formatted: average(savedProperties.value, "advertisedPrice") + " " + returnUnitMetric({ key: "advertisedPrice" }),
+				unformatted: average(savedProperties.value, "advertisedPrice")
+			};
+		});
+		return {
+			savedProperties,
+			addProperty,
+			removeProperty,
+			removeAllProperty,
+			save,
+			averagePSQM,
+			averagePrice
+		};
+	});
 	function init$1(key) {
 		const data = localStorage.getItem(key);
 		return data ? JSON.parse(data) : [];
 	}
 	function syncToLocalStorage$1(state, key) {
+		window.addEventListener("storage", (event) => {
+			if (event.key === key) if (event.newValue === null) {
+				state.value = [];
+				showToast(`${key} in localStorage was cleared.`, "danger");
+			} else try {
+				state.value = JSON.parse(event.newValue);
+				showToast(`Intercepted localStorage udpdate.`, "info");
+			} catch (e) {
+				showToast("Failed to parse intercepted JSON.", "danger");
+			}
+		});
+	}
+	const useSettingsStore = defineStore("settings", () => {
+		const STORAGE_KEY = "settingsMyk";
+		const settings = ref(init$1(STORAGE_KEY));
+		syncToLocalStorage$1(settings, STORAGE_KEY);
+		function save() {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(settings.value));
+		}
+		return {
+			settings,
+			save
+		};
+	});
+	var { showToast: showToast$1 } = useToast();
+	function init(key) {
+		const data = localStorage.getItem(key);
+		return data ? JSON.parse(data) : [];
+	}
+	function syncToLocalStorage(state, key) {
 		window.addEventListener("storage", (event) => {
 			if (event.key === key) if (event.newValue === null) {
 				state.value = [];
@@ -5563,10 +5693,15 @@ Note: ${data.note}`;
 			}
 		});
 	}
-	const usePropertyStore = defineStore("properties", () => {
-		const STORAGE_KEY = "selectedProperties";
-		const savedProperties = ref(init$1(STORAGE_KEY));
-		syncToLocalStorage$1(savedProperties, STORAGE_KEY);
+	const useNewConstructionsStore = defineStore("newConstructions", () => {
+		const STORAGE_KEY = "selectedNewConstructions";
+		const savedProperties = ref(init(STORAGE_KEY));
+		syncToLocalStorage(savedProperties, STORAGE_KEY);
+		const VAT = ref(21);
+		const CC = ref();
+		const PC = ref();
+		const LA = ref();
+		const PSQM = ref();
 		function addProperty(listing) {
 			if (!savedProperties.value.find((p$1) => p$1.uid === listing.uid)) {
 				savedProperties.value.push(listing);
@@ -5599,14 +5734,74 @@ Note: ${data.note}`;
 				unformatted: average(savedProperties.value, "advertisedPrice")
 			};
 		});
+		const groundPortion = computed(() => {
+			let computedValue = PC.value / (parseFloat(CC.value) + parseFloat(PC.value));
+			return {
+				formatted: (computedValue * 100).toFixed(0) + "%",
+				unformatted: computedValue
+			};
+		});
+		const averagePSQMInclVAT = computed(() => {
+			let psqm = parseFloat(averagePSQM.value.unformatted);
+			let portion = groundPortion.value.unformatted;
+			let vat = VAT.value / 100;
+			let computedValue = psqm + (1 - portion) * psqm * vat;
+			return {
+				formatted: computedValue.toFixed(2) + " €/sqm",
+				unformatted: computedValue
+			};
+		});
+		const averagePriceInclVAT = computed(() => {
+			let p$1 = parseFloat(averagePrice.value.unformatted);
+			let portion = groundPortion.value.unformatted;
+			let vat = VAT.value / 100;
+			let computedValue = p$1 + (1 - portion) * p$1 * vat;
+			return {
+				formatted: computedValue.toFixed(2) + " €",
+				unformatted: computedValue
+			};
+		});
+		const valuationCM = computed(() => {
+			let vat = VAT.value / 100;
+			let computedValue = parseFloat(CC.value) * (1 + vat) + parseFloat(PC.value);
+			return {
+				formatted: computedValue.toFixed(2) + " €",
+				unformatted: computedValue
+			};
+		});
+		const valuationMM = computed(() => {
+			let computedValue = parseFloat(LA.value) * parseFloat(PSQM.value);
+			return {
+				formatted: computedValue.toFixed(2) + " €",
+				unformatted: computedValue
+			};
+		});
+		const valuationFinal = computed(() => {
+			let computedValue = (valuationCM.value.unformatted + valuationMM.value.unformatted) / 2;
+			return {
+				formatted: computedValue.toFixed(2) + " €",
+				unformatted: computedValue
+			};
+		});
 		return {
 			savedProperties,
+			VAT,
+			PC,
+			CC,
+			LA,
+			PSQM,
 			addProperty,
 			removeProperty,
 			removeAllProperty,
 			save,
 			averagePSQM,
-			averagePrice
+			averagePrice,
+			groundPortion,
+			averagePSQMInclVAT,
+			averagePriceInclVAT,
+			valuationCM,
+			valuationMM,
+			valuationFinal
 		};
 	});
 	var Dashboard_default = {
@@ -5616,21 +5811,18 @@ Note: ${data.note}`;
 			const listingStore = useListingStore();
 			const { currentListing } = storeToRefs(listingStore);
 			const propertyStore = usePropertyStore();
+			const settingsStore = useSettingsStore();
+			const newConstructionsStore = useNewConstructionsStore();
 			return (_ctx, _cache) => {
 				return openBlock(), createBlock(BasicContainer_default, null, {
-					header: withCtx(() => [_cache[5] || (_cache[5] = createTextVNode(" Listing Information ", -1)), createVNode(BaseButton_default, {
+					header: withCtx(() => [_cache[6] || (_cache[6] = createTextVNode(" Listing Information ", -1)), createVNode(BaseButton_default, {
 						severity: "info",
 						onClick: _cache[0] || (_cache[0] = ($event) => unref(listingStore).reloadCurrentListingData())
 					}, {
-						default: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("Reload", -1)])]),
+						default: withCtx(() => [..._cache[5] || (_cache[5] = [createTextVNode("Reload", -1)])]),
 						_: 1
 					})]),
-					main: withCtx(() => [createVNode(InformationTable_default, { data: unref(omitObjectItems)(unref(currentListing), [
-						"uid",
-						"link",
-						"isEdited",
-						"note"
-					]) }, {
+					main: withCtx(() => [createVNode(InformationTable_default, { data: unref(omitObjectItems)(unref(listingStore).filteredData, ["note"]) }, {
 						default: withCtx(() => [createVNode(TableItem_default, {
 							editMode: true,
 							itemData: {
@@ -5646,19 +5838,105 @@ Note: ${data.note}`;
 							severity: "info",
 							onClick: _cache[2] || (_cache[2] = ($event) => unref(copyObjectToClipboard)([unref(currentListing)]))
 						}, {
-							default: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("Clipboard", -1)])]),
+							default: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Clipboard", -1)])]),
 							_: 1
-						}), createVNode(BaseButton_default, {
+						}), unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BaseButton_default, {
+							key: 0,
 							severity: "info",
-							onClick: _cache[3] || (_cache[3] = ($event) => unref(propertyStore).addProperty(unref(currentListing)))
+							onClick: _cache[3] || (_cache[3] = ($event) => unref(propertyStore).addProperty(unref(listingStore).validData))
 						}, {
-							default: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Add", -1)])]),
+							default: withCtx(() => [..._cache[8] || (_cache[8] = [createTextVNode(" Add ", -1)])]),
 							_: 1
-						})]),
+						})) : (openBlock(), createBlock(BaseButton_default, {
+							key: 1,
+							severity: "info",
+							onClick: _cache[4] || (_cache[4] = ($event) => unref(newConstructionsStore).addProperty(unref(listingStore).validData))
+						}, {
+							default: withCtx(() => [..._cache[9] || (_cache[9] = [createTextVNode(" Add ", -1)])]),
+							_: 1
+						}))]),
 						_: 1
 					})]),
 					_: 1
 				});
+			};
+		}
+	};
+	function computeCI(tx, min, max) {
+		const price = parseFloat(tx);
+		const lower = price / max;
+		const upper = price / min;
+		return {
+			lower: lower.toFixed(0),
+			upper: upper.toFixed(0)
+		};
+	}
+	function useValuation() {
+		const valuationMetrics = reactive({
+			dvmLA: 150,
+			dvmPSQM: 2500
+		});
+		const dvmPrice = computed(() => {
+			const area = parseFloat(valuationMetrics.dvmLA) || 0;
+			const psqm = parseFloat(valuationMetrics.dvmPSQM) || 0;
+			return (area * psqm).toFixed(0);
+		});
+		const dvmConfidenceIntervalARG = computed(() => {
+			const ci = computeCI(dvmPrice.value, .95, 1.2);
+			return `[ ${ci.lower} ; ${ci.upper} ]`;
+		});
+		const dvmConfidenceIntervalING = computed(() => {
+			const ci = computeCI(dvmPrice.value, .9, 1.1);
+			return `[ ${ci.lower} ; ${ci.upper} ]`;
+		});
+		return {
+			valuationMetrics,
+			dvmPrice,
+			dvmConfidenceIntervalARG,
+			dvmConfidenceIntervalING
+		};
+	}
+	var _hoisted_1$5 = { class: "vtsb--toggle-card-action-bar" };
+	var ValuationCalculator_default = {
+		__name: "ValuationCalculator",
+		setup(__props) {
+			const { valuationMetrics, dvmPrice, dvmConfidenceIntervalARG, dvmConfidenceIntervalING } = useValuation();
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock(Fragment, null, [createVNode(InformationTable_default, null, {
+					default: withCtx(() => [
+						createVNode(TableItem_default, {
+							itemData: {
+								key: "Living Area",
+								value: unref(valuationMetrics).dvmLA
+							},
+							editMode: "true",
+							modelValue: unref(valuationMetrics).dvmLA,
+							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(valuationMetrics).dvmLA = $event)
+						}, null, 8, ["itemData", "modelValue"]),
+						createVNode(TableItem_default, {
+							itemData: {
+								key: "PSQM Correction",
+								value: unref(valuationMetrics).dvmPSQM
+							},
+							editMode: "true",
+							modelValue: unref(valuationMetrics).dvmPSQM,
+							"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(valuationMetrics).dvmPSQM = $event)
+						}, null, 8, ["itemData", "modelValue"]),
+						createVNode(TableItem_default, { itemData: {
+							key: "Valuation",
+							value: unref(dvmPrice)
+						} }, null, 8, ["itemData"]),
+						createVNode(TableItem_default, { itemData: {
+							key: "Confidence Interval ARG",
+							value: unref(dvmConfidenceIntervalARG)
+						} }, null, 8, ["itemData"]),
+						createVNode(TableItem_default, { itemData: {
+							key: "Confidence Interval ING",
+							value: unref(dvmConfidenceIntervalING)
+						} }, null, 8, ["itemData"])
+					]),
+					_: 1
+				}), createBaseVNode("div", _hoisted_1$5, [renderSlot(_ctx.$slots, "actionbar")])], 64);
 			};
 		}
 	};
@@ -5688,30 +5966,37 @@ Note: ${data.note}`;
 	var _hoisted_1$3 = { class: "vstb--reference-table" };
 	var ReferenceTable_default = {
 		__name: "ReferenceTable",
-		props: { data: {
-			type: Array,
-			default: []
-		} },
+		props: {
+			data: {
+				type: Array,
+				default: []
+			},
+			store: {
+				type: Object,
+				required: true
+			}
+		},
 		setup(__props) {
 			const expandedPropertyId = ref(null);
-			const propertyStore = usePropertyStore();
 			const { copyObjectToClipboard, copySummaryStatistics } = useClipboard();
+			const props = __props;
 			function toggleReferenceDetails(referenceUID) {
 				if (expandedPropertyId.value === referenceUID) expandedPropertyId.value = null;
 				else expandedPropertyId.value = referenceUID;
 			}
 			function handleEditMode(referenceUID) {
-				propertyStore.savedProperties.find((i) => i.uid == referenceUID).isEdited = !propertyStore.savedProperties.find((i) => i.uid == referenceUID).isEdited;
-				propertyStore.save();
+				let reference = props.store.savedProperties.find((i) => i.uid == referenceUID);
+				reference.isEdited = !reference.isEdited;
+				props.store.save();
 			}
 			return (_ctx, _cache) => {
-				return openBlock(), createElementBlock("div", _hoisted_1$3, [(openBlock(true), createElementBlock(Fragment, null, renderList(unref(propertyStore).savedProperties, (reference, index) => {
+				return openBlock(), createElementBlock("div", _hoisted_1$3, [(openBlock(true), createElementBlock(Fragment, null, renderList(__props.store.savedProperties, (reference, index) => {
 					return openBlock(), createBlock(ToggleCard_default, {
 						collapsed: reference.uid != expandedPropertyId.value,
 						onClicked: ($event) => toggleReferenceDetails(reference.uid)
 					}, {
 						start: withCtx(() => [createTextVNode(toDisplayString(index + 1), 1)]),
-						bar: withCtx(() => [createTextVNode(toDisplayString(reference.advertisedPrice), 1)]),
+						bar: withCtx(() => [createTextVNode(toDisplayString(reference.advertisedPrice) + " " + toDisplayString(reference.hasVAT ? "" : "(excl. VAT)"), 1)]),
 						end: withCtx(() => [createTextVNode(toDisplayString(_ctx.toggled ? "▲" : "▼"), 1)]),
 						content: withCtx(() => [createVNode(InformationTable_default, {
 							size: "small",
@@ -5719,7 +6004,8 @@ Note: ${data.note}`;
 							omitObjectItems: [
 								"uid",
 								"link",
-								"isEdited"
+								"isEdited",
+								"hasVAT"
 							],
 							editMode: reference.isEdited
 						}, null, 8, ["data", "editMode"])]),
@@ -5727,7 +6013,7 @@ Note: ${data.note}`;
 							default: withCtx(() => [
 								createVNode(BaseButton_default, {
 									severity: "danger",
-									onClick: ($event) => unref(propertyStore).removeProperty(reference.uid)
+									onClick: ($event) => __props.store.removeProperty(reference.uid)
 								}, {
 									default: withCtx(() => [..._cache[2] || (_cache[2] = [createTextVNode("Delete", -1)])]),
 									_: 1
@@ -5754,16 +6040,16 @@ Note: ${data.note}`;
 						}, 8, ["onClick"])]),
 						_: 2
 					}, 1032, ["collapsed", "onClicked"]);
-				}), 256)), unref(propertyStore).savedProperties != 0 ? (openBlock(), createBlock(ButtonGroup_default, { key: 0 }, {
+				}), 256)), __props.store.savedProperties != 0 ? (openBlock(), createBlock(ButtonGroup_default, { key: 0 }, {
 					default: withCtx(() => [createVNode(BaseButton_default, {
 						severity: "danger",
-						onClick: _cache[0] || (_cache[0] = ($event) => unref(propertyStore).removeAllProperty())
+						onClick: _cache[0] || (_cache[0] = ($event) => __props.store.removeAllProperty())
 					}, {
 						default: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("Delete All", -1)])]),
 						_: 1
 					}), createVNode(BaseButton_default, {
 						severity: "info",
-						onClick: _cache[1] || (_cache[1] = ($event) => unref(copyObjectToClipboard)(unref(propertyStore).savedProperties))
+						onClick: _cache[1] || (_cache[1] = ($event) => unref(copyObjectToClipboard)(__props.store.savedProperties))
 					}, {
 						default: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Clipboard", -1)])]),
 						_: 1
@@ -5773,175 +6059,189 @@ Note: ${data.note}`;
 			};
 		}
 	};
-	function computeCI(tx, min, max) {
-		const price = parseFloat(tx);
-		const lower = price / max;
-		const upper = price / min;
-		return {
-			lower: lower.toFixed(0),
-			upper: upper.toFixed(0)
-		};
-	}
-	var valuationMetrics = reactive({
-		dvmLA: 150,
-		dvmPSQM: 2500
-	});
-	var dvmPrice = computed(() => {
-		const area = parseFloat(valuationMetrics.dvmLA) || 0;
-		const psqm = parseFloat(valuationMetrics.dvmPSQM) || 0;
-		return (area * psqm).toFixed(0);
-	});
-	var dvmConfidenceIntervalARG = computed(() => {
-		const ci = computeCI(dvmPrice.value, .95, 1.2);
-		return `[ ${ci.lower} ; ${ci.upper} ]`;
-	});
-	var dvmConfidenceIntervalING = computed(() => {
-		const ci = computeCI(dvmPrice.value, .9, 1.1);
-		return `[ ${ci.lower} ; ${ci.upper} ]`;
-	});
-	function useValuation() {
-		return {
-			valuationMetrics,
-			dvmPrice,
-			dvmConfidenceIntervalARG,
-			dvmConfidenceIntervalING
-		};
-	}
-	var _hoisted_1$2 = { class: "vtsb--toggle-card-action-bar" };
-	var ValuationCalculator_default = {
-		__name: "ValuationCalculator",
+	var ComparablesNormal_default = {
+		__name: "ComparablesNormal",
 		setup(__props) {
-			const { valuationMetrics: valuationMetrics$1, dvmPrice: dvmPrice$1, dvmConfidenceIntervalARG: dvmConfidenceIntervalARG$1, dvmConfidenceIntervalING: dvmConfidenceIntervalING$1 } = useValuation();
+			const { copySummaryStatistics } = useClipboard();
+			const propertyStore = usePropertyStore();
 			return (_ctx, _cache) => {
-				return openBlock(), createElementBlock(Fragment, null, [createVNode(InformationTable_default, null, {
-					default: withCtx(() => [
-						createVNode(TableItem_default, {
-							itemData: {
-								key: "Living Area",
-								value: unref(valuationMetrics$1).dvmLA
-							},
-							editMode: "true",
-							modelValue: unref(valuationMetrics$1).dvmLA,
-							"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(valuationMetrics$1).dvmLA = $event)
-						}, null, 8, ["itemData", "modelValue"]),
-						createVNode(TableItem_default, {
-							itemData: {
-								key: "PSQM Correction",
-								value: unref(valuationMetrics$1).dvmPSQM
-							},
-							editMode: "true",
-							modelValue: unref(valuationMetrics$1).dvmPSQM,
-							"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(valuationMetrics$1).dvmPSQM = $event)
-						}, null, 8, ["itemData", "modelValue"]),
-						createVNode(TableItem_default, { itemData: {
-							key: "Valuation",
-							value: unref(dvmPrice$1)
-						} }, null, 8, ["itemData"]),
-						createVNode(TableItem_default, { itemData: {
-							key: "Confidence Interval ARG",
-							value: unref(dvmConfidenceIntervalARG$1)
-						} }, null, 8, ["itemData"]),
-						createVNode(TableItem_default, { itemData: {
-							key: "Confidence Interval ING",
-							value: unref(dvmConfidenceIntervalING$1)
-						} }, null, 8, ["itemData"])
-					]),
+				return openBlock(), createElementBlock(Fragment, null, [createVNode(BasicContainer_default, null, {
+					header: withCtx(() => [..._cache[2] || (_cache[2] = [createTextVNode("Reference Table", -1)])]),
+					main: withCtx(() => [createVNode(ReferenceTable_default, { store: unref(propertyStore) }, null, 8, ["store"])]),
 					_: 1
-				}), createBaseVNode("div", _hoisted_1$2, [renderSlot(_ctx.$slots, "actionbar")])], 64);
+				}), createVNode(BasicContainer_default, null, {
+					header: withCtx(() => [..._cache[3] || (_cache[3] = [createTextVNode("Summary Stastics", -1)])]),
+					main: withCtx(() => [createVNode(InformationTable_default, { data: {
+						pSQM: unref(propertyStore).averagePSQM.formatted,
+						price: unref(propertyStore).averagePrice.formatted
+					} }, null, 8, ["data"]), createVNode(ValuationCalculator_default, null, {
+						actionbar: withCtx(() => [createVNode(ButtonGroup_default, null, {
+							default: withCtx(() => [createVNode(BaseButton_default, {
+								severity: "info",
+								onClick: _cache[0] || (_cache[0] = ($event) => unref(copySummaryStatistics)())
+							}, {
+								default: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("Copy Statistics", -1)])]),
+								_: 1
+							}), createVNode(BaseButton_default, {
+								severity: "info",
+								onClick: _cache[1] || (_cache[1] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(propertyStore).averagePSQM.formatted }, unref(propertyStore).savedProperties))
+							}, {
+								default: withCtx(() => [..._cache[5] || (_cache[5] = [createTextVNode("Clipboard All", -1)])]),
+								_: 1
+							})]),
+							_: 1
+						})]),
+						_: 1
+					})]),
+					_: 1
+				})], 64);
 			};
 		}
 	};
-	function init(key) {
-		const data = localStorage.getItem(key);
-		return data ? JSON.parse(data) : [];
-	}
-	function syncToLocalStorage(state, key) {
-		window.addEventListener("storage", (event) => {
-			if (event.key === key) if (event.newValue === null) {
-				state.value = [];
-				showToast(`${key} in localStorage was cleared.`, "danger");
-			} else try {
-				state.value = JSON.parse(event.newValue);
-				showToast(`Intercepted localStorage udpdate.`, "info");
-			} catch (e) {
-				showToast("Failed to parse intercepted JSON.", "danger");
-			}
-		});
-	}
-	const useSettingsStore = defineStore("settings", () => {
-		const STORAGE_KEY = "settingsMyk";
-		const settings = ref(init(STORAGE_KEY));
-		syncToLocalStorage(settings, STORAGE_KEY);
-		function save() {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(settings.value));
+	var newConstructionCalculator_default = {
+		__name: "newConstructionCalculator",
+		setup(__props) {
+			const newConstructionsStore = useNewConstructionsStore();
+			const collapsed = ref(true);
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock(Fragment, null, [
+					createVNode(ToggleCard_default, {
+						collapsed: collapsed.value || false,
+						onClicked: _cache[4] || (_cache[4] = ($event) => collapsed.value = !collapsed.value)
+					}, {
+						start: withCtx(() => [..._cache[5] || (_cache[5] = [createTextVNode("🏠", -1)])]),
+						bar: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("Property Information", -1)])]),
+						end: withCtx(() => [createTextVNode(toDisplayString(!collapsed.value ? "▲" : "▼"), 1)]),
+						content: withCtx(() => [createVNode(InformationTable_default, null, {
+							default: withCtx(() => [
+								createVNode(TableItem_default, {
+									itemData: {
+										key: "Construction Cost",
+										value: unref(newConstructionsStore).CC
+									},
+									editMode: "true",
+									modelValue: unref(newConstructionsStore).CC,
+									"onUpdate:modelValue": _cache[0] || (_cache[0] = ($event) => unref(newConstructionsStore).CC = $event)
+								}, null, 8, ["itemData", "modelValue"]),
+								createVNode(TableItem_default, {
+									itemData: {
+										key: "Land Cost",
+										value: unref(newConstructionsStore).PC
+									},
+									editMode: "true",
+									modelValue: unref(newConstructionsStore).PC,
+									"onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => unref(newConstructionsStore).PC = $event)
+								}, null, 8, ["itemData", "modelValue"]),
+								createVNode(TableItem_default, { itemData: {
+									key: "VAT",
+									value: unref(newConstructionsStore).VAT
+								} }, null, 8, ["itemData"])
+							]),
+							_: 1
+						}), createVNode(InformationTable_default, null, {
+							default: withCtx(() => [createVNode(TableItem_default, {
+								itemData: {
+									key: "Living Area",
+									value: unref(newConstructionsStore).LA
+								},
+								editMode: "true",
+								modelValue: unref(newConstructionsStore).LA,
+								"onUpdate:modelValue": _cache[2] || (_cache[2] = ($event) => unref(newConstructionsStore).LA = $event)
+							}, null, 8, ["itemData", "modelValue"]), createVNode(TableItem_default, {
+								itemData: {
+									key: "PSQM",
+									value: unref(newConstructionsStore).PSQM
+								},
+								editMode: "true",
+								modelValue: unref(newConstructionsStore).PSQM,
+								"onUpdate:modelValue": _cache[3] || (_cache[3] = ($event) => unref(newConstructionsStore).PSQM = $event)
+							}, null, 8, ["itemData", "modelValue"])]),
+							_: 1
+						})]),
+						_: 1
+					}, 8, ["collapsed"]),
+					createVNode(InformationTable_default, null, {
+						default: withCtx(() => [createVNode(TableItem_default, { itemData: {
+							key: "Ground Portion",
+							value: unref(newConstructionsStore).groundPortion.formatted
+						} }, null, 8, ["itemData"])]),
+						_: 1
+					}),
+					createVNode(InformationTable_default, null, {
+						default: withCtx(() => [
+							createVNode(TableItem_default, { itemData: {
+								key: "Construction Method",
+								value: unref(newConstructionsStore).valuationCM.formatted
+							} }, null, 8, ["itemData"]),
+							createVNode(TableItem_default, { itemData: {
+								key: "Market Method",
+								value: unref(newConstructionsStore).valuationMM.formatted
+							} }, null, 8, ["itemData"]),
+							createVNode(TableItem_default, { itemData: {
+								key: "Valuation (Average)",
+								value: unref(newConstructionsStore).valuationFinal.formatted
+							} }, null, 8, ["itemData"])
+						]),
+						_: 1
+					})
+				], 64);
+			};
 		}
-		return {
-			settings,
-			save
-		};
-	});
+	};
+	var _hoisted_1$2 = { class: "vtsb--conditional-two-col" };
+	var ComparablesNewConstructions_default = {
+		__name: "ComparablesNewConstructions",
+		setup(__props) {
+			const newConstructionsStore = useNewConstructionsStore();
+			return (_ctx, _cache) => {
+				return openBlock(), createElementBlock(Fragment, null, [createVNode(BasicContainer_default, null, {
+					header: withCtx(() => [..._cache[0] || (_cache[0] = [createTextVNode("Reference Table", -1)])]),
+					main: withCtx(() => [createVNode(ReferenceTable_default, { store: unref(newConstructionsStore) }, null, 8, ["store"])]),
+					_: 1
+				}), createVNode(BasicContainer_default, null, {
+					header: withCtx(() => [..._cache[1] || (_cache[1] = [createTextVNode("Summary Statistics", -1)])]),
+					main: withCtx(() => [createBaseVNode("div", _hoisted_1$2, [createVNode(InformationTable_default, { data: {
+						pSQM: unref(newConstructionsStore).averagePSQM.formatted,
+						price: unref(newConstructionsStore).averagePrice.formatted
+					} }, null, 8, ["data"]), createVNode(InformationTable_default, { data: {
+						pSQM: unref(newConstructionsStore).averagePSQMInclVAT.formatted,
+						price: unref(newConstructionsStore).averagePriceInclVAT.formatted
+					} }, null, 8, ["data"])]), createVNode(newConstructionCalculator_default)]),
+					_: 1
+				})], 64);
+			};
+		}
+	};
 	var Comparables_default = {
 		__name: "Comparables",
 		setup(__props) {
 			const settingsStore = useSettingsStore();
-			const propertyStore = usePropertyStore();
-			const { copySummaryStatistics } = useClipboard();
 			return (_ctx, _cache) => {
 				return openBlock(), createElementBlock(Fragment, null, [
 					unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BasicContainer_default, { key: 0 }, {
-						header: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("Valuation Type", -1)])]),
+						header: withCtx(() => [..._cache[2] || (_cache[2] = [createTextVNode("Valuation Type", -1)])]),
 						main: withCtx(() => [createVNode(ButtonGroup_default, null, {
 							default: withCtx(() => [createVNode(BaseButton_default, {
 								severity: "info",
 								active: unref(settingsStore).settings.valType === "Normal",
 								onClick: _cache[0] || (_cache[0] = ($event) => unref(settingsStore).settings.valType = "Normal")
 							}, {
-								default: withCtx(() => [..._cache[5] || (_cache[5] = [createTextVNode("Normal", -1)])]),
+								default: withCtx(() => [..._cache[3] || (_cache[3] = [createTextVNode("Normal", -1)])]),
 								_: 1
 							}, 8, ["active"]), createVNode(BaseButton_default, {
 								severity: "info",
 								active: unref(settingsStore).settings.valType === "New Construction",
 								onClick: _cache[1] || (_cache[1] = ($event) => unref(settingsStore).settings.valType = "New Construction")
 							}, {
-								default: withCtx(() => [..._cache[6] || (_cache[6] = [createTextVNode("New Construction", -1)])]),
+								default: withCtx(() => [..._cache[4] || (_cache[4] = [createTextVNode("New Construction", -1)])]),
 								_: 1
 							}, 8, ["active"])]),
 							_: 1
 						})]),
 						_: 1
 					})) : createCommentVNode("", true),
-					unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BasicContainer_default, { key: 1 }, {
-						header: withCtx(() => [..._cache[7] || (_cache[7] = [createTextVNode("Reference Table", -1)])]),
-						main: withCtx(() => [createVNode(ReferenceTable_default)]),
-						_: 1
-					})) : createCommentVNode("", true),
-					unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(BasicContainer_default, { key: 2 }, {
-						header: withCtx(() => [..._cache[8] || (_cache[8] = [createTextVNode("Summary Stastics", -1)])]),
-						main: withCtx(() => [createVNode(InformationTable_default, { data: {
-							pSQM: unref(propertyStore).averagePSQM.formatted,
-							price: unref(propertyStore).averagePrice.formatted
-						} }, null, 8, ["data"]), createVNode(ValuationCalculator_default, null, {
-							actionbar: withCtx(() => [createVNode(ButtonGroup_default, null, {
-								default: withCtx(() => [createVNode(BaseButton_default, {
-									severity: "info",
-									onClick: _cache[2] || (_cache[2] = ($event) => unref(copySummaryStatistics)())
-								}, {
-									default: withCtx(() => [..._cache[9] || (_cache[9] = [createTextVNode("Copy Statistics", -1)])]),
-									_: 1
-								}), createVNode(BaseButton_default, {
-									severity: "info",
-									onClick: _cache[3] || (_cache[3] = ($event) => unref(copySummaryStatistics)(_ctx.sumStats = { "PSQM Average": unref(propertyStore).averagePSQM.formatted }, unref(propertyStore).savedProperties))
-								}, {
-									default: withCtx(() => [..._cache[10] || (_cache[10] = [createTextVNode("Clipboard All", -1)])]),
-									_: 1
-								})]),
-								_: 1
-							})]),
-							_: 1
-						})]),
-						_: 1
-					})) : createCommentVNode("", true),
-					unref(settingsStore).settings.valType == "New Construction" && unref(settingsStore).settings.additionalTools ? (openBlock(), createElementBlock(Fragment, { key: 3 }, [createTextVNode(" Still under construction... 🥁 ")], 64)) : createCommentVNode("", true)
+					unref(settingsStore).settings.valType == "Normal" || !unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(ComparablesNormal_default, { key: 1 })) : createCommentVNode("", true),
+					unref(settingsStore).settings.valType == "New Construction" && unref(settingsStore).settings.additionalTools ? (openBlock(), createBlock(ComparablesNewConstructions_default, { key: 2 })) : createCommentVNode("", true)
 				], 64);
 			};
 		}
@@ -6018,7 +6318,7 @@ Note: ${data.note}`;
 			};
 		}
 	};
-	var shadowStyle_default = "/* This CSS file is impacting the Shadow DOM. Hence, the monolothic structure... */\n\n:host {\n  --text-color: #009CFF;\n  --secondary-color:#798DA6;\n  --active-bg: rgb(204, 235.2, 255);\n  --active-hover-bg: rgb(191, 225, 247);\n\n}\n\ninput {\n  text-align: right;\n  font-size: 15px;\n}\n\n#myk--vue-app {\n  position: sticky;\n  top: 0;\n  z-index: 10000;\n}\n\n/* -- Component specific (prep for Chrome Extension Migration) -- */\n\n/* App.vue */\n\n#vtsb--app {\n  top: 0;\n  left: 0;\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Satoshi', sans-serif;\n}\n\n#vstb--app-container {\n  position: absolute;\n  right: 0;\n  width: 450px;\n  height: 700px;\n  background: rgb(247, 249, 251);\n  border-bottom: 1px solid #d6e2e9;\n  overflow: hidden;\n  box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;\n}\n\n#vstb--bg-re-logo{\n  position: absolute;\n  bottom: 30px;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 55px;\n  filter: invert(0.3) grayscale(1);\n  z-index: 1;\n}\n\n.vstb--tab-container {\n  padding: 15px;\n  display:flex;\n  position: relative;\n  height: calc(100% - 82px);\n  flex-direction: column;\n  overflow-y: scroll;\n  border-radius: 12px;\n  z-index: 5000;\n\n}\n\n/* Dashboard.vue (N/A) */\n\n/* Comparables.vue (N/A) */\n\n/* Settings.vue */\n\n.vstb--input-line {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Header.vue */\n\n#vstb--app-header {\n  width: 100%;\n  height: 25px;\n  background-color: #fff;\n  border-bottom: 1px solid #d6e2e9;\n  color: var(--text-color);\n}\n\n/* TabBar.vue */\n\n#vstb--app-selector-menu{\n    display: flex;\n    width: 100%;\n    justify-content: space-between;\n\n}\n\n#vstb--app-selector-menu>.vstb--selector-buttons{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    width: calc(100% / 3);\n    height: 50px;\n    border-bottom: var(--text-color) 2px solid;\n    cursor: pointer;\n    font-weight: 600;\n}\n\n#vstb--app-selector-menu>.vstb--selector-buttons.active{\n  background-color: var(--active-bg); /* Light green */\n  color: var(--text-color);\n}\n\n.vstb--selector-buttons:hover{\n  background: #f7f9fb;\n}\n\n/* ValuationCalculator.vue (N/A)*/\n\n/* BaseButton.vue */\n\n.vstb--button{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 32px;\n  padding: 0 10px;\n  margin: 5px 0;\n  font-size: 14px;\n  background: #fff;\n  -webkit-user-select: none;\n  cursor:pointer;\n  user-select: none;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  color: rgb(99, 105, 125);\n}\n\n.vstb--button:hover{\n    background: #f7f9fb;\n}\n\n.vstb--button.severity-info:hover, .vstb--button.severity-info.active {\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n}\n\n.vstb--button.severity-danger:hover, .vstb--button.severity-danger.active{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n}\n\n/* ButtonGroup.vue */\n\n.vstb--button-group {\n  display: flex;\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  width: max-content;\n  overflow: hidden;\n}\n\n.vstb--button-group button {\n  border-radius: 0;\n  border: none;\n  margin: 0;\n  height: 30px;\n}\n\n.vstb--button-group button:not(:first-child) {\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n/* InformationTable.vue */\n\n.vstb--information-table {\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 0 8px;\n  background: #fff;\n}\n\n.vstb--information-table .vstb--information-table-table-item:not(:last-child) {\n  border-bottom: 1px solid rgb(214, 226, 233);\n}\n\n/* TableItem.vue */\n\n.vstb--information-table-table-item{\n  padding: 3px 0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.vstb--information-table.small .vstb--information-table-table-item{\n  padding: calc(3px / 3) 0;\n}\n\n/* BasicContainer.vue */\n\n.vstb--basic-container {\n  margin: 5px 0;\n}\n\n.vstb--basic-container-header {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: end;\n  font-size: 16px;\n  font-weight: 600;\n  color: rgb(0, 24, 55);\n}\n\n.vstb--basic-container-main {\n  display: flex;\n  flex-direction: column;\n}\n\n/* ReferenceTable.vue */\n\n.vstb--reference-table{\n  display: flex;\n  flex-direction: column;\n  margin: 5px 0;\n}\n\n/* ToggleCard.vue */\n\n.vtsb--toggle-card {\n  width: 100%;\n}\n\n.vtsb--toggle-card:not(:last-child) {\n  margin-bottom: 10px;\n}\n\n.vtsb--toggle-card-bar {\n  display: flex;\n  max-width: 100%;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  -webkit-user-select: none;\n  cursor: pointer;\n  user-select: none;\n}\n\n.vtsb--toggle-card-bar:hover {\n  background: #f7f9fb;\n}\n\n.vtsb--toggle-card-bar.active {\n  border-bottom-left-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n\n.vstb--toggle-card-icon {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 30px;\n  height: 30px;\n  font-size: 12px;\n  font-weight: 600;\n  color: var(--secondary-color);\n}\n\n.vtsb--toggle-card-bar .icon-start {\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.vtsb--toggle-card-bar .icon-end {\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.vtsb--toggle-card-collapsed{\n  display: none;\n  flex-direction: column;\n  border-bottom-left-radius: 6px;\n  border-bottom-right-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  border-top: 0;\n  padding: 10px;\n  font-size: 14px;\n  max-width: 100%;\n\n}\n\n.vtsb--toggle-card-collapsed.active{\n  display: flex;\n}\n\n.vtsb--toggle-card-action-bar{\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n}\n\n/* Toast.vue */\n\n.toast-notification{\n  position: absolute;\n  bottom: 15px;\n  left: 50%;\n  width: max-content;\n  transform: translateX(-50%);\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border: 1px solid rgb(127.5, 205.5, 255);\n  padding: 5px 12px;\n  border-radius: 50px;\n  z-index: 10000;\n}\n\n.toast-info{\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border-color: rgb(14, 165, 233);\n}\n\n.toast-danger{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n  border-color: rgb(239, 68, 68);\n}\n";
+	var shadowStyle_default = "/* This CSS file is impacting the Shadow DOM. Hence, the monolothic structure... */\n\n:host {\n  --text-color: #009CFF;\n  --secondary-color:#798DA6;\n  --active-bg: rgb(204, 235.2, 255);\n  --active-hover-bg: rgb(191, 225, 247);\n\n}\n\ninput {\n  text-align: right;\n  font-size: 15px;\n}\n\n#myk--vue-app {\n  position: sticky;\n  top: 0;\n  z-index: 10000;\n}\n\n/* -- Component specific (prep for Chrome Extension Migration) -- */\n\n.vtsb--conditional-two-col {\n  display: flex;\n  gap: 16px;\n  width: 100%;\n  margin-bottom: 5px;\n}\n\n.vtsb--conditional-two-col > * {\n  flex: 1;\n  min-width: 0; \n}\n\n/* App.vue */\n\n#vtsb--app {\n  top: 0;\n  left: 0;\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n  font-family: 'Satoshi', sans-serif;\n}\n\n#vstb--app-container {\n  position: absolute;\n  right: 0;\n  width: 450px;\n  height: 700px;\n  background: rgb(247, 249, 251);\n  border-bottom: 1px solid #d6e2e9;\n  overflow: hidden;\n  box-shadow: 0 1px 5px #0003, 0 2px 2px #00000024, 0 3px 1px -2px #0000001f;\n}\n\n#vstb--bg-re-logo{\n  position: absolute;\n  bottom: 30px;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 55px;\n  filter: invert(0.3) grayscale(1);\n  z-index: 1;\n}\n\n.vstb--tab-container {\n  padding: 15px;\n  display:flex;\n  position: relative;\n  height: calc(100% - 82px);\n  flex-direction: column;\n  overflow-y: scroll;\n  border-radius: 12px;\n  z-index: 5000;\n\n}\n\n/* Dashboard.vue (N/A) */\n\n/* Comparables.vue (N/A) */\n\n/* Settings.vue */\n\n.vstb--input-line {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n/* Header.vue */\n\n#vstb--app-header {\n  width: 100%;\n  height: 25px;\n  background-color: #fff;\n  border-bottom: 1px solid #d6e2e9;\n  color: var(--text-color);\n}\n\n/* TabBar.vue */\n\n#vstb--app-selector-menu{\n    display: flex;\n    width: 100%;\n    justify-content: space-between;\n\n}\n\n#vstb--app-selector-menu>.vstb--selector-buttons{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    width: calc(100% / 3);\n    height: 50px;\n    border-bottom: var(--text-color) 2px solid;\n    cursor: pointer;\n    font-weight: 600;\n}\n\n#vstb--app-selector-menu>.vstb--selector-buttons.active{\n  background-color: var(--active-bg); /* Light green */\n  color: var(--text-color);\n}\n\n.vstb--selector-buttons:hover{\n  background: #f7f9fb;\n}\n\n/* ValuationCalculator.vue (N/A)*/\n\n/* BaseButton.vue */\n\n.vstb--button{\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 32px;\n  padding: 0 10px;\n  margin: 5px 0;\n  font-size: 14px;\n  background: #fff;\n  -webkit-user-select: none;\n  cursor:pointer;\n  user-select: none;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  color: rgb(99, 105, 125);\n}\n\n.vstb--button:hover{\n    background: #f7f9fb;\n}\n\n.vstb--button.severity-info:hover, .vstb--button.severity-info.active {\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n}\n\n.vstb--button.severity-danger:hover, .vstb--button.severity-danger.active{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n}\n\n/* ButtonGroup.vue */\n\n.vstb--button-group {\n  display: flex;\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  width: max-content;\n  overflow: hidden;\n}\n\n.vstb--button-group button {\n  border-radius: 0;\n  border: none;\n  margin: 0;\n  height: 30px;\n}\n\n.vstb--button-group button:not(:first-child) {\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n/* InformationTable.vue */\n\n.vstb--information-table {\n  margin: 5px 0;\n  border-radius: 6px;\n  border: 1px solid rgb(214, 226, 233);\n  padding: 0 8px;\n  background: #fff;\n}\n\n.vstb--information-table:not(:has(*)) {\n    display: none;\n}\n\n.vstb--information-table .vstb--information-table-table-item:not(:last-child) {\n  border-bottom: 1px solid rgb(214, 226, 233);\n}\n\n/* TableItem.vue */\n\n.vstb--information-table-table-item{\n  padding: 3px 0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n\n.vstb--information-table.small .vstb--information-table-table-item{\n  padding: calc(3px / 3) 0;\n}\n\n/* BasicContainer.vue */\n\n.vstb--basic-container {\n  margin: 5px 0;\n}\n\n.vstb--basic-container-header {\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: end;\n  font-size: 16px;\n  font-weight: 600;\n  color: rgb(0, 24, 55);\n}\n\n.vstb--basic-container-main {\n  display: flex;\n  flex-direction: column;\n}\n\n/* ReferenceTable.vue */\n\n.vstb--reference-table{\n  display: flex;\n  flex-direction: column;\n  margin: 5px 0;\n}\n\n/* ToggleCard.vue */\n\n.vtsb--toggle-card {\n  width: 100%;\n}\n\n.vtsb--toggle-card:not(:last-child) {\n  margin-bottom: 10px;\n}\n\n.vtsb--toggle-card-bar {\n  display: flex;\n  max-width: 100%;\n  flex-direction: row;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  -webkit-user-select: none;\n  cursor: pointer;\n  user-select: none;\n}\n\n.vtsb--toggle-card-bar:hover {\n  background: #f7f9fb;\n}\n\n.vtsb--toggle-card-bar.active {\n  border-bottom-left-radius: 0px;\n  border-bottom-right-radius: 0px;\n}\n\n.vstb--toggle-card-icon {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 30px;\n  height: 30px;\n  font-size: 12px;\n  font-weight: 600;\n  color: var(--secondary-color);\n}\n\n.vtsb--toggle-card-bar .icon-start {\n  border-right: 1px solid rgb(214, 226, 233);\n}\n\n.vtsb--toggle-card-bar .icon-end {\n  border-left: 1px solid rgb(214, 226, 233);\n}\n\n.vtsb--toggle-card-collapsed{\n  display: none;\n  flex-direction: column;\n  border-bottom-left-radius: 6px;\n  border-bottom-right-radius: 6px;\n  background: #fff;\n  border: 1px solid rgb(214, 226, 233);\n  border-top: 0;\n  padding: 10px;\n  font-size: 14px;\n  max-width: 100%;\n\n}\n\n.vtsb--toggle-card-collapsed.active{\n  display: flex;\n}\n\n.vtsb--toggle-card-action-bar{\n  display: flex;\n  flex-direction: row;\n  justify-content: space-between;\n}\n\n/* Toast.vue */\n\n.toast-notification{\n  position: absolute;\n  bottom: 15px;\n  left: 50%;\n  width: max-content;\n  transform: translateX(-50%);\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border: 1px solid rgb(127.5, 205.5, 255);\n  padding: 5px 12px;\n  border-radius: 50px;\n  z-index: 10000;\n}\n\n.toast-info{\n  color: rgb(14, 165, 233);\n  background: rgb(246, 429, 255);\n  border-color: rgb(14, 165, 233);\n}\n\n.toast-danger{\n  color: rgb(239, 68, 68);\n  background: rgb(254,242,242);\n  border-color: rgb(239, 68, 68);\n}\n";
 	function mountApp() {
 		const host = document.createElement("div");
 		host.id = "vstoolbox-host";

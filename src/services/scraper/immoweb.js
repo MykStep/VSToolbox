@@ -15,8 +15,12 @@ export class ImmowebScraper extends BaseScraper {
             }
 
             // Scraped data
+            const priceContainer = this.document.querySelector('.classified__price .sr-only');
+            const hasVAT = !priceContainer.innerText.includes('*');
+
             const scraped = {
-                advertisedPrice: this.htmlToNumeral(this.document.querySelector('.classified__price .sr-only')),
+                advertisedPrice: this.htmlToNumeral(priceContainer),
+                hasVAT: hasVAT
             }
 
             // Push scraped data from table
@@ -44,6 +48,7 @@ export class ImmowebScraper extends BaseScraper {
                 EPC: scraped.EPC,
                 EPCLabel: scraped.EPCLabel,
                 CY: scraped.CY,
+                hasVAT: scraped.hasVAT,
                 note: metadata.note
             };
 
