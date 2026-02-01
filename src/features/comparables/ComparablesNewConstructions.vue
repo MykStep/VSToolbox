@@ -13,7 +13,7 @@
           <InformationTable :data="{pSQM: newConstructionsStore.averagePSQM.formatted, price: newConstructionsStore.averagePrice.formatted}"></InformationTable>
           <InformationTable :data="{pSQM: newConstructionsStore.averagePSQMInclVAT.formatted, price: newConstructionsStore.averagePriceInclVAT.formatted}"></InformationTable>
         </div>
-        <newConstructionCalculator></newConstructionCalculator>
+        <NewConstructionCalculator></NewConstructionCalculator>
       </template>
     </BasicContainer>
 </template>
@@ -23,7 +23,7 @@
 // Components
 import BasicContainer from '../../components/atoms/BasicContainer.vue';
 import ReferenceTable from '../../components/organisms/ReferenceTable.vue';
-import newConstructionCalculator from '../../components/organisms/newConstructionCalculator.vue';
+import NewConstructionCalculator from '../../components/organisms/NewConstructionCalculator.vue';
 import InformationTable from '../../components/molecules/InformationTable.vue';
 
 // Stores
