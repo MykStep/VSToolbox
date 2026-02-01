@@ -13,13 +13,13 @@ export const useListingStore = defineStore('listing', () => {
     const currentListing = ref({})
 
     function reloadCurrentListingData() {
-        const scraper = new ImmowebScraper(document);
-        const result = scraper.scrape();
-        
-        if (result.success) {
+        try {
+            const scraper = new ImmowebScraper(document);
+            const result = scraper.scrape();
             currentListing.value = result.data;
             showToast('Scraping successful', 'info');
-        } else {
+        } catch (e) {
+             // console.log(e);
             showToast('Scraping unsuccessful', 'danger');
         }
     }

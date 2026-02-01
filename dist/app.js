@@ -5382,7 +5382,7 @@
 		timeoutId: null
 	});
 	function useToast() {
-		const showToast$6 = (message, type = "success", duration = 3e3) => {
+		const showToast$5 = (message, type = "success", duration = 3e3) => {
 			if (toast.timeoutId) clearTimeout(toast.timeoutId);
 			toast.message = message;
 			toast.type = type;
@@ -5393,7 +5393,7 @@
 		};
 		return {
 			toast: reactive(toast),
-			showToast: showToast$6
+			showToast: showToast$5
 		};
 	}
 	function formatObjectForClipboard(data, index = null) {
@@ -5407,15 +5407,15 @@ PSQM: ${data.PSQM}
 Note: ${data.note}`;
 	}
 	function useClipboard() {
-		const { showToast: showToast$6 } = useToast();
+		const { showToast: showToast$5 } = useToast();
 		async function copyToClipboard(text) {
 			try {
 				await navigator.clipboard.writeText(text);
 				console.log("Text copied to clipboard successfully!");
-				showToast$6("Copied to clipboard", "info");
+				showToast$5("Copied to clipboard", "info");
 			} catch (err) {
 				console.error("Failed to copy text: ", err);
-				showToast$6("Failed to copy", "error");
+				showToast$5("Failed to copy", "error");
 			}
 		}
 		function copyObjectToClipboard(data) {
@@ -5445,13 +5445,13 @@ Note: ${data.note}`;
 			copySummaryStatistics
 		};
 	}
-	var { showToast: showToast$5 } = useToast();
+	var { showToast: showToast$4 } = useToast();
 	var BaseScraper = class {
 		constructor(document$1) {
 			this.document = document$1;
 		}
 		scrape() {
-			showToast$5("scrape() function not defined in child", "danger");
+			throw new Error("Method \"scrape()\" must be implemented in child class");
 		}
 		htmlToNumeral(html) {
 			const str = this.cleanText(html.innerText);
@@ -5464,7 +5464,6 @@ Note: ${data.note}`;
 			return parseInt(this.cleanText(str).replace(/[^0-9]/g, ""));
 		}
 	};
-	var { showToast: showToast$4 } = useToast();
 	var ImmowebScraper = class extends BaseScraper {
 		scrape() {
 			try {
@@ -5545,11 +5544,12 @@ Note: ${data.note}`;
 	const useListingStore = defineStore("listing", () => {
 		const currentListing = ref({});
 		function reloadCurrentListingData() {
-			const result = new ImmowebScraper(document).scrape();
-			if (result.success) {
-				currentListing.value = result.data;
+			try {
+				currentListing.value = new ImmowebScraper(document).scrape().data;
 				showToast$3("Scraping successful", "info");
-			} else showToast$3("Scraping unsuccessful", "danger");
+			} catch (e) {
+				showToast$3("Scraping unsuccessful", "danger");
+			}
 		}
 		const renderListingData = computed(() => {
 			let validData$1 = {};
@@ -6098,8 +6098,8 @@ Note: ${data.note}`;
 			};
 		}
 	};
-	var newConstructionCalculator_default = {
-		__name: "newConstructionCalculator",
+	var NewConstructionCalculator_default = {
+		__name: "NewConstructionCalculator",
 		setup(__props) {
 			const newConstructionsStore = useNewConstructionsStore();
 			const collapsed = ref(true);
@@ -6206,7 +6206,7 @@ Note: ${data.note}`;
 					} }, null, 8, ["data"]), createVNode(InformationTable_default, { data: {
 						pSQM: unref(newConstructionsStore).averagePSQMInclVAT.formatted,
 						price: unref(newConstructionsStore).averagePriceInclVAT.formatted
-					} }, null, 8, ["data"])]), createVNode(newConstructionCalculator_default)]),
+					} }, null, 8, ["data"])]), createVNode(NewConstructionCalculator_default)]),
 					_: 1
 				})], 64);
 			};

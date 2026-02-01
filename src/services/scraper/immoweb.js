@@ -1,7 +1,6 @@
 import { BaseScraper } from "./base";
-import { useToast } from "../../composables/useToast";
 
-const { showToast } = useToast();
+//TODO: Create a Scraper"Factory", i.e, a scraper router for scalability
 
 export class ImmowebScraper extends BaseScraper {
     scrape (){

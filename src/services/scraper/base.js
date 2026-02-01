@@ -7,8 +7,8 @@ export class BaseScraper {
         this.document = document;
     }
 
-    scrape () {
-        showToast('scrape() function not defined in child', 'danger')
+    scrape() {
+        throw new Error('Method "scrape()" must be implemented in child class');
     }
 
     htmlToNumeral(html){
