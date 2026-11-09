@@ -1,3 +1,5 @@
+// not yet in use
+
 type ListingNormalized = {
     countryCode: string;
     address?: {

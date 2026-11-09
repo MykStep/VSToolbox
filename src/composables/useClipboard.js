@@ -2,19 +2,14 @@ import { useToast } from './useToast';
 
 // Internal helper function, not exported
 function formatObjectForClipboard(data, index = null) {
-  const formattedPrice = (Number(data.advertisedPrice) / 1000).toFixed(1).replace('.', ',') + 'k';
-  
+  // const formattedPrice = (Number(data.advertisedPrice) / 1000).toFixed(1).replace('.', ',') + 'k';
+  const formattedPrice = data.advertisedPrice;
+
   const linkText = index !== null
     ? `Reference ${index}: ${data.link}`
     : `Link: ${data.link}`;
 
-  return `${linkText}
-EPC: ${data.EPC}, ${data.EPCLabel}
-LA: ${data.LA}
-CY: ${data.CY}
-P: ${formattedPrice}
-PSQM: ${data.PSQM}
-Note: ${data.note}`;
+  return `${data.link}	${data.address}	${data.EPC}	${data.CY}	${data.LA}	${data.PA}	${formattedPrice}	${data.PSQM}`;
 }
 
 export function useClipboard() {
@@ -49,14 +44,14 @@ export function useClipboard() {
       data.forEach((reference, index) => {
         const displayIndex = data.length > 1 ? index + 1 : null;
         let referenceText = formatObjectForClipboard(reference, displayIndex);
-        textToCopy += (`\n\n` + referenceText);
+        textToCopy += (`\n` + referenceText);
       });
     }
     
-    for (const [key, value] of Object.entries(sumStats)) {
+    /*for (const [key, value] of Object.entries(sumStats)) {
       let sumStatsItemText = `${key}: ${value}`;
       textToCopy += (`\n\n` + sumStatsItemText);
-    };
+    };*/
 
     copyToClipboard(textToCopy.trim());
   }

@@ -22,6 +22,14 @@ export class ImmowebScraper extends BaseScraper {
                 hasVAT: hasVAT
             }
 
+            // TODO: Start using ClassifiedObject as a whole
+            const classified = this._getClassfiedObject();
+            // TODO: make the address operation a seperate function
+            scraped["address"] = `${classified.property.location.street} ${classified.property.location.number}, ${classified.property.location.postalCode}`;
+            console.log(scraped);
+
+            scraped["PA"] = classified.property.land.surface;
+
             // Push scraped data from table
             const features = this._getTableData();
             const filter = {
@@ -43,10 +51,12 @@ export class ImmowebScraper extends BaseScraper {
                 link: metadata.link,
                 advertisedPrice: scraped.advertisedPrice,
                 PSQM: computes.PSQM,
+                address: scraped.address,
                 LA: scraped.LA,
                 EPC: scraped.EPC,
                 EPCLabel: scraped.EPCLabel,
                 CY: scraped.CY,
+                PA: scraped.PA,
                 hasVAT: scraped.hasVAT,
                 note: metadata.note
             };
@@ -55,6 +65,11 @@ export class ImmowebScraper extends BaseScraper {
         } catch (e) {
             return { success: false, e }
         }
+    }
+
+    _getClassfiedObject() {
+        let classified = window.classified;
+        return classified;
     }
 
     _getTableData() {

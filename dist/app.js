@@ -5397,14 +5397,9 @@
 		};
 	}
 	function formatObjectForClipboard(data, index = null) {
-		const formattedPrice = (Number(data.advertisedPrice) / 1e3).toFixed(1).replace(".", ",") + "k";
-		return `${index !== null ? `Reference ${index}: ${data.link}` : `Link: ${data.link}`}
-EPC: ${data.EPC}, ${data.EPCLabel}
-LA: ${data.LA}
-CY: ${data.CY}
-P: ${formattedPrice}
-PSQM: ${data.PSQM}
-Note: ${data.note}`;
+		const formattedPrice = data.advertisedPrice;
+		index !== null ? `${index}${data.link}` : `${data.link}`;
+		return `${data.link}	${data.address}	${data.EPC}	${data.CY}	${data.LA}	${data.PA}	${formattedPrice}	${data.PSQM}`;
 	}
 	function useClipboard() {
 		const { showToast: showToast$5 } = useToast();
@@ -5432,12 +5427,8 @@ Note: ${data.note}`;
 			if (data !== null) data.forEach((reference, index) => {
 				const displayIndex = data.length > 1 ? index + 1 : null;
 				let referenceText = formatObjectForClipboard(reference, displayIndex);
-				textToCopy += `\n\n` + referenceText;
+				textToCopy += `\n` + referenceText;
 			});
-			for (const [key, value] of Object.entries(sumStats)) {
-				let sumStatsItemText = `${key}: ${value}`;
-				textToCopy += `\n\n` + sumStatsItemText;
-			}
 			copyToClipboard(textToCopy.trim());
 		}
 		return {
@@ -5479,6 +5470,10 @@ Note: ${data.note}`;
 					advertisedPrice: this.htmlToNumeral(priceContainer),
 					hasVAT
 				};
+				const classified = this._getClassfiedObject();
+				scraped["address"] = `${classified.property.location.street} ${classified.property.location.number}, ${classified.property.location.postalCode}`;
+				console.log(scraped);
+				scraped["PA"] = classified.property.land.surface;
 				const features = this._getTableData();
 				this._pushData(scraped, features, {
 					LA: {
@@ -5506,10 +5501,12 @@ Note: ${data.note}`;
 						link: metadata.link,
 						advertisedPrice: scraped.advertisedPrice,
 						PSQM: computes.PSQM,
+						address: scraped.address,
 						LA: scraped.LA,
 						EPC: scraped.EPC,
 						EPCLabel: scraped.EPCLabel,
 						CY: scraped.CY,
+						PA: scraped.PA,
 						hasVAT: scraped.hasVAT,
 						note: metadata.note
 					}
@@ -5520,6 +5517,9 @@ Note: ${data.note}`;
 					e
 				};
 			}
+		}
+		_getClassfiedObject() {
+			return window.classified;
 		}
 		_getTableData() {
 			const map = {};
